@@ -53,25 +53,63 @@ PRODUCT_SOONG_NAMESPACES += \
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 
-# Include prebuilt kernel and ramdisk in the build
+# Include prebuilt kernel
 include $(CLEAR_VARS)
 LOCAL_MODULE := kernel
-LOCAL_MODULE_PATH := $(TARGET_OUT_KERNEL)
-LOCAL_SRC_FILES := prebuilts/Image
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/Image
 LOCAL_MODULE_TAGS := optional
-LOCAL_CERTIFICATE := platform
-LOCAL_MODULE_CLASS := APPS
-LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_INSTALLER_SUFFIX)
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
 include $(BUILD_PREBUILT)
 
 # Include prebuilt ramdisk
 include $(CLEAR_VARS)
 LOCAL_MODULE := ramdisk
-LOCAL_MODULE_PATH := $(TARGET_OUT_RAMDISK)
-LOCAL_SRC_FILES := prebuilts/ramdisk
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_RAMDISK)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/ramdisk
 LOCAL_MODULE_TAGS := optional
-LOCAL_CERTIFICATE := platform
-LOCAL_MODULE_CLASS := APPS
-LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_INSTALLER_SUFFIX)
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
+include $(BUILD_PREBUILT)
+
+# Include prebuilt dtb
+include $(CLEAR_VARS)
+LOCAL_MODULE := dtb
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/dtb.img
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
+include $(BUILD_PREBUILT)
+
+# Include prebuilt dtbo
+include $(CLEAR_VARS)
+LOCAL_MODULE := dtbo
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/dtbo.img
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
+include $(BUILD_PREBUILT)
+
+# Include prebuilt system_dlkm
+include $(CLEAR_VARS)
+LOCAL_MODULE := system_dlkm
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_SYSTEM_DLKM)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/system_dlkm.img
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
+include $(BUILD_PREBUILT)
+
+# Include prebuilt vendor_dlkm
+include $(CLEAR_VARS)
+LOCAL_MODULE := vendor_dlkm
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_DLKM)
+LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/vendor_dlkm.img
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_SUFFIX)
 include $(BUILD_PREBUILT)
 

@@ -13,10 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit from device-specific configuration
+$(call inherit-product, $(LOCAL_PATH)/device.mk)
+
+# Inherit from vendor configuration
+$(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
+
+PRODUCT_NAME := lineage_pdx245-$(TARGET_RELEASE)
+PRODUCT_DEVICE := pdx245
+PRODUCT_BRAND := Sony
+PRODUCT_MODEL := XQ-EC72
+PRODUCT_MANUFACTURER := Sony
 
 # Inherit from device.mk
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
@@ -36,12 +47,6 @@ MAINLINE_INCLUDE_VIRT_MODULE := true
 TARGET_FACE_UNLOCK_SUPPORTED := true
 
 IS_PHONE := true
-
-PRODUCT_NAME := lineage_pdx245
-PRODUCT_DEVICE := pdx245
-PRODUCT_MANUFACTURER := Sony
-PRODUCT_BRAND := Sony
-PRODUCT_MODEL := XQ-EC72
 
 PRODUCT_SYSTEM_NAME := XQ-EC72
 PRODUCT_SYSTEM_DEVICE := XQ-EC72

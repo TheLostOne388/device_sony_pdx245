@@ -21,3 +21,4 @@ COMMON_LUNCH_CHOICES := \
     lineage_pdx245-user \
     lineage_pdx245-userdebug \
     lineage_pdx245-eng
+
