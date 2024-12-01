@@ -11,11 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-PRODUCT_DEVICE := pdx245
 
 # Inherit from sony sm8650-common
 -include device/sony/sm8650-common/BoardConfigCommon.mk
+
+#Enable Treble Support
+PRODUCT_FULL_TREBLE_OVERRIDE := true
+BOARD_SEPARATE_VENDOR := true
+BOARD_VNDK_VERSION := current
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_SIZE := 1610612736
+
+BOARD_HAS_VENDOR_PARTITION := true
+BOARD_BUILD_VENDOR_IMAGE := true
 
 DEVICE_PATH := device/sony/pdx245
 
@@ -58,23 +66,4 @@ BOARD_VENDOR_SEPOLICY_DIRS += vendor/sony/pdx245/etc/selinux
 
 # Product copy for kernel modules
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*.ko,vendor/sony/pdx245/proprietary/vendor/lib/modules,$(TARGET_COPY_OUT_VENDOR)/lib/modules)
-
-# Prevent kernel-related items from being treated as apps
-PRODUCT_PACKAGES += \
-    android.hardware.ramdisk.kernel
-
-# Kernel output paths
-TARGET_COPY_OUT_VENDOR_KERNEL := $(TARGET_OUT_VENDOR)/kernel
-TARGET_COPY_OUT_RAMDISK := $(TARGET_OUT_RAMDISK)
-TARGET_COPY_OUT_SYSTEM_DLKM := $(TARGET_OUT_SYSTEM_DLKM)
-TARGET_COPY_OUT_VENDOR_DLKM := $(TARGET_OUT_VENDOR_DLKM)
-
-$(info TARGET_OUT_VENDOR_KERNEL=$(TARGET_OUT_VENDOR_KERNEL))
-$(info TARGET_OUT_RAMDISK=$(TARGET_OUT_RAMDISK))
-$(info TARGET_OUT_VENDOR_DLKM=$(TARGET_OUT_VENDOR_DLKM))
-$(info TARGET_OUT_SYSTEM_DLKM=$(TARGET_OUT_SYSTEM_DLKM))
-
-TARGET_OUT_ETC := $(TARGET_OUT)/etc
-$(info TARGET_OUT_ETC=$(TARGET_OUT_ETC))
-
+    $(call find-copy-subdir-files,*.ko,vendor/sony/pdx245/proprietary/vendor/lib/modules,$(TARGET_OUT_VENDOR)/lib/modules)

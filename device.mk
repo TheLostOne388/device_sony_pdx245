@@ -22,8 +22,12 @@
 # definition file).
 #
 
+BOARD_SEPARATE_VENDOR := true
+
 # Inherit from sony sm8650-common
 $(call inherit-product, device/sony/sm8650-common/common.mk)
+
+$(call inherit-product, hardware/qcom-caf/sm8650/wifi/legacy/qcwcn/wpa_supplicant_8_lib/Android.mk)
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2560
@@ -48,15 +52,23 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    hardware/sony \
+    vendor/sony \
+    vendor/sony/pdx245 \
+    vendor/sony/sm8650-common \
+    hardware/qcom-caf/sm8650/audio \
+    hardware/qcom-caf/sm8650/display \
+    hardware/qcom-caf/sm8650/media \
+    hardware/qcom-caf/sm8650/wifi
 
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 
-# Include prebuilt kernel
+# Include prebuilt kernel in the vendor directory
 include $(CLEAR_VARS)
 LOCAL_MODULE := kernel
-LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR)/kernel
 LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/Image
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := ETC
@@ -76,7 +88,7 @@ include $(BUILD_PREBUILT)
 # Include prebuilt dtb
 include $(CLEAR_VARS)
 LOCAL_MODULE := dtb
-LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR)/kernel
 LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/dtb.img
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := ETC
@@ -86,7 +98,7 @@ include $(BUILD_PREBUILT)
 # Include prebuilt dtbo
 include $(CLEAR_VARS)
 LOCAL_MODULE := dtbo
-LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR_KERNEL)
+LOCAL_MODULE_PATH := $(TARGET_COPY_OUT_VENDOR)/dtbo
 LOCAL_SRC_FILES := kernel/sony/pdx245-kernel/prebuilts/dtbo.img
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := ETC
