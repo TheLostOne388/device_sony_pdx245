@@ -48,6 +48,7 @@ PRODUCT_PACKAGES += \
     SonyPDX245FrameworksRes
 
 DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage
 
 # Soong namespaces

@@ -26,7 +26,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from device-specific configuration
-$(call inherit-product, /home/erik/crDroid/device/sony/pdx245/device.mk)
+$(call inherit-product, device/sony/pdx245/device.mk)
+
 #$(call inherit-product, $(LOCAL_PATH)/device.mk)
 
 # Inherit from vendor configuration
@@ -34,10 +35,6 @@ $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
-
-# Prevent kernel-related items from being treated as apps
-PRODUCT_PACKAGES += \
-    android.hardware.ramdisk.kernel
 
 IS_PHONE := true
 

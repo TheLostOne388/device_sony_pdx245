@@ -27,6 +27,8 @@ BOARD_BUILD_VENDOR_IMAGE := true
 
 DEVICE_PATH := device/sony/pdx245
 
+DEVICE_MANIFEST_FILE += device/sony/sm8650-common/configs/manifest_graphics.xml
+
 # Display
 TARGET_SCREEN_DENSITY := 420
 
