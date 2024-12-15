@@ -1,0 +1,2 @@
+type vendor_dataservice_app, domain;
+app_domain(vendor_dataservice_app)
