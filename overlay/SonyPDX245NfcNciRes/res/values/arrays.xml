@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+
+<resources>
+    <string-array name="config_skuSupportsSecureNfc">
+        <item>c000002</item>
+        <item>c000018</item>
+        <item>c000027</item>
+        <item>c000032</item>
+        <item>c000850</item>
+        <item>c001435</item>
+        <item>c001492</item>
+        <item>c001526</item>
+        <item>c001581</item>
+        <item>c001678</item>
+        <item>c001707</item>
+        <item>c001839</item>
+        <item>c001884</item>
+        <item>c001894</item>
+        <item>c002100</item>
+        <item>c002110</item>
+        <item>c002429</item>
+        <item>c002514</item>
+        <item>c999990</item>
+        <item>c999995</item>
+        <item>c999996</item>
+        <item>c999997</item>
+        <item>c999998</item>
+        <item>c999999</item>
+    </string-array>
+</resources>

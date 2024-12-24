@@ -1,0 +1,19 @@
+type vendor_qtelephony, domain;
+app_domain(vendor_qtelephony)
+typeattribute vendor_qtelephony halclientdomain;
+
+# Allow access to various vendor HALs
+hal_client_domain(vendor_qtelephony, vendor_hal_datafactory_qti)
+hal_client_domain(vendor_qtelephony, vendor_hal_perf)
+
+# Property access
+get_prop(vendor_qtelephony, vendor_radio_prop)
+get_prop(vendor_qtelephony, vendor_ims_prop)
+get_prop(vendor_qtelephony, vendor_persist_camera_prop)
+get_prop(vendor_qtelephony, vendor_audio_prop)
+get_prop(vendor_qtelephony, vendor_video_prop)
+
+# Hardware service access
+allow vendor_qtelephony vendor_hal_imsrtp_hwservice:hwservice_manager find;
+dontaudit vendor_qtelephony default_android_service:service_manager find;
+binder_call(vendor_qtelephony, vendor_hal_imsrtp)

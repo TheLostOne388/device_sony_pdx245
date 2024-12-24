@@ -1,0 +1,11 @@
+soong_namespace {
+}
+
+filegroup {
+    name: "sony_pdx245_overlays",
+    srcs: [
+        "overlay/**/*.xml",
+        "overlay-lineage/**/*.xml",
+    ],
+}
+
