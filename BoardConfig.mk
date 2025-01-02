@@ -36,11 +36,14 @@ TARGET_SCREEN_DENSITY := 420
 # Props
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
-# Kernel Configuration
+# Kernel Version
+BOARD_KERNEL_VERSION := 6.1.43
+INSTALLED_KERNEL_TARGET := $(KERNEL_PATH)/Image
+
+# Kernel Path Configuration
 KERNEL_PATH := kernel/sony/pdx245-kernel/prebuilts
 
-# Kernel build configuration
-TARGET_NO_KERNEL := false
+# Kernel Build Configuration
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_KERNEL_SOURCE := kernel/sony/pdx245-kernel
 
@@ -51,25 +54,26 @@ TARGET_CUSTOM_KERNEL_HEADERS := $(KERNEL_PATH)/kernel-headers
 TARGET_KERNEL_HEADERS := $(KERNEL_PATH)/kernel-headers
 TARGET_VENDOR_KERNEL_HEADERS := $(KERNEL_PATH)/kernel-headers
 
-# Disable all kernel build options
-BUILD_KERNEL_HEADERS := false
+# Kernel Build Options
+BUILD_KERNEL_HEADERS := true
 NEED_KERNEL_MODULE_SYSTEM := false
 BUILD_BROKEN_KERNEL_MODULES := true
 BUILD_KERNEL_MODULES := false
 TARGET_NO_KERNEL_MODULES := true
+BOARD_USES_VENDOR_DLKM := true
 
-# Basic kernel config
+# Basic Kernel Config
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET := 0x01000000
 BOARD_DTB_OFFSET := 0x01f00000
 
-# Prebuilt kernel configuration
+# Prebuilt Kernel Configuration
 TARGET_PREBUILT_KERNEL := $(KERNEL_PATH)/Image
 BOARD_KERNEL_IMAGE_NAME := Image
 
-# DTB/DTBO
+# DTB/DTBO Configuration
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_PREBUILT_DTBIMAGE := $(KERNEL_PATH)/dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PATH)/dtbo.img
@@ -79,29 +83,38 @@ BOARD_MKBOOTIMG_ARGS += --dtb $(KERNEL_PATH)/dtb.img
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(KERNEL_PATH)/*.ko)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat vendor/sony/pdx245/proprietary/vendor/lib/modules/modules.load))
 
-# Override kernel header generation
+# Soong Namespaces
 PRODUCT_SOONG_NAMESPACES += \
     vendor/lineage \
     kernel/sony/pdx245-kernel
 
-# Copy prebuilt headers to generated location
-# $(shell mkdir -p $(GENERATED_KERNEL_HEADERS))
-# $(shell cp -r $(KERNEL_PATH)/kernel-headers/* $(GENERATED_KERNEL_HEADERS)/)
-
 # SELinux
 include device/qcom/sepolicy_vndr/SEPolicy.mk
+include hardware/sony/sepolicy/qti/SEPolicy.mk
 
+# Type definitions before other policies
+BOARD_VENDOR_SEPOLICY_DIRS += \
+    device/qcom/sepolicy_vndr/sm8550/generic/vendor/common \
+    $(DEVICE_PATH)/sepolicy/vendor/type \
+    device/qcom/sepolicy_vndr/sm8550/generic/vendor/qspm \
+    device/lineage/sepolicy/qcom/system
+
+
+# Then other policies
 BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor \
-    vendor/sony/pdx245/proprietary/vendor/etc/selinux \
-    device/qcom/sepolicy_vndr/sm8550/generic/vendor/common \
-    device/qcom/sepolicy_vndr/sm8550/generic/vendor/kalama \
+    system/sepolicy/vendor \
+    device/qcom/sepolicy_vndr/sm8550/generic/vendor/pineapple \
     device/qcom/sepolicy_vndr/sm8550/qva/vendor/common \
-    device/qcom/sepolicy_vndr/sm8550/qva/vendor/kalama \
+    device/qcom/sepolicy_vndr/sm8550/qva/vendor/pineapple \
+    vendor/sony/pdx245/proprietary/vendor/etc/selinux \
     device/lineage/sepolicy/qcom/vendor
+
+BOARD_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/private
 
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
     device/lineage/sepolicy/common/private \
+    device/lineage/sepolicy/qcom/system \
     device/lineage/sepolicy/qcom/dynamic \
     device/lineage/sepolicy/qcom/private \
     $(DEVICE_PATH)/sepolicy/private
@@ -110,6 +123,4 @@ SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += \
     device/lineage/sepolicy/common/public \
     device/sony/pdx245/sepolicy/public
 
-# Move your attributes.te to the vendor directory
-BOARD_VENDOR_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy/vendor
+BOARD_SEPOLICY_M4DEFS := $(sort $(BOARD_SEPOLICY_M4DEFS))

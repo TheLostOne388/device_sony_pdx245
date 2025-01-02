@@ -13,7 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+LINEAGE_BUILD := true
+
 LOCAL_PATH := $(call my-dir)
+
+# Prevent AOSP APN list inclusion
+PRODUCT_NO_TELEPHONY := true
 
 # Include the audio module from the Android.mk file
 include $(TOP)/hardware/qcom-caf/sm8650/audio/Android.mk
@@ -21,20 +26,21 @@ include $(TOP)/hardware/qcom-caf/sm8650/audio/Android.mk
 PRODUCT_SOONG_NAMESPACES += \
     hardware/qcom-caf/sm8650/audio
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+# Inherit some common Lineage stuff.
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Inherit from device-specific configuration
 $(call inherit-product, device/sony/pdx245/device.mk)
 
-#$(call inherit-product, $(LOCAL_PATH)/device.mk)
-
 # Inherit from vendor configuration
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 
-# Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Include the prebuilt kernel
+$(call inherit-product, device/sony/pdx245/kernel.mk)
 
 IS_PHONE := true
 
@@ -43,9 +49,6 @@ PRODUCT_DEVICE := pdx245
 PRODUCT_BRAND := Sony
 PRODUCT_MODEL := XQ-EC72
 PRODUCT_MANUFACTURER := Sony
-
-# Inherit some cool Parasitic shit.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 TARGET_SUPPORTS_GOOGLE_RECORDER := true
 TARGET_INCLUDE_STOCK_ARCORE := true
@@ -67,6 +70,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-sonymobile
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE=$(PRODUCT_SYSTEM_DEVICE) \
     TARGET_PRODUCT=$(PRODUCT_SYSTEM_NAME) \
-    PRIVATE_BUILD_DESC="XQ-EC72-user 14 69.0.A.2.18 069000A002001800522519484 release-keys"
+    PRIVATE_BUILD_DESC="XQ-EC72-user 15 69.0.A.2.49 069000A002001800522519484 release-keys"
 
-BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:14/69.0.A.2.18/069000A002001800522519484:user/release-keys
+BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:14/69.0.A.2.49/069000A002001800522519484:user/release-keys

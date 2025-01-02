@@ -1,0 +1,2 @@
+# Base type declarations
+type vendor_qtelephony, domain;

@@ -45,7 +45,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     SonyPDX245SystemUIRes \
     SonyPDX245NfcNciRes \
-    SonyPDX245FrameworksRes
+    SonyPDX245FrameworksRes \
 
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
@@ -72,4 +72,4 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245-kernel/prebuilts/dtb.img:dtb.img \
     kernel/sony/pdx245-kernel/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
     kernel/sony/pdx245-kernel/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
-    kernel/sony/pdx245-kernel/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img
+    kernel/sony/pdx245-kernel/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 

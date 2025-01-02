@@ -8,3 +8,5 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_SYSTEM_EXT_MODULE := true
 
 include $(BUILD_SYSTEM)/base_rules.mk
+
+include $(LOCAL_PATH)/Sepolicy.mk

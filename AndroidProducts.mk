@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+PRODUCT_KERNEL_PREBUILT := device/sony/pdx245/kernel.mk
+
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/lineage_pdx245.mk
 
