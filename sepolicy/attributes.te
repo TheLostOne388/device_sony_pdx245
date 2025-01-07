@@ -1,7 +1,0 @@
-# Define vendor-specific attribute for HAL clients
-attribute vendor_hal_qspmhal_client, hal_type;
-
-# Define attributes for LiveDisplay HAL
-attribute hal_lineage_livedisplay;
-attribute hal_lineage_livedisplay_client;
-attribute hal_lineage_livedisplay_server;

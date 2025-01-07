@@ -88,39 +88,13 @@ PRODUCT_SOONG_NAMESPACES += \
     vendor/lineage \
     kernel/sony/pdx245-kernel
 
-# SELinux
-include device/qcom/sepolicy_vndr/SEPolicy.mk
-include hardware/sony/sepolicy/qti/SEPolicy.mk
+TARGET_BOARD_PLATFORM := pineapple
+TARGET_USES_PREBUILT_VENDOR_SEPOLICY := true
 
-# Type definitions before other policies
+BOARD_ODM_SEPOLICY_DIRS += \
+    vendor/sony/sm8650-common/proprietary/odm/etc/selinux
+
 BOARD_VENDOR_SEPOLICY_DIRS += \
-    device/qcom/sepolicy_vndr/sm8550/generic/vendor/common \
-    $(DEVICE_PATH)/sepolicy/vendor/type \
-    device/qcom/sepolicy_vndr/sm8550/generic/vendor/qspm \
-    device/lineage/sepolicy/qcom/system
+    device/sony/pdx245/sepolicy/vendor
 
-
-# Then other policies
-BOARD_VENDOR_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy/vendor \
-    system/sepolicy/vendor \
-    device/qcom/sepolicy_vndr/sm8550/generic/vendor/pineapple \
-    device/qcom/sepolicy_vndr/sm8550/qva/vendor/common \
-    device/qcom/sepolicy_vndr/sm8550/qva/vendor/pineapple \
-    vendor/sony/pdx245/proprietary/vendor/etc/selinux \
-    device/lineage/sepolicy/qcom/vendor
-
-BOARD_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/private
-
-SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
-    device/lineage/sepolicy/common/private \
-    device/lineage/sepolicy/qcom/system \
-    device/lineage/sepolicy/qcom/dynamic \
-    device/lineage/sepolicy/qcom/private \
-    $(DEVICE_PATH)/sepolicy/private
-
-SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += \
-    device/lineage/sepolicy/common/public \
-    device/sony/pdx245/sepolicy/public
-
-BOARD_SEPOLICY_M4DEFS := $(sort $(BOARD_SEPOLICY_M4DEFS))
+include device/lineage/sepolicy/qcom/sepolicy.mk

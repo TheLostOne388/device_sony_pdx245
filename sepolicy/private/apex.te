@@ -1,7 +1,0 @@
-# Override system policy to use dontaudit instead of allow
-dontaudit apexd vendor_file_type:file { read getattr };
-dontaudit apexd vendor_app_file:file { read getattr };
-
-# Keep the vendor APEX specific access
-r_dir_file(apexd, vendor_apex_file)
-r_dir_file(apexd, vendor_apex_metadata_file)
