@@ -21,10 +21,10 @@ LOCAL_PATH := $(call my-dir)
 PRODUCT_NO_TELEPHONY := true
 
 # Include the audio module from the Android.mk file
-include $(TOP)/hardware/qcom-caf/sm8650/audio/Android.mk
+# include $(TOP)/hardware/qcom-caf/sm8650/audio/Android.mk
 
 PRODUCT_SOONG_NAMESPACES += \
-    hardware/qcom-caf/sm8650/audio
+#    hardware/qcom-caf/sm8650/audio
 
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
@@ -70,6 +70,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-sonymobile
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE=$(PRODUCT_SYSTEM_DEVICE) \
     TARGET_PRODUCT=$(PRODUCT_SYSTEM_NAME) \
-    PRIVATE_BUILD_DESC="XQ-EC72-user 15 69.0.A.2.49 069000A002001800522519484 release-keys"
+    PRIVATE_BUILD_DESC="XQ-EC72-userdebug 15 69.1.A.2.78 069001A002007800522519484 release-keys"
 
-BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:14/69.0.A.2.49/069000A002001800522519484:user/release-keys
+BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:15/69.1.A.2.78/069001A002007800522519484:user/release-keys

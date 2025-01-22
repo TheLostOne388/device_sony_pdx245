@@ -27,7 +27,7 @@ BOARD_SEPARATE_VENDOR := true
 # Inherit from sony sm8650-common
 $(call inherit-product, device/sony/sm8650-common/common.mk)
 
-$(call inherit-product, hardware/qcom-caf/sm8650/wifi/legacy/qcwcn/wpa_supplicant_8_lib/Android.mk)
+# $(call inherit-product, hardware/qcom-caf/sm8650/wifi/legacy/qcwcn/wpa_supplicant_8_lib/Android.mk)
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2560
@@ -63,10 +63,10 @@ PRODUCT_SOONG_NAMESPACES += \
     vendor/sony \
     vendor/sony/pdx245 \
     vendor/sony/sm8650-common \
-    hardware/qcom-caf/sm8650/audio \
-    hardware/qcom-caf/sm8650/display \
-    hardware/qcom-caf/sm8650/media \
-    hardware/qcom-caf/sm8650/wifi
+#    hardware/qcom-caf/sm8650/audio \
+#    hardware/qcom-caf/sm8650/display \
+#    hardware/qcom-caf/sm8650/media \
+#    hardware/qcom-caf/sm8650/wifi
 
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
@@ -78,3 +78,25 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245-kernel/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
     kernel/sony/pdx245-kernel/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
     kernel/sony/pdx245-kernel/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 
+	
+# Force vendor variants for display HAL
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.display.mapper@3.0-impl \
+    vendor.qti.hardware.display.mapper@1.1-impl \
+    vendor.qti.hardware.display.composer@2.0-impl \
+    vendor.qti.hardware.display.allocator@1.0-impl
+
+# Force vendor radio variants
+PRODUCT_PACKAGES += \
+    android.hardware.radio.config@1.0-impl \
+    android.hardware.radio.config@1.1-impl
+
+# Override system_ext partition assignments
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-qti.xml
+
+# Ensure vendor variants are used
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.qti.sys.fw.bservice_enable=true \
+    ro.vendor.qti.sys.fw.bservice_limit=5 \
+    ro.vendor.qti.sys.fw.bservice_age=5000
