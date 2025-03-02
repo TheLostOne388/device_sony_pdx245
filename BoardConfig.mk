@@ -42,6 +42,8 @@ BOARD_USES_VENDOR_DLKM := true
 # Define base kernel path
 KERNEL_PREBUILT_DIR := $(shell pwd)/kernel/sony/pdx245/prebuilts
 
+#gibberish to test commit script. 
+
 # Kernel Configuration
 TARGET_NO_KERNEL := false
 INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/Image
