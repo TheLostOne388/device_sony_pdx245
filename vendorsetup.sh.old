@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Add the lunch options
+add_lunch_combo evolution_pdx245-user
+add_lunch_combo evolution_pdx245-userdebug
+add_lunch_combo evolution_pdx245-eng
+
+# Set up our custom build variable for the AGM client
+export BOARD_HAVE_QCOM_AGMCLIENT=true
