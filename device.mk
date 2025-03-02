@@ -375,5 +375,4 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     audio.primary.pineapple
 
-# Audio configuration moved to BoardConfig.mk
 
