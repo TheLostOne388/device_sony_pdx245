@@ -219,10 +219,7 @@ PRODUCT_PACKAGES += \
 
 # NFC packages
 PRODUCT_PACKAGES += \
-    vendor.nxp.hardware.nfc@1.0 \
-    vendor.nxp.hardware.nfc@1.1 \
-    vendor.nxp.nxpnfc@2.0 \
-    manifest_fcm_level
+    vendor.nxp.nxpnfc@2.0 
 
 # Additional QTI HALs
 PRODUCT_PACKAGES += \
@@ -237,7 +234,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.postproc \
     vendor.qti.hardware.dpmservice@1.0 \
     vendor.qti.hardware.dpmservice@1.1 \
-    vendor.qti.hardware.qseecom@1.0 \
     vendor.qti.hardware.qteeconnector@1.0 \
     vendor.qti.hardware.radio.ims@1.0-2 \
     vendor.qti.hardware.spu@1.0-2
@@ -256,19 +252,26 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.config-V1-ndk.vendor \
     vendor.qti.hardware.qseecom@1.0.vendor
 
-# Already defined above
-
 # VINTF Manifest Configuration
-DEVICE_MANIFEST_FILE := device/sony/sm8650-common/consolidated_manifest.xml
+DEVICE_MANIFEST_FILE := vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml
+DEVICE_MANIFEST_SKUS := pdx245
+DEVICE_MANIFEST_PDX245_FILES := \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.system.wifi.keystore.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.camera.provider.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.sensors.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.nfc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.secure_element.xml
+
+PRODUCT_PACKAGES += android.system.wifi.keystore@1.0-service
 
 # Device compatibility matrix
 DEVICE_MATRIX_FILE := \
     vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/compatibility_matrix.xml
 
-# Framework compatibility matrix - add device-specific file to enforce FCM level
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    device/sony/sm8650-common/framework_compatibility_matrix.xml \
-    device/sony/pdx245/framework_compatibility_matrix.xml
+    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/device_framework_compatibility_matrix.xml
 
 # Set shipping API level to match Android 15
 PRODUCT_SHIPPING_API_LEVEL := 34

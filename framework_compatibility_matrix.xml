@@ -30,5 +30,5 @@
     </vndk>
     
     <\!-- Specify kernel level -->
-    <kernel version="6.1.0" level="15"/>
+    <kernel version="6.1.0" level="8"/>
 </compatibility-matrix>

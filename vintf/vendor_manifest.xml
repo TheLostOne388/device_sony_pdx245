@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest version="8.0" type="device" level="15" target-level="15">
-    <!-- This is a minimal vendor manifest with just the FCM level specified -->
-    <!-- Add your device's specific HALs below -->
-    <kernel target-level="15"/>
-    <sepolicy>
-        <version>34.0</version>
-    </sepolicy>
-</manifest>
