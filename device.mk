@@ -217,11 +217,11 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.bluetooth_sar@1.1 \
     vendor.nxp.nxpnfc
 
-# NFC packages
+# NFC packages (keep AIDL-compatible ones)
 PRODUCT_PACKAGES += \
-    vendor.nxp.nxpnfc@2.0 
+    vendor.nxp.nxpnfc@2.0
 
-# Additional QTI HALs
+# Additional QTI HALs (remove deprecated HIDL where stock uses AIDL)
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.data.connection@1.0 \
     vendor.qti.hardware.data.connection@1.1 \
@@ -234,7 +234,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.postproc \
     vendor.qti.hardware.dpmservice@1.0 \
     vendor.qti.hardware.dpmservice@1.1 \
-    vendor.qti.hardware.qteeconnector@1.0 \
     vendor.qti.hardware.radio.ims@1.0-2 \
     vendor.qti.hardware.spu@1.0-2
 
@@ -249,22 +248,20 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.data.connection@1.1.vendor \
     vendor.qti.hardware.data.iwlan@1.0.vendor \
-    vendor.qti.hardware.display.config-V1-ndk.vendor \
-    vendor.qti.hardware.qseecom@1.0.vendor
+    vendor.qti.hardware.display.config-V1-ndk.vendor
 
 # VINTF Manifest Configuration
 DEVICE_MANIFEST_FILE := vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml
 DEVICE_MANIFEST_SKUS := pdx245
 DEVICE_MANIFEST_PDX245_FILES := \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.system.wifi.keystore.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.camera.provider.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.sensors.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.nfc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.secure_element.xml
+    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml
 
-PRODUCT_PACKAGES += android.system.wifi.keystore@1.0-service
+PRODUCT_PACKAGES += \
+    android.system.wifi.keystore@1.0-service \
+    android.hardware.sensors@2-service
+    
+PRODUCT_PACKAGES -= android.hardware.sensors@2.1-multihal
 
 # Device compatibility matrix
 DEVICE_MATRIX_FILE := \
