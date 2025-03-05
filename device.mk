@@ -196,10 +196,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf \
     hostapd
 
-# Init files
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/init/android.system.wifi.keystore@1.0-service.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/android.system.wifi.keystore@1.0-service.rc
-
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.radio.ims@1.0 \
     vendor.qti.hardware.radio.qtiradio@2.0 \
@@ -260,8 +256,10 @@ DEVICE_MANIFEST_PDX245_FILES := \
 PRODUCT_PACKAGES += \
     android.system.wifi.keystore@1.0-service \
     android.hardware.sensors@2-service
-    
+
 PRODUCT_PACKAGES -= android.hardware.sensors@2.1-multihal
+    
+DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
 
 # Device compatibility matrix
 DEVICE_MATRIX_FILE := \
