@@ -30,8 +30,8 @@ $(call inherit-product, device/sony/sm8650-common/common.mk)
 PRODUCT_TARGET_FCM_VERSION := 9
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 2560
-TARGET_SCREEN_WIDTH := 1440
+TARGET_SCREEN_HEIGHT := 2330
+TARGET_SCREEN_WIDTH := 1080
 
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
