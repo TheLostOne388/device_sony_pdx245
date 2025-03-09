@@ -20,13 +20,13 @@
 
     <\!-- These FCM level definitions are required for proper compatibility -->
     <vendor-ndk>
-        <version>34</version>
+        <version>35</version>
     </vendor-ndk>
     <system-sdk>
-        <version>34</version>
+        <version>35</version>
     </system-sdk>
     <vndk>
-        <version>34</version>
+        <version>35</version>
     </vndk>
     
     <\!-- Specify kernel level -->
