@@ -1,0 +1,16 @@
+// Android WiFi Keystore (HIDL) Service
+cc_binary {
+    name: "android.system.wifi.keystore@1.0-service",
+    relative_install_path: "hw",
+    srcs: ["service.cpp"],
+    shared_libs: [
+        "libhidlbase",
+        "libutils",
+        "liblog",
+        "android.system.wifi.keystore@1.0",
+    ],
+    init_rc: ["android.system.wifi.keystore@1.0-service.rc"],
+    vintf_fragments: [":android.system.wifi.keystore.xml"],
+    proprietary: true,
+    vendor: true,
+}

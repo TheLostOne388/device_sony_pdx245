@@ -1,73 +1,111 @@
-#include <android/hardware/sensors/2.0/ISensors.h>
-#include <hidl/HidlTransportSupport.h>
-#include <hidl/LegacySupport.h>
+#include <aidl/android/hardware/sensors/ISensors.h>
+#include <aidl/android/hardware/sensors/Event.h>
+#include <aidl/android/hardware/sensors/SensorInfo.h>
+#include <binder/IServiceManager.h>
+#include <binder/ProcessState.h>
+#include <binder/IPCThreadState.h>
+#include <android-base/logging.h>
+#include <android/binder_manager.h>
 
-using ::android::hardware::configureRpcThreadpool;
-using ::android::hardware::joinRpcThreadpool;
-using ::android::hardware::sensors::V2_0::ISensors;
-using ::android::hardware::sensors::V1_0::OperationMode;
-using ::android::hardware::sensors::V1_0::Result;
-using ::android::hardware::sensors::V1_0::Event;
-using ::android::hardware::sensors::V1_0::SharedMemInfo;
-using ::android::hardware::sensors::V1_0::RateLevel;
-using ::android::hardware::Return;
-using ::android::hardware::Void;
-using ::android::sp;
+using ::aidl::android::hardware::sensors::ISensors;
+using ::aidl::android::hardware::sensors::SensorInfo;
+using ::aidl::android::hardware::sensors::Event;
+using RateLevel = ::aidl::android::hardware::sensors::ISensors::RateLevel;        // Alias
+using SharedMemInfo = ::aidl::android::hardware::sensors::ISensors::SharedMemInfo; // Alias
+using OperationMode = ::aidl::android::hardware::sensors::ISensors::OperationMode; // Alias
+using ::ndk::ScopedAStatus;
+using ::ndk::SpAIBinder;
+using ::android::ProcessState;
+using ::android::defaultServiceManager;
+using ::android::String16;
 
-struct Sensors : public ISensors {
-    Return<void> getSensorsList(getSensorsList_cb _hidl_cb) override {
-        _hidl_cb({});
-        return Void();
+class Sensors : public ISensors {
+public:
+    Sensors() = default;
+
+    SpAIBinder asBinder() override { return SpAIBinder(); }
+    bool isRemote() override { return false; }
+
+    ScopedAStatus getSensorsList(std::vector<SensorInfo>* _aidl_return) override {
+        LOG(INFO) << "getSensorsList called";
+        *_aidl_return = {};
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> setOperationMode(OperationMode mode) override {
-        return Result::OK;
+    ScopedAStatus setOperationMode(OperationMode mode) override {
+        LOG(INFO) << "setOperationMode: " << static_cast<int>(mode);
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> activate(int32_t sensorHandle, bool enabled) override {
-        return Result::OK;
+    ScopedAStatus activate(int32_t sensorHandle, bool enabled) override {
+        LOG(INFO) << "activate: handle=" << sensorHandle << ", enabled=" << enabled;
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> initialize(const ::android::hardware::MQDescriptorSync<Event>& eventQueueDescriptor,
-                              const ::android::hardware::MQDescriptorSync<uint32_t>& wakeLockDescriptor,
-                              const sp<::android::hardware::sensors::V2_0::ISensorsCallback>& sensorsCallback) override {
-        return Result::OK;
+    ScopedAStatus batch(int32_t sensorHandle, int64_t samplingPeriodNs, int64_t maxReportLatencyNs) override {
+        LOG(INFO) << "batch: handle=" << sensorHandle << ", sampling=" << samplingPeriodNs;
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> batch(int32_t sensorHandle, int64_t samplingPeriodNs, int64_t maxReportLatencyNs) override {
-        return Result::OK;
+    ScopedAStatus flush(int32_t sensorHandle) override {
+        LOG(INFO) << "flush: handle=" << sensorHandle;
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> flush(int32_t sensorHandle) override {
-        return Result::OK;
+    ScopedAStatus injectSensorData(const Event& event) override {
+        LOG(INFO) << "injectSensorData";
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> injectSensorData(const Event& event) override {
-        return Result::OK;
+    ScopedAStatus registerDirectChannel(const SharedMemInfo& mem, int32_t* _aidl_return) override {
+        LOG(INFO) << "registerDirectChannel";
+        *_aidl_return = 0;
+        return ScopedAStatus::ok();
     }
 
-    Return<void> registerDirectChannel(const SharedMemInfo& mem, registerDirectChannel_cb _hidl_cb) override {
-        _hidl_cb(Result::OK, 0);
-        return Void();
+    ScopedAStatus unregisterDirectChannel(int32_t channelHandle) override {
+        LOG(INFO) << "unregisterDirectChannel: handle=" << channelHandle;
+        return ScopedAStatus::ok();
     }
 
-    Return<Result> unregisterDirectChannel(int32_t channelHandle) override {
-        return Result::OK;
+    ScopedAStatus configDirectReport(int32_t sensorHandle, int32_t channelHandle, RateLevel rate, int32_t* _aidl_return) override {
+        LOG(INFO) << "configDirectReport: sensor=" << sensorHandle << ", channel=" << channelHandle;
+        *_aidl_return = 0;
+        return ScopedAStatus::ok();
     }
 
-    Return<void> configDirectReport(int32_t sensorHandle, int32_t channelHandle, RateLevel rate, configDirectReport_cb _hidl_cb) override {
-        _hidl_cb(Result::OK, 0);
-        return Void();
+    ScopedAStatus initialize(
+        const ::aidl::android::hardware::common::fmq::MQDescriptor<::aidl::android::hardware::sensors::Event, ::aidl::android::hardware::common::fmq::SynchronizedReadWrite>& eventQueueDescriptor,
+        const ::aidl::android::hardware::common::fmq::MQDescriptor<int32_t, ::aidl::android::hardware::common::fmq::SynchronizedReadWrite>& wakeLockDescriptor,
+        const std::shared_ptr<::aidl::android::hardware::sensors::ISensorsCallback>& sensorsCallback) override {
+        LOG(INFO) << "initialize called";
+        return ScopedAStatus::ok();
+    }
+
+    ScopedAStatus getInterfaceVersion(int32_t* _aidl_return) override {
+        *_aidl_return = ISensors::version;
+        return ScopedAStatus::ok();
+    }
+
+    ScopedAStatus getInterfaceHash(std::string* _aidl_return) override {
+        *_aidl_return = ISensors::hash;
+        return ScopedAStatus::ok();
     }
 };
 
 int main() {
-    sp<ISensors> service = new Sensors();
-    configureRpcThreadpool(1, true);
-    android::status_t status = service->registerAsService("default");
-    if (status != android::OK) {
+    LOG(INFO) << "Starting PDX245 sensors service";
+    std::shared_ptr<Sensors> service = ndk::SharedRefBase::make<Sensors>();
+    ProcessState::self()->startThreadPool();
+
+    const std::string serviceName = std::string(ISensors::descriptor) + "/default";
+    binder_status_t status = AServiceManager_addService(service->asBinder().get(), serviceName.c_str());
+    if (status != STATUS_OK) {
+        LOG(ERROR) << "Failed to register service: " << status;
         return -1;
     }
-    joinRpcThreadpool();
+    LOG(INFO) << "Service registered successfully";
+
+    android::IPCThreadState::self()->joinThreadPool();
     return 0;
 }

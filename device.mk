@@ -71,7 +71,8 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/interfaces/media/c2/1.0 \
     hardware/interfaces/bluetooth/audio \
     vendor/qcom/opensource/interfaces \
-    kernel/sony/pdx245
+    kernel/sony/pdx245 \
+    vendor/sony/pdx245/sensors
 
 # Prebuilt kernel files
 PRODUCT_COPY_FILES += \
@@ -254,10 +255,25 @@ DEVICE_MANIFEST_PDX245_FILES := \
     vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml
 
 PRODUCT_PACKAGES += \
+    android.hardware.sensors-service.pdx245 \
+    android.hardware.sensors-service.pdx245.xml \
     android.system.wifi.keystore@1.0-service \
-    android.hardware.sensors@2-service
+    android.system.wifi.keystore.xml
 
-PRODUCT_PACKAGES -= android.hardware.sensors@2.1-multihal
+PRODUCT_PACKAGES -= \
+    android.hardware.sensors@2.1-multihal \
+    android.hardware.sensors@2.1-service.multihal \
+    android.hardware.sensors@2.0-multihal.xml \
+    android.hardware.sensors@2.0-service.multihal \
+    android.hardware.sensors@2.0-multihal-sony.xml
+
+DEVICE_MANIFEST_FILE += vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.system.wifi.keystore.xml
+
+# Optional: Include manifest if not using vintf_fragments in Android.bp
+DEVICE_MANIFEST_FILE += device/sony/pdx245/wifi_keystore/1.0/default/android.system.wifi.keystore.xml
+
+# Include the wifi keystore manifest fragment
+DEVICE_MANIFEST_FILE += device/sony/pdx245/wifi_keystore/1.0/default/android.system.wifi.keystore.xml
     
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
 
