@@ -105,7 +105,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE :=
 # QCOM's SEPolicy already included in BoardConfigCommon.mk
 
 # Set FCM Version for VINTF compatibility
-BOARD_SHIPPING_API_LEVEL := 34
+BOARD_SHIPPING_API_LEVEL := 35
 BOARD_SHIPPING_FCM_VERSION := 8
 
 # Map vendor types to system types
