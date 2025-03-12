@@ -23,6 +23,12 @@
 #
 
 # BOARD_SEPARATE_VENDOR moved to BoardConfig.mk
+# Device identification
+PRODUCT_DEVICE := pdx245
+PRODUCT_NAME := lineage_pdx245
+PRODUCT_MODEL := Sony Xperia XQ-EC72
+PRODUCT_BRAND := Sony
+PRODUCT_MANUFACTURER := Sony
 
 # Inherit from sony sm8650-common
 $(call inherit-product, device/sony/sm8650-common/common.mk)
@@ -268,13 +274,7 @@ PRODUCT_PACKAGES -= \
     android.hardware.sensors@2.0-multihal-sony.xml
 
 DEVICE_MANIFEST_FILE += vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.system.wifi.keystore.xml
-
-# Optional: Include manifest if not using vintf_fragments in Android.bp
-DEVICE_MANIFEST_FILE += device/sony/pdx245/wifi_keystore/1.0/default/android.system.wifi.keystore.xml
-
-# Include the wifi keystore manifest fragment
-DEVICE_MANIFEST_FILE += device/sony/pdx245/wifi_keystore/1.0/default/android.system.wifi.keystore.xml
-    
+ 
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
 
 # Device compatibility matrix
@@ -285,7 +285,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/device_framework_compatibility_matrix.xml
 
 # Set shipping API level to match Android 15
-PRODUCT_SHIPPING_API_LEVEL := 34
+PRODUCT_SHIPPING_API_LEVEL := 35
 
 # Enable VINTF enforcement
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
@@ -295,7 +295,7 @@ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 $(call inherit-product, vendor/sony/sm8650-common/sm8650-common-vendor.mk)
 
-# Pakcages that conflict with LineageOS which we aim to override and use Sony's versions
+# Packages that conflict with LineageOS which we aim to override and use Sony's versions
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.config-V1-ndk \
     vendor.qti.hardware.display.config-V2-ndk \
