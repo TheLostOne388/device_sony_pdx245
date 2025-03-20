@@ -33,8 +33,6 @@ PRODUCT_MANUFACTURER := Sony
 # Inherit from sony sm8650-common
 $(call inherit-product, device/sony/sm8650-common/common.mk)
 
-PRODUCT_TARGET_FCM_VERSION := 9
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -185,14 +183,24 @@ PRODUCT_PACKAGES_REMOVE += \
 
 # VINTF properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.boot.product.vendor.sku=default \
-    ro.boot.product.hardware.sku=default \
+    ro.boot.product.vendor.sku=pdx245 \
+    ro.boot.product.hardware.sku=pdx245 \
     ro.vendor.kernel.version=6.1.43
 
-# VINTF paths
+# VINTF paths and configuration
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.vintf.manifest.path=/vendor/etc/vintf/manifest.xml \
     ro.vendor.vintf.version=1.0
+
+# Include FCM level configuration
+include $(LOCAL_PATH)/fcm_level.mk
+
+# Set shipping API level to match Android 14
+PRODUCT_SHIPPING_API_LEVEL := 34
+
+# Enable VINTF enforcement
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
@@ -253,13 +261,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.data.iwlan@1.0.vendor \
     vendor.qti.hardware.display.config-V1-ndk.vendor
 
-# VINTF Manifest Configuration
-DEVICE_MANIFEST_FILE := vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml
-DEVICE_MANIFEST_SKUS := pdx245
-DEVICE_MANIFEST_PDX245_FILES := \
-    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml
-
 PRODUCT_PACKAGES += \
     android.hardware.sensors-service.pdx245 \
     android.hardware.sensors-service.pdx245.xml \
@@ -273,23 +274,7 @@ PRODUCT_PACKAGES -= \
     android.hardware.sensors@2.0-service.multihal \
     android.hardware.sensors@2.0-multihal-sony.xml
 
-DEVICE_MANIFEST_FILE += vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.system.wifi.keystore.xml
- 
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
-
-# Device compatibility matrix
-DEVICE_MATRIX_FILE := \
-    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/compatibility_matrix.xml
-
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/device_framework_compatibility_matrix.xml
-
-# Set shipping API level to match Android 15
-PRODUCT_SHIPPING_API_LEVEL := 35
-
-# Enable VINTF enforcement
-PRODUCT_ENFORCE_VINTF_MANIFEST := true
-PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
@@ -388,5 +373,8 @@ PRODUCT_PACKAGES += \
 # Audio HAL
 PRODUCT_PACKAGES += \
     audio.primary.pineapple
+
+PRODUCT_PACKAGES += \
+    android.hidl.base@1.0
 
 

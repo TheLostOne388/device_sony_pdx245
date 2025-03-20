@@ -1,0 +1,46 @@
+<manifest version="8.0" type="device" target-level="8">
+    <!-- Existing HALs -->
+    <hal format="hidl">
+        <name>vendor.qti.hardware.secureprocessor.device</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISecureProcessor</name>
+            <instance>qti-tee</instance>
+            <instance>qti-tvm</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.qti.hardware.spu</name>
+        <version>2</version>
+        <interface>
+            <name>ISPUManager</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Add from vendor manifests -->
+    <hal format="aidl">
+        <name>android.hardware.bluetooth.audio</name>
+        <version>4</version>
+        <interface>
+            <name>IBluetoothAudioProviderFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <hal format="aidl">
+        <name>android.hardware.wifi.supplicant</name>
+        <version>3</version>
+        <interface>
+            <name>ISupplicant</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Vendor-specific HALs from manifest_pdx245.xml -->
+    <!-- Add as previously suggested -->
+
+    <sepolicy>
+        <version>202404</version>
+    </sepolicy>
+</manifest>

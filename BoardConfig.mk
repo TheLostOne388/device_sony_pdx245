@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+override POLICYVERS := 202404
+
 # Inherit from sony sm8650-common
 -include device/sony/sm8650-common/BoardConfigCommon.mk
 
@@ -32,7 +34,7 @@ BOARD_BUILD_VENDOR_IMAGE := true
 DEVICE_PATH := device/sony/pdx245
 
 # Display
-TARGET_SCREEN_DENSITY := 420
+TARGET_SCREEN_DENSITY := 396
 
 # Props
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
@@ -40,7 +42,7 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 BOARD_USES_VENDOR_DLKM := true
 
 # Define base kernel path
-KERNEL_PREBUILT_DIR := $(shell pwd)/kernel/sony/pdx245/prebuilts
+KERNEL_PREBUILT_DIR := $(TOP)/kernel/sony/pdx245/prebuilts
 
 # Kernel Configuration
 TARGET_NO_KERNEL := false
@@ -55,6 +57,19 @@ TARGET_NO_KERNEL_HEADERS := true
 TARGET_USE_PREBUILT_KERNEL_HEADERS := true
 BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
 BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
+
+# Add system-wide kernel header paths
+TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers
+
+# Define the header library that other modules can depend on
+BOARD_HEADER_LIBRARIES += \
+    generated_kernel_headers \
+    qti_kernel_headers
+
+# Make sure Soong can find the headers
+SOONG_CONFIG_NAMESPACES += kernel_headers
+SOONG_CONFIG_kernel_headers += kernel_headers_path
+SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers
 
 # DTB/DTBO Configuration
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
@@ -95,18 +110,39 @@ TARGET_SPECIFIC_HEADER_PATH := \
     hardware/interfaces/bluetooth/audio/2.0 \
     hardware/interfaces/bluetooth/audio/2.1 
     
-# Soong Namespaces moved to device.mk
-
 TARGET_SEPOLICY_DIR := sm8550
-
-# Use DEVICE_MATRIX_FILE in device.mk instead
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE :=
 
 # QCOM's SEPolicy already included in BoardConfigCommon.mk
 
 # Set FCM Version for VINTF compatibility
-BOARD_SHIPPING_API_LEVEL := 35
+BOARD_SHIPPING_API_LEVEL := 34
 BOARD_SHIPPING_FCM_VERSION := 8
+BOARD_SYSTEMSDK_VERSIONS := 34 35
+
+# Android 15 uses date-based SEPolicy version
+BOARD_SEPOLICY_VERS := 202404
+PLATFORM_SEPOLICY_VERSION := 202404
+BOARD_SEPOLICY_VERS_API := 34
+
+# Override the common declaration
+override DEVICE_MATRIX_FILE := \
+    $(DEVICE_PATH)/vintf/device_compatibility_matrix.xml
+
+# Use our custom framework compatibility matrices - alternative file as a test
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+    $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
+
+# Base device manifest
+DEVICE_MANIFEST_FILE := \
+    $(DEVICE_PATH)/vintf/manifest.xml 
+#    device/sony/sm8650-common/manifest.xml \
+#    device/sony/sm8650-common/network_manifest.xml
+
+# SKU-specific manifests
+DEVICE_MANIFEST_SKUS := pdx245
+DEVICE_MANIFEST_PDX245_FILES := \
+    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml
 
 # Map vendor types to system types
 BOARD_VENDOR_SEPOLICY_DIRS += \
@@ -127,7 +163,6 @@ SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += \
     device/lineage/sepolicy/qcom/public
 
 # Define the M4 macros directly without recursive definitions
-# Remove the -E argument which might be causing issues with macro expansion
 BOARD_SEPOLICY_M4DEFS += \
     vendor_sysfs_battery_supply=sysfs_battery_supply \
     vendor_sysfs_graphics=sysfs_graphics \
