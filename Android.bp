@@ -5,4 +5,3 @@ filegroup {
         "overlay-lineage/**/*.xml",
     ],
 }
-

@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-override POLICYVERS := 202404
 
-# Inherit from sony sm8650-common
--include device/sony/sm8650-common/BoardConfigCommon.mk
 
 # TARGET_BOARD_PLATFORM already defined in BoardConfigCommon.mk
 TARGET_COMPILE_WITH_MSM_KERNEL := true
+
 # BOARD_USES_QCOM_HARDWARE is already defined in BoardConfigCommon.mk
 
 # Enable Treble Support
@@ -29,9 +27,6 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_PARTITION_SIZE := 1610612736
 BOARD_HAS_VENDOR_PARTITION := true
 BOARD_BUILD_VENDOR_IMAGE := true
-
-# Device Path
-DEVICE_PATH := device/sony/pdx245
 
 # Display
 TARGET_SCREEN_DENSITY := 396
@@ -112,25 +107,8 @@ TARGET_SPECIFIC_HEADER_PATH := \
     
 TARGET_SEPOLICY_DIR := sm8550
 
-# QCOM's SEPolicy already included in BoardConfigCommon.mk
-
-# Set FCM Version for VINTF compatibility
-BOARD_SHIPPING_API_LEVEL := 34
-BOARD_SHIPPING_FCM_VERSION := 8
-BOARD_SYSTEMSDK_VERSIONS := 34 35
-
-# Android 15 uses date-based SEPolicy version
-BOARD_SEPOLICY_VERS := 202404
-PLATFORM_SEPOLICY_VERSION := 202404
-BOARD_SEPOLICY_VERS_API := 34
-
-# Override the common declaration
-override DEVICE_MATRIX_FILE := \
-    $(DEVICE_PATH)/vintf/device_compatibility_matrix.xml
-
-# Use our custom framework compatibility matrices - alternative file as a test
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
+DEVICE_PATH := device/sony/pdx245
+-include device/sony/sm8650-common/BoardConfigCommon.mk
 
 # Base device manifest
 DEVICE_MANIFEST_FILE := \
@@ -143,6 +121,26 @@ DEVICE_MANIFEST_SKUS := pdx245
 DEVICE_MANIFEST_PDX245_FILES := \
     vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
     vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/android.hardware.boot.xml
+
+# Use our custom framework compatibility matrices - alternative file as a test
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
+
+# Override the common declaration
+override DEVICE_MATRIX_FILE := \
+    $(DEVICE_PATH)/vintf/device_compatibility_matrix.xml
+
+# Set FCM Version for VINTF compatibility
+BOARD_SHIPPING_API_LEVEL := 34
+BOARD_SHIPPING_FCM_VERSION := 8
+BOARD_SYSTEMSDK_VERSIONS := 34 35
+BOARD_SEPOLICY_VERS := 202404
+PLATFORM_SEPOLICY_VERSION := 202404
+BOARD_SEPOLICY_VERS_API := 34
+
+# Set POLICYVERS as a Soong config variable
+SOONG_CONFIG_NAMESPACES += vintf 
+SOONG_CONFIG_vintf += POLICYVERS
+SOONG_CONFIG_vintf_POLICYVERS := 202404
 
 # Map vendor types to system types
 BOARD_VENDOR_SEPOLICY_DIRS += \
