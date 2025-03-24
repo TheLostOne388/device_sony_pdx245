@@ -1,0 +1,1 @@
+package vendor.qti.hardware.wifi.wifilearner@1.0; interface IWifiStats { };

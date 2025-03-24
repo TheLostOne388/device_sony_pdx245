@@ -1,6 +1,6 @@
 <compatibility-matrix version="1.0" type="device" level="8">
     <sepolicy>
-        <kernel-sepolicy-version>202404</kernel-sepolicy-version>
+        <kernel-sepolicy-version>30</kernel-sepolicy-version>
         <sepolicy-version>202404</sepolicy-version>
     </sepolicy>
 
@@ -61,6 +61,6 @@
 
     <!-- Only require SDK version 34, not 35 -->
     <system-sdk>
-        <version>34</version>
+        <version>35</version>
     </system-sdk>
 </compatibility-matrix>

@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 # TARGET_BOARD_PLATFORM already defined in BoardConfigCommon.mk
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
@@ -87,7 +85,6 @@ TARGET_DEVICE := pdx245
 
 # Claude Made Me Do It
 TARGET_SPECIFIC_HEADER_PATH := \
-    $(TARGET_SPECIFIC_HEADER_PATH) \
     frameworks/av/media/module/foundation/include \
     frameworks/av/media/module/libmediatranscoding/transcoder/include \
     frameworks/av/media/libmediametrics/include \
@@ -112,7 +109,7 @@ DEVICE_PATH := device/sony/pdx245
 
 # Base device manifest
 DEVICE_MANIFEST_FILE := \
-    $(DEVICE_PATH)/vintf/manifest.xml 
+#    $(DEVICE_PATH)/vintf/manifest.xml 
 #    device/sony/sm8650-common/manifest.xml \
 #    device/sony/sm8650-common/network_manifest.xml
 
@@ -133,14 +130,14 @@ override DEVICE_MATRIX_FILE := \
 BOARD_SHIPPING_API_LEVEL := 34
 BOARD_SHIPPING_FCM_VERSION := 8
 BOARD_SYSTEMSDK_VERSIONS := 34 35
-BOARD_SEPOLICY_VERS := 202404
+BOARD_SEPOLICY_VERS := 30
 PLATFORM_SEPOLICY_VERSION := 202404
-BOARD_SEPOLICY_VERS_API := 34
+BOARD_SEPOLICY_VERS_API := 30
 
 # Set POLICYVERS as a Soong config variable
 SOONG_CONFIG_NAMESPACES += vintf 
 SOONG_CONFIG_vintf += POLICYVERS
-SOONG_CONFIG_vintf_POLICYVERS := 202404
+SOONG_CONFIG_vintf_POLICYVERS := 30
 
 # Map vendor types to system types
 BOARD_VENDOR_SEPOLICY_DIRS += \

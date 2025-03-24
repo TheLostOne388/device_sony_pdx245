@@ -76,7 +76,8 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/interfaces/bluetooth/audio \
     vendor/qcom/opensource/interfaces \
     kernel/sony/pdx245 \
-    vendor/sony/pdx245/sensors
+    vendor/sony/pdx245/sensors \
+    device/sony/pdx245/vintf/interfaces
 
 # Prebuilt kernel files
 PRODUCT_COPY_FILES += \
@@ -85,7 +86,8 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
     kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
     kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 
-	
+
+
 # Override system_ext partition assignments
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-qti.xml
