@@ -16,7 +16,7 @@
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
 # BOARD_USES_QCOM_HARDWARE is already defined in BoardConfigCommon.mk
-
+# PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := false
 # Enable Treble Support
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_SEPARATE_VENDOR := true

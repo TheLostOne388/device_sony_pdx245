@@ -1,201 +1,280 @@
-// Dummy AIDL Interfaces
-aidl_interface {
-    name: "vendor.semc.hardware.spc",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/semc/hardware/spc/ISpc.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+// HIDL Package Roots
+hidl_package_root {
+    name: "com.qualcomm.qti.imscmservice",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
-aidl_interface {
-    name: "vendor.somc.hardware.aidlifaa",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/aidlifaa/IIFAAManagerService.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+hidl_package_root {
+    name: "com.qualcomm.qti.uceservice",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
-aidl_interface {
-    name: "vendor.somc.hardware.aidlmiscta",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/aidlmiscta/IMiscTA.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+hidl_package_root {
+    name: "vendor.qti.spu",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
-aidl_interface {
-    name: "vendor.somc.hardware.aidlsensor",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/aidlsensor/ISensor.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+hidl_package_root {
+    name: "vendor.qti.hardware.wifi.wifilearner",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
-aidl_interface {
-    name: "vendor.somc.hardware.aidlsuperstamina",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/aidlsuperstamina/ISuperStamina.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+hidl_package_root {
+    name: "vendor.qti.hardware.bluetooth_sar",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
-aidl_interface {
-    name: "vendor.hardware.biometrics.fingerprintRbs",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/hardware/biometrics/fingerprintRbs/IFingerprintRbs.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
+hidl_package_root {
+    name: "vendor.qti.hardware.fm",
+    path: "device/sony/pdx245/vintf/interfaces",
 }
 
+hidl_package_root {
+    name: "vendor.qti.hardware.qspm",
+    path: "device/sony/pdx245/vintf/interfaces",
+}
+
+hidl_package_root {
+    name: "vendor.qti.hardware.secureprocessor.device",
+    path: "device/sony/pdx245/vintf/interfaces",
+}
+
+hidl_package_root {
+    name: "vendor.qti.hardware.cacert",
+    path: "device/sony/pdx245/vintf/interfaces",
+}
+
+hidl_package_root {
+    name: "vendor.qti.ims.factory",
+    path: "device/sony/pdx245/vintf/interfaces",
+}
+
+hidl_package_root {
+    name: "vendor.qti.ims.callinfo",
+    path: "device/sony/pdx245/vintf/interfaces",
+}
+
+// AIDL interfaces
 aidl_interface {
     name: "vendor.qti.hardware.spu",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/spu/ISPUManager.aidl"],
+    srcs: [
+        "vendor/qti/hardware/spu/ISPUManager.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
-    name: "vendor.semc.hardware.aidlcharger",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/semc/hardware/aidlcharger/ICharger.aidl"],
+    name: "vendor.semc.hardware.spc",
+    srcs: [
+        "vendor/semc/hardware/spc/ISpc.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
     name: "vendor.semc.hardware.aidldisplay",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/semc/hardware/aidldisplay/IDisplay.aidl"],
+    srcs: [
+        "vendor/semc/hardware/aidldisplay/IDisplay.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
     name: "vendor.semc.hardware.extlight",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/semc/hardware/extlight/IExtLight.aidl"],
+    srcs: [
+        "vendor/semc/hardware/extlight/IExtLight.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
-    name: "vendor.somc.hardware.aidlwifidriver",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/aidlwifidriver/ISomcWifiDriver.aidl"],
+    name: "vendor.semc.hardware.aidlcharger",
+    srcs: [
+        "vendor/semc/hardware/aidlcharger/ICharger.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
-    name: "vendor.somc.hardware.perfagent",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/perfagent/IPerfAgent.aidl"],
+    name: "vendor.hardware.biometrics.fingerprintRbs",
+    srcs: [
+        "vendor/hardware/biometrics/fingerprintRbs/IFingerprintRbs.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
-    },
-}
-
-aidl_interface {
-    name: "vendor.somc.hardware.security.aidlsecd",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/security/aidlsecd/IDeviceSecurity.aidl"],
-    stability: "vintf",
-    backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
 aidl_interface {
     name: "vendor.somc.hardware.wifi.idd",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/somc/hardware/wifi/idd/ISomcWifiIdd.aidl"],
+    srcs: [
+        "vendor/somc/hardware/wifi/idd/ISomcWifiIdd.aidl",
+    ],
     stability: "vintf",
     backend: {
-        cpp: { enabled: false },
-        java: { enabled: false },
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
     },
 }
 
-// Dummy HIDL Interfaces
-hidl_interface {
-    name: "com.qualcomm.qti.imscmservice@2.2",
-    srcs: ["device/sony/pdx245/vintf/interfaces/com/qualcomm/qti/imscmservice/2.2/IImsCmService.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.aidlmiscta",
+    srcs: [
+        "vendor/somc/hardware/aidlmiscta/IMiscTA.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "com.qualcomm.qti.uceservice@2.3",
-    srcs: ["device/sony/pdx245/vintf/interfaces/com/qualcomm/qti/uceservice/2.3/IUceService.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.security.aidlsecd",
+    srcs: [
+        "vendor/somc/hardware/security/aidlsecd/IDeviceSecurity.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "vendor.nxp.nxpnfc@2.4",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/nxp/nxpnfc/2.4/INxpNfc.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.aidlsuperstamina.vintf",
+    srcs: [
+        "vendor/somc/hardware/aidlsuperstamina/ISuperStamina.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "vendor.qti.hardware.bluetooth_sar@1.1",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/bluetooth_sar/1.1/IBluetoothSar.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.perfagent",
+    srcs: [
+        "vendor/somc/hardware/perfagent/IPerfAgent.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "vendor.qti.hardware.cacert@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/cacert/1.0/IService.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.aidlifaa",
+    srcs: [
+        "vendor/somc/hardware/aidlifaa/IIFAAManagerService.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "vendor.qti.hardware.fm@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/fm/1.0/IFmHci.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.aidlwifidriver.vintf",
+    srcs: [
+        "vendor/somc/hardware/aidlwifidriver/ISomcWifiDriver.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
 
-hidl_interface {
-    name: "vendor.qti.hardware.qspm@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/qspm/1.0/IQspmhal.hal"],
-}
-
-hidl_interface {
-    name: "vendor.qti.hardware.secureprocessor.device@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/secureprocessor/device/1.0/ISecureProcessor.hal"],
-}
-
-hidl_interface {
-    name: "vendor.qti.hardware.wifi.wifilearner@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/hardware/wifi/wifilearner/1.0/IWifiStats.hal"],
-}
-
-hidl_interface {
-    name: "vendor.qti.ims.callinfo@1.0",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/ims/callinfo/1.0/IService.hal"],
-}
-
-hidl_interface {
-    name: "vendor.qti.ims.factory@1.1",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/ims/factory/1.1/IImsFactory.hal"],
-}
-
-hidl_interface {
-    name: "vendor.qti.spu@1.1",
-    srcs: ["device/sony/pdx245/vintf/interfaces/vendor/qti/spu/1.1/ISPUManager.hal"],
+aidl_interface {
+    name: "vendor.somc.hardware.aidlsensor",
+    srcs: [
+        "vendor/somc/hardware/aidlsensor/ISensor.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        java: {
+            enabled: false,
+        },
+        cpp: {
+            enabled: false,
+        },
+    },
 }
