@@ -87,6 +87,8 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
     kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 
 
+PRODUCT_VENDOR_KERNEL_HEADERS += device/sony/pdx245/prebuilts/kernel-headers
+
 
 # Override system_ext partition assignments
 PRODUCT_COPY_FILES += \
@@ -170,8 +172,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@2.0
 
 PRODUCT_PACKAGES += libOpenCL
-
-PRODUCT_VENDOR_KERNEL_HEADERS += device/sony/pdx245/kernel-headers
 
 $(shell bash $(LOCAL_PATH)/patches/fix_init_rc.sh)
 
