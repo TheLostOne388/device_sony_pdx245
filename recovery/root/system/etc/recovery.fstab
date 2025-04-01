@@ -1,0 +1,29 @@
+# Android fstab file for Sony Xperia (PDX245)
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+# Boot partitions
+/boot                 emmc     /dev/block/bootdevice/by-name/boot                    flags=display="Boot";backup=1;flashimg=1
+/vendor_boot          emmc     /dev/block/bootdevice/by-name/vendor_boot             flags=display="Vendor Boot";backup=1;flashimg=1
+/dtbo                 emmc     /dev/block/bootdevice/by-name/dtbo                    flags=display="DTBO";backup=1;flashimg=1
+/recovery             emmc     /dev/block/bootdevice/by-name/recovery                flags=display="Recovery";backup=1;flashimg=1
+
+# System partitions
+/system               ext4     /dev/block/bootdevice/by-name/system                  flags=display="System";backup=1;wipeingui;flashimg=1
+/system_ext           ext4     /dev/block/bootdevice/by-name/system_ext              flags=display="System_Ext";wipeingui;backup=1;flashimg=1
+/product              ext4     /dev/block/bootdevice/by-name/product                 flags=display="Product";wipeingui;backup=1;flashimg=1
+/vendor               ext4     /dev/block/bootdevice/by-name/vendor                  flags=display="Vendor";backup=1;wipeingui;flashimg=1
+/vendor_dlkm          ext4     /dev/block/bootdevice/by-name/vendor_dlkm             flags=display="Vendor_DLKM";wipeingui;backup=1;flashimg=1
+/system_dlkm          ext4     /dev/block/bootdevice/by-name/system_dlkm             flags=display="System_DLKM";wipeingui;backup=1;flashimg=1
+/odm                  ext4     /dev/block/bootdevice/by-name/odm                     flags=display="ODM";wipeingui;backup=1;flashimg=1
+
+# Data partition
+/data                 f2fs     /dev/block/bootdevice/by-name/userdata                flags=display="Data";backup=1;encryptable=footer;length=-16384;fileencryption=aes-256-xts:aes-256-cts:v2
+
+# Misc partitions
+/metadata             ext4     /dev/block/bootdevice/by-name/metadata                flags=display="Metadata";backup=1;wrappedkey
+/misc                 emmc     /dev/block/bootdevice/by-name/misc                    flags=display="Misc";backup=1;flashimg=1
+
+# Removable storage
+/external_sd          auto     /dev/block/mmcblk0p1    /dev/block/mmcblk0            flags=display="MicroSD";storage;wipeingui;removable
+/usb_otg              auto     /dev/block/sda1         /dev/block/sda                flags=display="USB OTG";storage;wipeingui;removable 

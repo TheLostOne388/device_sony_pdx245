@@ -1,0 +1,7 @@
+# This file overrides the neverallow violation in LineageOS sepolicy
+
+# Use dontaudit to silence the rule violation
+dontaudit hal_lineage_livedisplay_sysfs vendor_display_prop:file { read getattr map open };
+
+# Define the proper way to access properties
+get_prop(hal_lineage_livedisplay_sysfs, vendor_display_prop)

@@ -22,7 +22,7 @@
 # definition file).
 #
 
-# BOARD_SEPARATE_VENDOR moved to BoardConfig.mk
+
 # Device identification
 PRODUCT_DEVICE := pdx245
 PRODUCT_NAME := lineage_pdx245
@@ -87,8 +87,7 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
     kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 
 
-PRODUCT_VENDOR_KERNEL_HEADERS += device/sony/pdx245/prebuilts/kernel-headers
-
+PRODUCT_VENDOR_KERNEL_HEADERS += kernel/sony/pdx245/prebuilts/kernel-headers
 
 # Override system_ext partition assignments
 PRODUCT_COPY_FILES += \
@@ -144,6 +143,18 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.2 \
     android.hardware.drm@1.3 \
     android.hardware.drm@1.4
+
+# Additional HAL interfaces needed for build
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0 \
+    android.hardware.gatekeeper@1.0-impl \
+    android.hardware.gatekeeper@1.0-service \
+    android.hardware.nfc@1.0 \
+    android.hardware.nfc@1.1 \
+    android.hardware.nfc@1.2 \
+    android.hardware.secure_element@1.0 \
+    android.hardware.secure_element@1.1 \
+    android.hardware.secure_element@1.2
 
 # Bluetooth Audio HIDL
 PRODUCT_PACKAGES += \
@@ -204,7 +215,12 @@ PRODUCT_SHIPPING_API_LEVEL := 34
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 
+# Dynamic partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+# Recovery configuration - use standard approach
+PRODUCT_PACKAGES += \
+    fastbootd
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -261,7 +277,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.data.connection@1.1.vendor \
     vendor.qti.hardware.data.iwlan@1.0.vendor \
-    vendor.qti.hardware.display.config-V1-ndk.vendor
+    vendor.qti.hardware.display.config-V1-ndk.vendor \
+    com.qualcomm.qti.dpm.api@1.0.vendor \
+    com.qualcomm.qti.imscmservice@2.2.vendor \
+    com.qualcomm.qti.uceservice@2.3.vendor \
+    vendor.qti.hardware.bluetooth_audio@2.1.vendor \
+    vendor.qti.hardware.bluetooth_sar@1.1.vendor \
+    vendor.qti.hardware.btconfigstore@2.0.vendor \
+    vendor.qti.hardware.cacert@1.0.vendor \
+    vendor.qti.hardware.capabilityconfigstore@1.0.vendor \
+    vendor.qti.hardware.dsp@1.0.vendor \
+    vendor.qti.hardware.factory@1.1.vendor \
+    vendor.qti.hardware.fm@1.0.vendor \
+    vendor.qti.hardware.secureprocessor.device@1.0.vendor \
+    vendor.qti.hardware.wifi.wifilearner@1.0.vendor \
+    vendor.qti.ims.callinfo@1.0.vendor \
+    vendor.qti.ims.factory@1.1.vendor \
+    vendor.qti.spu@1.1.vendor \
+    vendor.qti.hardware.spu@1.0.vendor \
+    vendor.nxp.nxpnfc_aidl.vendor
 
 PRODUCT_PACKAGES += \
     android.hardware.sensors-service.pdx245 \
@@ -378,5 +412,57 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0
+
+# Explicitly specify we don't want recovery to be included in vendor
+TARGET_COPY_OUT_RECOVERY := recovery
+
+# A/B related packages for OTA update
+PRODUCT_PACKAGES += \
+    update_engine \
+    update_engine_sideload \
+    update_verifier \
+    android.hardware.boot@1.0-impl \
+    android.hardware.boot@1.0-impl.recovery \
+    android.hardware.boot@1.0-service \
+    bootctrl.$(TARGET_BOARD_PLATFORM).recovery \
+    bootctrl.$(TARGET_BOARD_PLATFORM) \
+    otapreopt_script
+
+# A/B OTA dexopt update_engine hookup
+PRODUCT_PACKAGES += \
+    checkpoint_gc \
+    otapreopt_script
+
+# A/B Boot control HAL - use compatible version
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.0-impl-qti \
+    android.hardware.boot@1.0-impl-qti.recovery \
+    android.hardware.boot@1.0-service
+
+# A/B specific properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.build.ab_update=true \
+    ro.virtual_ab.enabled=true
+
+# A/B
+AB_OTA_UPDATER := true
+
+AB_OTA_PARTITIONS += \
+    boot \
+    dtbo \
+    init_boot \
+    odm \
+    product \
+    recovery \
+    system \
+    system_dlkm \
+    system_ext \
+    vbmeta \
+    vbmeta_system \
+    vendor \
+    vendor_boot \
+    vendor_dlkm
+
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 
 

@@ -1,0 +1,7 @@
+# Add these domains to the list of violators to handle neverallow exceptions
+typeattribute heapprofd system_executes_vendor_violators;
+typeattribute traced_perf system_executes_vendor_violators;
+typeattribute traced data_between_core_and_vendor_violators;
+typeattribute ueventd data_between_core_and_vendor_violators;
+typeattribute profcollectd system_executes_vendor_violators;
+typeattribute simpleperf_boot system_executes_vendor_violators; 

@@ -73,6 +73,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-sonymobile
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.product.system.device=$(PRODUCT_SYSTEM_DEVICE) \
     ro.product.system.name=$(PRODUCT_SYSTEM_NAME) \
-    ro.build.description="XQ-EC72-userdebug 15 69.1.A.2.78 069001A002007800522519484 release-keys"
+    ro.build.description="XQ-EC72-userdebug 15 69.1.A.2.78 069001A002007800522519484 test-keys"
 
-BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:15/69.1.A.2.78/069001A002007800522519484:user/release-keys
+BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:15/69.1.A.2.78/069001A002007800522519484:userdebug/test-keys

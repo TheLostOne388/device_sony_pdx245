@@ -1,0 +1,6 @@
+package vendor.semc.hardware.charger@1.2;
+
+interface ICharger {
+    // Basic charger interface
+    // Add methods as needed
+}; 
