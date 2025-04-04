@@ -20,7 +20,6 @@ DEVICE_PATH := device/sony/pdx245
 
 # Use our custom framework compatibility matrices - alternative file as a test
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
-# BOARD_USES_QCOM_HARDWARE is already defined in BoardConfigCommon.mk
 
 # Enable Treble Support
 PRODUCT_FULL_TREBLE_OVERRIDE := true
@@ -29,7 +28,7 @@ BOARD_VNDK_VERSION := current
 
 # Vendor partition
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDORIMAGE_PARTITION_SIZE := 10737418240  # 10 GB (temporary oversized to determine actual size requirement)
+BOARD_VENDORIMAGE_PARTITION_SIZE := 629145600  # 600MB
 
 # Move vendor_dlkm out of vendor
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
@@ -90,7 +89,7 @@ BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PREBUILT_DIR)/dtbo.img
 BOARD_KERNEL_SEPARATED_DTBO := true
 
 # Ramdisk Configuration
-BOARD_PREBUILT_RAMDISK := $(KERNEL_PREBUILT_DIR)/ramdisk.cpio
+## BOARD_PREBUILT_RAMDISK := $(KERNEL_PREBUILT_DIR)/ramdisk.cpio
 
 # DLKM Images
 BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
@@ -123,12 +122,6 @@ TARGET_SPECIFIC_HEADER_PATH := \
     
 TARGET_SEPOLICY_DIR := sm8550
 
-# Base device manifest
-DEVICE_MANIFEST_FILE := \
-#    $(DEVICE_PATH)/vintf/manifest.xml 
-#    device/sony/sm8650-common/manifest.xml \
-#    device/sony/sm8650-common/network_manifest.xml
-
 # SKU-specific manifests
 DEVICE_MANIFEST_SKUS := pdx245
 DEVICE_MANIFEST_PDX245_FILES := \
@@ -160,7 +153,6 @@ SOONG_CONFIG_NAMESPACES += vintf
 SOONG_CONFIG_vintf += POLICYVERS
 SOONG_CONFIG_vintf_POLICYVERS := 30
 
-# Map vendor types to system types
 # Load our fixed sepolicy directory first
 include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
 
@@ -176,12 +168,6 @@ SOONG_CONFIG_NAMESPACES += sony_sm8650
 SOONG_CONFIG_sony_sm8650 += module_priority
 SOONG_CONFIG_sony_sm8650_module_priority := vendor/sony/sm8650-common
 
-# SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
-#    device/lineage/sepolicy/qcom/private
-
-# SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += \
-#    device/lineage/sepolicy/qcom/public
-
 # Define the M4 macros directly without recursive definitions
 BOARD_SEPOLICY_M4DEFS += \
     sysfs_battery_supply=vendor_sysfs_battery_supply \
@@ -195,7 +181,6 @@ BOARD_SEPOLICY_M4DEFS += \
     persist_block_device=vendor_persist_block_device \
     qdisplay_service=vendor_qdisplay_service
 
-# Audio
 # These override the BoardConfigCommon.mk settings
 BOARD_SUPPORTS_OPENSOURCE_STHAL := false
 
@@ -206,18 +191,10 @@ BOARD_SEPOLICY_REPLACE := $(filter-out vendor_sepolicy.cil vendor_file_contexts,
 include $(DEVICE_PATH)/audio/audio_effects.mk
 include $(DEVICE_PATH)/audio/audio_primary.mk
 
-# The following lines are commented out as they're likely redundant now that our sepolicy_fixed is working
-# Comment out consolidated sepolicy until we resolve all type issues
-# BOARD_VENDOR_SEPOLICY_DIRS := $(filter-out device/sony/pdx245/sepolicy/%,$(BOARD_VENDOR_SEPOLICY_DIRS))
-# SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS := $(filter-out device/sony/pdx245/sepolicy/%,$(SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS))
-
-# Remove direct LineageOS sepolicy includes since they're included through Qualcomm
-# BOARD_VENDOR_SEPOLICY_DIRS := $(filter-out device/lineage/sepolicy/qcom/vendor,$(BOARD_VENDOR_SEPOLICY_DIRS))
-# SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS := $(filter-out device/lineage/sepolicy/qcom/private,$(SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS))
-# BOARD_SEPOLICY_DIRS := $(filter-out device/lineage/sepolicy/qcom/public,$(BOARD_SEPOLICY_DIRS))
-
 # AB OTA PARTITIONS
 AB_OTA_UPDATER := true
+BOARD_RECOVERY_IMAGE_NOT_REQUIRED := true
+BOARD_USES_RECOVERY_AS_BOOT := true
 AB_OTA_PARTITIONS += \
     boot \
     dtbo \
@@ -239,7 +216,8 @@ BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
 # Use prebuilt init_boot.img
-BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot_X-FLASH-ALL-88DF.img
+TARGET_NO_INIT_BOOT := true
+BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
 
 # AVB configuration for init_boot
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -249,11 +227,12 @@ BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 
 # In A/B devices, recovery is integrated into boot partition
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_NO_RECOVERY := true
+
+
 
 # Create or modify a compatibility matrix for the boot HAL
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
-
-# VINTF compatibility checks
 
 # Add our boot HAL override manifest
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
@@ -261,3 +240,5 @@ DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
 # Boot partition configuration
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512
+
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml

@@ -1,0 +1,10 @@
+<compatibility-matrix version="1.0" type="framework" level="5" vintf_disable_conflicts="true">
+    <hal format="aidl" optional="true">
+        <name>vendor.semc.hardware.aidlcharger</name>
+        <version>3</version>
+        <interface>
+            <name>ICharger</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

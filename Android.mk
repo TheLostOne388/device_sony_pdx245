@@ -27,6 +27,10 @@
 
 LOCAL_PATH := $(call my-dir)
 
+# Add devices to the lunch combo
 ifneq ($(filter pdx245,$(TARGET_DEVICE)),)
-    include $(call first-makefiles-under,$(LOCAL_PATH))
+  include $(call all-makefiles-under,$(LOCAL_PATH))
+
+  # Create data directory at parse time (simplest solution)
+  $(shell mkdir -p $(PRODUCT_OUT)/data)
 endif

@@ -1,7 +1,7 @@
 <compatibility-matrix version="1.0" type="device" level="8">
     <sepolicy>
         <kernel-sepolicy-version>30</kernel-sepolicy-version>
-        <sepolicy-version>202404</sepolicy-version>
+        <sepolicy-version>30</sepolicy-version>
     </sepolicy>
 
     <!-- Core Android Framework HALs -->

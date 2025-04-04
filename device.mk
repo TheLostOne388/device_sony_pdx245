@@ -33,6 +33,8 @@ PRODUCT_MANUFACTURER := Sony
 # Inherit from sony sm8650-common
 $(call inherit-product, device/sony/sm8650-common/common.mk)
 
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -85,7 +87,7 @@ PRODUCT_COPY_FILES += \
     kernel/sony/pdx245/prebuilts/dtb.img:dtb.img \
     kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
     kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
-    kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img 
+    kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img
 
 PRODUCT_VENDOR_KERNEL_HEADERS += kernel/sony/pdx245/prebuilts/kernel-headers
 
@@ -129,8 +131,6 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@3.0 \
     android.hardware.graphics.mapper@4.0
 
-# Already included in Soong namespaces above
-	
 # DRM HIDL
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
@@ -218,7 +218,6 @@ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
 # Dynamic partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Recovery configuration - use standard approach
 PRODUCT_PACKAGES += \
     fastbootd
 
@@ -413,9 +412,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0
 
-# Explicitly specify we don't want recovery to be included in vendor
-TARGET_COPY_OUT_RECOVERY := recovery
-
 # A/B related packages for OTA update
 PRODUCT_PACKAGES += \
     update_engine \
@@ -444,25 +440,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.ab_update=true \
     ro.virtual_ab.enabled=true
 
-# A/B
-AB_OTA_UPDATER := true
-
-AB_OTA_PARTITIONS += \
-    boot \
-    dtbo \
-    init_boot \
-    odm \
-    product \
-    recovery \
-    system \
-    system_dlkm \
-    system_ext \
-    vbmeta \
-    vbmeta_system \
-    vendor \
-    vendor_boot \
-    vendor_dlkm
-
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
+
+# Copy prebuilt init_boot.img to output
+$(shell bash $(LOCAL_PATH)/copy_init_boot.sh)
+
+
 
 
