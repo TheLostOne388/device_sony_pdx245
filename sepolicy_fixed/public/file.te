@@ -1,0 +1,2 @@
+type vendor_sysfs_soc_sensitive, fs_type, sysfs_type;
+type vendor_hal_perf_default, domain; 

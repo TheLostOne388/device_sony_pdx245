@@ -1,0 +1,2 @@
+# Disable LiveDisplay sepolicy issues with a blanket dontaudit
+dontaudit hal_lineage_livedisplay_qti domain:binder *; 

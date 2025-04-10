@@ -23,12 +23,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framew
 
 # Enable Treble Support
 PRODUCT_FULL_TREBLE_OVERRIDE := true
-BOARD_SEPARATE_VENDOR := true
 BOARD_VNDK_VERSION := current
-
-# Vendor partition
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDORIMAGE_PARTITION_SIZE := 629145600  # 600MB
 
 # Move vendor_dlkm out of vendor
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
@@ -120,7 +115,7 @@ TARGET_SPECIFIC_HEADER_PATH := \
     hardware/interfaces/bluetooth/audio/2.0 \
     hardware/interfaces/bluetooth/audio/2.1 
     
-TARGET_SEPOLICY_DIR := sm8550
+TARGET_SEPOLICY_DIR := sm8650
 
 # SKU-specific manifests
 DEVICE_MANIFEST_SKUS := pdx245
@@ -191,33 +186,39 @@ BOARD_SEPOLICY_REPLACE := $(filter-out vendor_sepolicy.cil vendor_file_contexts,
 include $(DEVICE_PATH)/audio/audio_effects.mk
 include $(DEVICE_PATH)/audio/audio_primary.mk
 
-# AB OTA PARTITIONS
+# Super partition configuration for dynamic partitions
+BOARD_SUPER_PARTITION_SIZE := 10737418240  # 10 GB
+BOARD_SUPER_PARTITION_GROUPS := sony_dynamic_partitions
+BOARD_SONY_DYNAMIC_PARTITIONS_SIZE := 8589934592  # 8 GB
+BOARD_SONY_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
+
+# A/B partition configuration for seamless updates
 AB_OTA_UPDATER := true
-BOARD_RECOVERY_IMAGE_NOT_REQUIRED := true
 BOARD_USES_RECOVERY_AS_BOOT := true
-AB_OTA_PARTITIONS += \
+TARGET_NO_RECOVERY := true
+AB_OTA_PARTITIONS := \
     boot \
     dtbo \
-    init_boot \
     odm \
     product \
     system \
-    system_dlkm \
     system_ext \
+    system_dlkm \
     vbmeta \
-    vbmeta_system \
     vendor \
     vendor_boot \
     vendor_dlkm
 
-# Init boot partition size - exact size from device (8MB)
-BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
+# Boot and related partition sizes
+BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296  # ~96 MB
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512  # ~112 MB
+BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608  # 8 MB
+BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
+BOARD_FLASH_BLOCK_SIZE := 131072
+
+# Init boot configuration
 BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
-
-# Use prebuilt init_boot.img
-TARGET_NO_INIT_BOOT := true
-BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
 
 # AVB configuration for init_boot
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -225,10 +226,14 @@ BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 
-# In A/B devices, recovery is integrated into boot partition
+# Recovery settings
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-TARGET_NO_RECOVERY := true
 
+# Vendor DLKM configuration
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
+BOARD_PREBUILT_VENDOR_DLKM := $(KERNEL_PREBUILT_DIR)/vendor_dlkm.img
+BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
 
 
 # Create or modify a compatibility matrix for the boot HAL
@@ -237,8 +242,15 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framew
 # Add our boot HAL override manifest
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
 
-# Boot partition configuration
-BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512
-
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
+
+# Allow duplicate module definitions
+BUILD_BROKEN_DUP_RULES := true
+
+# Use Sony's proprietary display stack
+TARGET_USES_ION := true
+TARGET_USES_QCOM_DISPLAY_BSP := true
+TARGET_USES_GRALLOC1 := true
+TARGET_USES_HWC2 := true
+TARGET_USES_COLOR_METADATA := true
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x2000U | 0x400000000LL

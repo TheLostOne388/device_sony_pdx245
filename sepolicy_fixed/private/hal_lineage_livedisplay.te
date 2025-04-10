@@ -1,0 +1,14 @@
+# Live display hal policy workarounds
+allow hal_lineage_livedisplay_sysfs sysfs:dir { open read search };
+allow hal_lineage_livedisplay_sysfs sysfs:file { open getattr read write };
+
+# Use sysfs instead of vendor types
+dontaudit hal_lineage_livedisplay_sysfs vendor_display_prop:file *;
+dontaudit hal_lineage_livedisplay_sysfs vendor_display_prop:dir *;
+
+# Same for qti implementation
+dontaudit hal_lineage_livedisplay_qti vendor_display_prop:file *;
+dontaudit hal_lineage_livedisplay_qti vendor_display_prop:dir *;
+
+# Disable all binder interactions to avoid hal_graphics_composer issues
+dontaudit hal_lineage_livedisplay_qti domain:binder *; 

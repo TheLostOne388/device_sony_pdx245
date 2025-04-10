@@ -1,0 +1,7 @@
+# Adding defintion to handle Lineage's dontaudit.te
+type bt_firmware_file, file_type;
+type adsprpcd_file, file_type;
+type firmware_file, file_type;
+
+# Adding dummy types for various QTI services
+

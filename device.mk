@@ -279,16 +279,43 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.config-V1-ndk.vendor \
     com.qualcomm.qti.dpm.api@1.0.vendor \
     com.qualcomm.qti.imscmservice@2.2.vendor \
-    com.qualcomm.qti.uceservice@2.3.vendor \
-    vendor.qti.hardware.bluetooth_audio@2.1.vendor \
-    vendor.qti.hardware.bluetooth_sar@1.1.vendor \
+    vendor.qti.hardware.display.config-V2-ndk.vendor \
+    vendor.qti.hardware.display.config-V3-ndk.vendor \
+    vendor.qti.hardware.display.config-V4-ndk.vendor \
+    vendor.qti.hardware.display.config-V5-ndk.vendor \
+    vendor.qti.hardware.display.config-V6-ndk.vendor \
+    vendor.qti.hardware.display.config-V7-ndk.vendor \
+    vendor.qti.hardware.display.config-V8-ndk.vendor \
+    vendor.qti.hardware.display.config-V9-ndk.vendor \
+    vendor.qti.hardware.display.config-V10-ndk.vendor \
+    vendor.qti.hardware.display.config-V11-ndk.vendor \
+    vendor.qti.hardware.display.config-V12-ndk.vendor \
+    vendor.qti.hardware.display.color-V1-ndk.vendor \
+    vendor.qti.hardware.display.composer3-V1-ndk.vendor \
+    vendor.qti.hardware.display.postproc-V1-ndk.vendor \
+    libdisplayconfig.qti.vendor \
+    libgralloc.qti.vendor \
+    libqdMetaData.vendor \
+    vendor.qti.hardware.bluetooth.audio-V1-ndk.vendor \
+    vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor \
-    vendor.qti.hardware.cacert@1.0.vendor \
+    vendor.qti.hardware.camera.aon-V1-ndk.vendor \
+    vendor.qti.hardware.camera.offlinecamera-V1-ndk.vendor \
+    vendor.qti.hardware.camera.offlinecamera-V2-ndk.vendor \
+    vendor.qti.hardware.camera.postproc@1.0.vendor \
+    libvndfwk_detect_jni.qti_vendor.vendor \
+    libwfdaac_vendor.vendor \
     vendor.qti.hardware.capabilityconfigstore@1.0.vendor \
-    vendor.qti.hardware.dsp@1.0.vendor \
-    vendor.qti.hardware.factory@1.1.vendor \
-    vendor.qti.hardware.fm@1.0.vendor \
-    vendor.qti.hardware.secureprocessor.device@1.0.vendor \
+    vendor.qti.hardware.perf@2.0.vendor \
+    vendor.qti.hardware.perf@2.1.vendor \
+    vendor.qti.hardware.perf@2.2.vendor \
+    vendor.qti.hardware.perf@2.3.vendor \
+    vendor.qti.hardware.qspa-V1-ndk.vendor \
+    vendor.qti.hardware.servicetracker@1.0.vendor \
+    vendor.qti.hardware.servicetracker@1.1.vendor \
+    vendor.qti.hardware.servicetrackeraidl-V1-ndk.vendor \
+    vendor.qti.hardware.systemhelper@1.0.vendor \
+    vendor.qti.hardware.systemhelperaidl-V1-ndk.vendor \
     vendor.qti.hardware.wifi.wifilearner@1.0.vendor \
     vendor.qti.ims.callinfo@1.0.vendor \
     vendor.qti.ims.factory@1.1.vendor \
@@ -310,6 +337,9 @@ PRODUCT_PACKAGES -= \
     android.hardware.sensors@2.0-multihal-sony.xml
 
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
+
+# Sepolicy fixes
+include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
 
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
@@ -444,6 +474,17 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 
 # Copy prebuilt init_boot.img to output
 $(shell bash $(LOCAL_PATH)/copy_init_boot.sh)
+
+# Additional variables to handle duplicate modules
+PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := false
+PRODUCT_ENFORCE_RRO_TARGETS := 
+RELAX_USES_LIBRARY_CHECK := true
+ALLOW_MISSING_DEPENDENCIES := true
+
+# Audio Configs
+include $(LOCAL_PATH)/audio/audio_effects.mk
+include $(LOCAL_PATH)/audio/audio_primary.mk
+
 
 
 

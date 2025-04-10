@@ -1,0 +1,2 @@
+# Dontaudit rules for system_server
+dontaudit system_server sysfs:file { open getattr read write }; 

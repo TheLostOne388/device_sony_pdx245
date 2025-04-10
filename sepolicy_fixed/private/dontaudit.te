@@ -1,0 +1,10 @@
+# Dontaudit rules for vendor display property access
+dontaudit hal_lineage_livedisplay_qti vendor_display_prop:file { getattr open read map };
+dontaudit hal_lineage_livedisplay_sysfs vendor_display_prop:file { getattr open read map };
+
+# Workaround for gmscore_app access to various filesystems
+# Disable the warnings by dontaudit
+dontaudit gmscore_app fs_type:filesystem getattr;
+
+# Alternative rule for gmscore access
+dontaudit gmscore_app { adsprpcd_file bt_firmware_file }:filesystem getattr;

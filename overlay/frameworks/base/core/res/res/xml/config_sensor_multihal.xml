@@ -1,5 +1,0 @@
-<resources>
-    <string-array name="config_sensor_multihal" translatable="false">
-        <!-- Empty to disable -->
-    </string-array>
-</resources>
