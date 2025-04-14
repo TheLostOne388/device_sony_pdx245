@@ -1,1 +1,6 @@
-package vendor.somc.hardware.perfagent; interface IPerfAgent { }
+package vendor.somc.hardware.perfagent;
+
+@VintfStability
+interface IPerfAgent {
+    boolean isAlive();
+}

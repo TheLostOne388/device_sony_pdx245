@@ -1,1 +1,6 @@
-package vendor.semc.hardware.aidldisplay; interface IDisplay { }
+package vendor.semc.hardware.aidldisplay;
+
+@VintfStability
+interface IDisplay {
+    boolean isAlive();
+}

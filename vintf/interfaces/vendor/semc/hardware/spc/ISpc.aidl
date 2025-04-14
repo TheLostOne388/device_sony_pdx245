@@ -1,1 +1,6 @@
-package vendor.semc.hardware.spc; interface ISpc { }
+package vendor.semc.hardware.spc;
+
+@VintfStability
+interface ISpc {
+    boolean isAlive();
+}

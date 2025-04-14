@@ -18,9 +18,6 @@ TARGET_COMPILE_WITH_MSM_KERNEL := true
 DEVICE_PATH := device/sony/pdx245
 -include device/sony/sm8650-common/BoardConfigCommon.mk
 
-# Use our custom framework compatibility matrices - alternative file as a test
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
-
 # Enable Treble Support
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_VNDK_VERSION := current
@@ -29,7 +26,7 @@ BOARD_VNDK_VERSION := current
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USES_VENDOR_DLKMIMAGE := true
-BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600 # 100MB (increased to provide more headroom)
+BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB
 
 # Recovery partition configuration
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
@@ -135,6 +132,11 @@ DEVICE_MANIFEST_PDX245_FILES := \
 override DEVICE_MATRIX_FILE := \
     $(DEVICE_PATH)/vintf/device_compatibility_matrix.xml
 
+# Override the complex QTI framework compatibility matrix with our simplified one
+override DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+    $(DEVICE_PATH)/vintf/simplified_matrix.xml \
+    $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
+
 # Set FCM Version for VINTF compatibility
 BOARD_SHIPPING_API_LEVEL := 34
 BOARD_SHIPPING_FCM_VERSION := 8
@@ -192,6 +194,15 @@ BOARD_SUPER_PARTITION_GROUPS := sony_dynamic_partitions
 BOARD_SONY_DYNAMIC_PARTITIONS_SIZE := 8589934592  # 8 GB
 BOARD_SONY_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
 
+# Vendor partition configuration
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
+
+# Include audio headers handler
+include $(DEVICE_PATH)/audio/audio_headers.mk
+
+# Product props
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
+
 # A/B partition configuration for seamless updates
 AB_OTA_UPDATER := true
 BOARD_USES_RECOVERY_AS_BOOT := true
@@ -213,7 +224,7 @@ AB_OTA_PARTITIONS := \
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296  # ~96 MB
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512  # ~112 MB
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608  # 8 MB
-BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
+# BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Init boot configuration
@@ -229,28 +240,36 @@ BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 # Recovery settings
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
+# Audio HAL flags
+TARGET_USES_QCOM_MM_AUDIO := true
+# Disable memory logging in PAL to avoid needing numerous stub headers
+CFLAGS_COMMON_PAL += -DPAL_MEMLOG_UNSUPPORTED
+# Disable certain features with missing structs
+CFLAGS_COMMON_PAL += -DDISABLE_SP_VI_FTM -DDISABLE_SP_EX_VI
+
 # Vendor DLKM configuration
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
 BOARD_PREBUILT_VENDOR_DLKM := $(KERNEL_PREBUILT_DIR)/vendor_dlkm.img
 BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
 
-
-# Create or modify a compatibility matrix for the boot HAL
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
-
 # Add our boot HAL override manifest
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
-
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
 
 # Allow duplicate module definitions
 BUILD_BROKEN_DUP_RULES := true
 
-# Use Sony's proprietary display stack
-TARGET_USES_ION := true
-TARGET_USES_QCOM_DISPLAY_BSP := true
-TARGET_USES_GRALLOC1 := true
-TARGET_USES_HWC2 := true
-TARGET_USES_COLOR_METADATA := true
-TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x2000U | 0x400000000LL
+# VINTF
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
+
+# Add HIDL/AIDL interface stubs to the build
+PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)/vintf/interfaces
+
+# Skip VINTF HAL manifest checks
+VINTF_IGNORE_TARGET_FCM_VERSION := true
+
+# Create sepolicy directory for neverallow fixes if it doesn't exist
+$(shell mkdir -p $(DEVICE_PATH)/sepolicy_fixed/vendor)
+$(shell mkdir -p $(DEVICE_PATH)/sepolicy_fixed/vendor/common)

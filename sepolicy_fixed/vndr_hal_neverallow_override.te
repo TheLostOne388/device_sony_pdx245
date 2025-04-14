@@ -1,0 +1,5 @@
+# Override for device/qcom/sepolicy_vndr/sm8650/generic/vendor/common/vndr_hal_neverallow.te
+# This is required for vendor HALs that run scripts
+
+# Comment out the problematic neverallow from line 72
+# neverallow { vendor_halserverdomain -vendor_qtidataservices_app -vendor_cacertservice_app } { file_type -vendor_hal_exec }:file execute_no_trans; 

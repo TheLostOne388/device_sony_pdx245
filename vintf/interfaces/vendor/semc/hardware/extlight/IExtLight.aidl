@@ -1,1 +1,6 @@
-package vendor.semc.hardware.extlight; interface IExtLight { }
+package vendor.semc.hardware.extlight;
+
+@VintfStability
+interface IExtLight {
+    boolean isAlive();
+}

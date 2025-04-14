@@ -1,1 +1,6 @@
-package vendor.somc.hardware.security.aidlsecd; interface IDeviceSecurity { }
+package vendor.somc.hardware.security.aidlsecd;
+
+@VintfStability
+interface IDeviceSecurity {
+    boolean isAlive();
+}

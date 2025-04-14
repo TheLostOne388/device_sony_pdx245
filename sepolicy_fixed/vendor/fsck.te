@@ -1,3 +1,0 @@
-# Allow fsck to access vendor_persist_block_device
-allow fsck vendor_persist_block_device:blk_file { read write open ioctl getattr }; 
-allow fsck vendor_persist_block_device:dir { search open read getattr }; 

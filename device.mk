@@ -338,8 +338,10 @@ PRODUCT_PACKAGES -= \
 
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
 
-# Sepolicy fixes
-include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
+# Replace the original sepolicy include with our simplified version
+# Sepolicy includes commented out - we're starting fresh
+#include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
+#include device/sony/pdx245/sepolicy_fixed.mk
 
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
@@ -471,9 +473,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.virtual_ab.enabled=true
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
-
-# Copy prebuilt init_boot.img to output
-$(shell bash $(LOCAL_PATH)/copy_init_boot.sh)
 
 # Additional variables to handle duplicate modules
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := false

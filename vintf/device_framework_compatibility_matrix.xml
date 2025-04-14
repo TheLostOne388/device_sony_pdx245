@@ -3,7 +3,7 @@
     <!-- Required HALs from the build error -->
     <hal format="aidl" optional="true">
         <name>vendor.semc.hardware.aidlcharger</name>
-        <version>3</version>
+        <version>1</version>
         <interface>
             <name>ICharger</name>
             <instance>default</instance>
@@ -43,9 +43,9 @@
     </hal>
 
     <!-- Sony-specific HALs (optional) -->
-    <hal format="hidl" optional="true">
-        <name>vendor.semc.hardware.charger</name>
-        <version>1.2</version>
+    <hal format="aidl" optional="true">
+        <name>vendor.semc.hardware.charger.aidl</name>
+        <version>1</version>
         <interface>
             <name>ICharger</name>
             <instance>default</instance>
@@ -123,9 +123,9 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" optional="true">
-        <name>vendor.semc.system.idd</name>
-        <version>1.1</version>
+    <hal format="aidl" optional="true">
+        <name>vendor.semc.system.idd.aidl</name>
+        <version>1</version>
         <interface>
             <name>IIdd</name>
             <instance>default</instance>
@@ -140,13 +140,12 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" optional="true">
-        <name>vendor.somc.hardware.radio</name>
-        <version>1.0</version>
+    <hal format="aidl" optional="true">
+        <name>vendor.somc.hardware.radio.aidl</name>
+        <version>1</version>
         <interface>
             <name>ISomcHook</name>
-            <instance>somchook</instance>
-            <instance>somchook2</instance>
+            <instance>default</instance>
         </interface>
     </hal>
     <hal format="aidl" optional="true">
@@ -181,9 +180,9 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" optional="true">
-        <name>vendor.semc.hardware.mmwavedirection</name>
-        <version>1.1</version>
+    <hal format="aidl" optional="true">
+        <name>vendor.semc.hardware.mmwavedirection.aidl</name>
+        <version>1</version>
         <interface>
             <name>IMmwavedirection</name>
             <instance>default</instance>
@@ -205,9 +204,9 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" optional="true">
-        <name>android.hardware.fingerprint</name>
-        <version>2.3</version>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.fingerprint.aidl</name>
+        <version>1</version>
         <interface>
             <name>IBiometricsFingerprint</name>
             <instance>default</instance>

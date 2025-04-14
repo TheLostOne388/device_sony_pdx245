@@ -1,1 +1,6 @@
-package vendor.somc.hardware.aidlwifidriver; interface ISomcWifiDriver { }
+package vendor.somc.hardware.aidlwifidriver;
+
+@VintfStability
+interface ISomcWifiDriver {
+    boolean isAlive();
+}

@@ -1,0 +1,5 @@
+package android.hardware.fingerprint@2.3;
+
+interface IBiometricsFingerprint {
+    ping() generates (bool alive);
+};
