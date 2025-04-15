@@ -1,5 +1,0 @@
-package vendor.semc.hardware.charger@1.2;
-
-interface ICharger {
-    ping() generates (bool alive);
-};

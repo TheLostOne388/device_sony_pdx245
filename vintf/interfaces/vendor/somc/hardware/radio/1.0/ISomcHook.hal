@@ -1,5 +1,0 @@
-package vendor.somc.hardware.radio@1.0;
-
-interface ISomcHook {
-    ping() generates (bool alive);
-};

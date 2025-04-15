@@ -1,1 +1,0 @@
-package vendor.qti.hardware.qspm@1.0; interface IQspmhal { };

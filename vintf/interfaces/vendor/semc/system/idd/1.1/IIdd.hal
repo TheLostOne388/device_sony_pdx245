@@ -1,5 +1,0 @@
-package vendor.semc.system.idd@1.1;
-
-interface IIdd {
-    ping() generates (bool alive);
-};

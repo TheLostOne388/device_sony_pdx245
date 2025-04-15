@@ -1,1 +1,0 @@
-package vendor.nxp.nxpnfc@2.4; interface INxpNfc { };

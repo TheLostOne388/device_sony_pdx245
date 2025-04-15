@@ -210,6 +210,7 @@ TARGET_NO_RECOVERY := true
 AB_OTA_PARTITIONS := \
     boot \
     dtbo \
+    init_boot \
     odm \
     product \
     system \
@@ -224,7 +225,6 @@ AB_OTA_PARTITIONS := \
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296  # ~96 MB
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512  # ~112 MB
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608  # 8 MB
-# BOARD_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt/init_boot.img
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Init boot configuration
@@ -240,13 +240,6 @@ BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 # Recovery settings
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 
-# Audio HAL flags
-TARGET_USES_QCOM_MM_AUDIO := true
-# Disable memory logging in PAL to avoid needing numerous stub headers
-CFLAGS_COMMON_PAL += -DPAL_MEMLOG_UNSUPPORTED
-# Disable certain features with missing structs
-CFLAGS_COMMON_PAL += -DDISABLE_SP_VI_FTM -DDISABLE_SP_EX_VI
-
 # Vendor DLKM configuration
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
@@ -256,20 +249,7 @@ BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
 # Add our boot HAL override manifest
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
 
-# Allow duplicate module definitions
-BUILD_BROKEN_DUP_RULES := true
-
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
-
-# Add HIDL/AIDL interface stubs to the build
-PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)/vintf/interfaces
-
-# Skip VINTF HAL manifest checks
-VINTF_IGNORE_TARGET_FCM_VERSION := true
-
-# Create sepolicy directory for neverallow fixes if it doesn't exist
-$(shell mkdir -p $(DEVICE_PATH)/sepolicy_fixed/vendor)
-$(shell mkdir -p $(DEVICE_PATH)/sepolicy_fixed/vendor/common)

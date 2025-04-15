@@ -1,5 +1,0 @@
-package vendor.semc.hardware.mmwavedirection@1.1;
-
-interface IMmwavedirection {
-    ping() generates (bool alive);
-};
