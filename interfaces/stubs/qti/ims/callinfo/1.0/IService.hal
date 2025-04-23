@@ -1,0 +1,7 @@
+// Stub for vendor.qti.ims.callinfo@1.0
+package vendor.qti.ims.callinfo@1.0;
+
+/** Minimal stub */
+interface IService {
+    // Methods TBD
+}; 

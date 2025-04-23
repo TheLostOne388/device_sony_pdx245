@@ -1,0 +1,7 @@
+// Stub for vendor.qti.hardware.wifi.wifilearner@1.0
+package vendor.qti.hardware.wifi.wifilearner@1.0;
+
+/** Minimal stub */
+interface IWifiStats {
+    // Methods TBD
+}; 

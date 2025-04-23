@@ -1,0 +1,13 @@
+# Product-specific properties for Sony pdx245 (Xperia 1 VI)
+ro.product.name=pdx245
+ro.product.device=pdx245
+ro.product.model=Sony Xperia 1 VI
+ro.product.brand=Sony
+ro.product.manufacturer=Sony
+ro.build.product=pdx245
+
+# Audio
+ro.config.media_vol_steps=30
+ro.config.vc_call_vol_steps=8
+
+# Additional properties can be added as needed 

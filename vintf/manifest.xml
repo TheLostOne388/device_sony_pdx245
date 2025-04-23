@@ -1,25 +1,15 @@
-<manifest version="8.0" type="device" target-level="8">
-    <!-- Existing HALs -->
+<manifest version="1.0" type="device" target-level="8">
+    <sepolicy>
+        <version>34.0</version>
+    </sepolicy>
     <hal format="hidl">
-        <name>vendor.qti.hardware.secureprocessor.device</name>
+        <name>android.hardware.boot</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>ISecureProcessor</name>
-            <instance>qti-tee</instance>
-            <instance>qti-tvm</instance>
-        </interface>
-    </hal>
-    <hal format="aidl">
-        <name>vendor.qti.hardware.spu</name>
-        <version>2</version>
-        <interface>
-            <name>ISPUManager</name>
+            <name>IBootControl</name>
             <instance>default</instance>
         </interface>
     </hal>
-
-    <sepolicy>
-        <version>202404</version>
-    </sepolicy>
+    <!-- Add vendor-specific HALs -->
 </manifest>

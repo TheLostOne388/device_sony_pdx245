@@ -1,0 +1,7 @@
+// Stub for vendor.qti.hardware.factory@1.1
+package vendor.qti.hardware.factory@1.1;
+
+/** Minimal stub */
+interface IFactory {
+    // Methods TBD
+}; 

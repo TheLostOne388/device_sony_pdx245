@@ -1,0 +1,7 @@
+// Stub for vendor.qti.hardware.AGMIPC@1.0
+package vendor.qti.hardware.AGMIPC@1.0;
+
+/** Minimal stub */
+interface IAGM {
+    // Methods TBD
+}; 

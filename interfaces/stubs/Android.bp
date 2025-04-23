@@ -1,0 +1,393 @@
+// Android.bp in device/sony/pdx245/interfaces/stubs/
+// Contains all stub package roots and interface definitions.
+
+// --- Package Root Definitions ---
+hidl_package_root {
+    name: "vendor.semc.hardware",
+    path: "device/sony/pdx245/interfaces/stubs/semc/hardware",
+}
+hidl_package_root {
+    name: "com.qualcomm.qti.imscmservice",
+    path: "device/sony/pdx245/interfaces/stubs/com/qualcomm/qti/imscmservice",
+}
+hidl_package_root {
+    name: "com.qualcomm.qti.uceservice",
+    path: "device/sony/pdx245/interfaces/stubs/com/qualcomm/qti/uceservice",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.secureprocessor.device",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/secureprocessor/device",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.ListenSoundModel",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/ListenSoundModel",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.bluetooth_sar",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/bluetooth_sar",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.cacert",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/cacert",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.factory",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/factory",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.fm",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/fm",
+}
+hidl_package_root {
+    name: "vendor.qti.hardware.wifi.wifilearner",
+    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/wifi/wifilearner",
+}
+hidl_package_root {
+    name: "vendor.qti.ims.callinfo",
+    path: "device/sony/pdx245/interfaces/stubs/qti/ims/callinfo",
+}
+hidl_package_root {
+    name: "vendor.qti.ims.factory",
+    path: "device/sony/pdx245/interfaces/stubs/qti/ims/factory",
+}
+hidl_package_root {
+    name: "vendor.qti.spu",
+    path: "device/sony/pdx245/interfaces/stubs/qti/spu",
+}
+hidl_package_root {
+    name: "vendor.somc.hardware.radio",
+    path: "device/sony/pdx245/interfaces/stubs/somc/hardware/radio",
+}
+hidl_package_root {
+    name: "com.qualcomm.qti.dpm.api",
+    path: "device/sony/pdx245/interfaces/stubs/com/qualcomm/qti/dpm/api",
+}
+
+// --- Stub Interface Definitions ---
+
+// com.qualcomm.qti.imscmservice@2.2
+/*
+hidl_interface {
+    name: "com.qualcomm.qti.imscmservice@2.2",
+    root: "com.qualcomm.qti.imscmservice",
+    srcs: ["com/qualcomm/qti/imscmservice/2.2/IImsCmService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// com.qualcomm.qti.uceservice@2.3
+/*
+hidl_interface {
+    name: "com.qualcomm.qti.uceservice@2.3",
+    root: "com.qualcomm.qti.uceservice",
+    srcs: ["com/qualcomm/qti/uceservice/2.3/IUceService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// vendor.qti.hardware.secureprocessor.device@1.0
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.secureprocessor.device@1.0",
+    root: "vendor.qti.hardware.secureprocessor.device",
+    srcs: ["qti/hardware/secureprocessor/device/1.0/ISecureProcessor.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// vendor.qti.hardware.bluetooth_sar@1.1
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.bluetooth_sar@1.1",
+    root: "vendor.qti.hardware.bluetooth_sar",
+    srcs: ["qti/hardware/bluetooth_sar/1.1/IBluetoothSar.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// vendor.qti.hardware.cacert@1.0
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.cacert@1.0",
+    root: "vendor.qti.hardware.cacert",
+    srcs: ["qti/hardware/cacert/1.0/IService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// vendor.qti.hardware.factory@1.1
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.factory@1.1",
+    root: "vendor.qti.hardware.factory",
+    srcs: ["qti/hardware/factory/1.1/IFactory.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.hardware.factory@1.1_headers",
+    srcs: [
+        "generated_headers/vendor/qti/hardware/factory/1.1/BpHwFactory.h",
+        "generated_headers/vendor/qti/hardware/factory/1.1/BnHwFactory.h",
+        "generated_headers/vendor/qti/hardware/factory/1.1/IFactory.h",
+        "generated_headers/vendor/qti/hardware/factory/1.1/BsFactory.h",
+        "generated_headers/vendor/qti/hardware/factory/1.1/IHwFactory.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/hardware/factory/1.1"],
+    vendor: true,
+}
+
+// vendor.qti.hardware.fm@1.0
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.fm@1.0",
+    root: "vendor.qti.hardware.fm",
+    srcs: ["qti/hardware/fm/1.0/IFmHci.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.hardware.fm@1.0_headers",
+    srcs: [
+        "generated_headers/vendor/qti/hardware/fm/1.0/IFmHci.h",
+        "generated_headers/vendor/qti/hardware/fm/1.0/BnHwFmHci.h",
+        "generated_headers/vendor/qti/hardware/fm/1.0/IHwFmHci.h",
+        "generated_headers/vendor/qti/hardware/fm/1.0/BsFmHci.h",
+        "generated_headers/vendor/qti/hardware/fm/1.0/BpHwFmHci.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/hardware/fm/1.0"],
+    vendor: true,
+}
+
+// vendor.qti.hardware.spu (AIDL V2)
+aidl_interface {
+    name: "vendor.qti.hardware.spu",
+    srcs: ["qti/hardware/spu/2/ISPUManager.aidl"],
+    vendor: true,
+    stability: "vintf",
+    owner: "qcom",
+    // Commented out versions to avoid issues with missing previous versions
+    // versions: ["2"],
+    backend: {cpp: { enabled: true, }, java: { enabled: false, }, ndk: { enabled: true, },},
+}
+
+// vendor.qti.hardware.wifi.wifilearner@1.0
+/*
+hidl_interface {
+    name: "vendor.qti.hardware.wifi.wifilearner@1.0",
+    root: "vendor.qti.hardware.wifi.wifilearner",
+    srcs: ["qti/hardware/wifi/wifilearner/1.0/IWifiStats.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.hardware.wifi.wifilearner@1.0_headers",
+    srcs: [
+        "generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0/BnHwWifiStats.h",
+        "generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0/IHwWifiStats.h",
+        "generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0/BpHwWifiStats.h",
+        "generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0/IWifiStats.h",
+        "generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0/BsWifiStats.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/hardware/wifi/wifilearner/1.0"],
+    vendor: true,
+}
+
+// vendor.qti.ims.callinfo@1.0
+/*
+hidl_interface {
+    name: "stub_vendor.qti.ims.callinfo@1.0",
+    root: "vendor.qti.ims.callinfo",
+    srcs: ["qti/ims/callinfo/1.0/IService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+
+// vendor.qti.ims.factory@1.0
+/*
+hidl_interface {
+    name: "vendor.qti.ims.factory@1.0",
+    root: "vendor.qti.ims.factory",
+    srcs: ["qti/ims/factory/1.0/IImsFactory.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.ims.factory@1.0_headers",
+    srcs: [
+        "generated_headers/vendor/qti/ims/factory/1.0/BnHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.0/BpHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.0/IHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.0/IImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.0/BsImsFactory.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/ims/factory/1.0"],
+    vendor: true,
+}
+
+// vendor.qti.ims.factory@1.1
+/*
+hidl_interface {
+    name: "vendor.qti.ims.factory@1.1_stub",
+    root: "vendor.qti.ims.factory",
+    srcs: ["qti/ims/factory/1.1/IImsFactory.hal"],
+    interfaces: [
+        "android.hidl.base@1.0",
+        "vendor.qti.ims.factory@1.0", // Updated dependency
+    ],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.ims.factory@1.1_headers",
+    srcs: [
+        "generated_headers/vendor/qti/ims/factory/1.1/BnHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.1/BpHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.1/IHwImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.1/IImsFactory.h",
+        "generated_headers/vendor/qti/ims/factory/1.1/BsImsFactory.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/ims/factory/1.1"],
+    vendor: true,
+}
+
+// vendor.qti.spu@1.0 (HIDL)
+/*
+hidl_interface {
+    name: "vendor.qti.spu@1.0",
+    root: "vendor.qti.spu",
+    srcs: ["qti/spu/1.0/ISPUManager.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.qti.spu@1.0_headers",
+    srcs: [
+        "generated_headers/vendor/qti/spu/1.0/ISPUManager.h",
+        "generated_headers/vendor/qti/spu/1.0/BnHwSPUManager.h",
+        "generated_headers/vendor/qti/spu/1.0/BsSPUManager.h",
+        "generated_headers/vendor/qti/spu/1.0/IHwSPUManager.h",
+        "generated_headers/vendor/qti/spu/1.0/BpHwSPUManager.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/qti/spu/1.0"],
+    vendor: true,
+}
+
+// vendor.somc.hardware.radio@1.0
+/*
+hidl_interface {
+    name: "vendor.somc.hardware.radio@1.0",
+    root: "vendor.somc.hardware.radio",
+    srcs: ["somc/hardware/radio/1.0/ISomcHook.hal"],
+    interfaces: [
+        "android.hidl.base@1.0",
+        "android.hardware.radio@1.0", // Depends on standard radio
+    ],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.somc.hardware.radio@1.0_headers",
+    srcs: [
+        "generated_headers/vendor/somc/hardware/radio/1.0/BsSomcHook.h",
+        "generated_headers/vendor/somc/hardware/radio/1.0/IHwSomcHook.h",
+        "generated_headers/vendor/somc/hardware/radio/1.0/ISomcHook.h",
+        "generated_headers/vendor/somc/hardware/radio/1.0/BnHwSomcHook.h",
+        "generated_headers/vendor/somc/hardware/radio/1.0/BpHwSomcHook.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/somc/hardware/radio/1.0"],
+    vendor: true,
+}
+
+// com.qualcomm.qti.dpm.api@1.0 - Renamed to avoid conflict with prebuilt in vendor/sony/sm8650
+/*
+hidl_interface {
+    name: "com.qualcomm.qti.dpm.api@1.0_stub",
+    root: "com.qualcomm.qti.dpm.api",
+    srcs: ["com/qualcomm/qti/dpm/api/1.0/IdpmQmi.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "com.qualcomm.qti.dpm.api@1.0_headers_stub",
+    srcs: [
+        "generated_headers/com/qualcomm/qti/dpm/api/1.0/BsdpmQmi.h",
+        "generated_headers/com/qualcomm/qti/dpm/api/1.0/IHwdpmQmi.h",
+        "generated_headers/com/qualcomm/qti/dpm/api/1.0/IdpmQmi.h",
+        "generated_headers/com/qualcomm/qti/dpm/api/1.0/BnHwdpmQmi.h",
+        "generated_headers/com/qualcomm/qti/dpm/api/1.0/BpHwdpmQmi.h",
+    ],
+    export_include_dirs: ["generated_headers/com/qualcomm/qti/dpm/api/1.0"],
+    vendor: true,
+}
+
+// vendor.semc.hardware.mmwavedirection@1.1
+/*
+hidl_interface {
+    name: "vendor.semc.hardware.mmwavedirection@1.1",
+    root: "vendor.semc.hardware",
+    srcs: ["semc/hardware/mmwavedirection/1.1/IMmwavedirection.hal"],
+    interfaces: [
+        "android.hidl.base@1.0",
+        // Add dependency on 1.0 if needed
+    ],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.semc.hardware.mmwavedirection@1.1_headers",
+    srcs: [
+        "generated_headers/vendor/semc/hardware/mmwavedirection/1.1/BpHwMmwavedirection.h",
+        "generated_headers/vendor/semc/hardware/mmwavedirection/1.1/IHwMmwavedirection.h",
+        "generated_headers/vendor/semc/hardware/mmwavedirection/1.1/BsMmwavedirection.h",
+        "generated_headers/vendor/semc/hardware/mmwavedirection/1.1/BnHwMmwavedirection.h",
+        "generated_headers/vendor/semc/hardware/mmwavedirection/1.1/IMmwavedirection.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/semc/hardware/mmwavedirection/1.1"],
+    vendor: true,
+}
+
+// vendor.semc.hardware.charger@1.2
+/*
+hidl_interface {
+    name: "vendor.semc.hardware.charger@1.2",
+    root: "vendor.semc.hardware",
+    srcs: ["semc/hardware/charger/1.2/ICharger.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+*/
+cc_prebuilt_headers {
+    name: "vendor.semc.hardware.charger@1.2_headers",
+    srcs: [
+        "generated_headers/vendor/semc/hardware/charger/1.2/IHwCharger.h",
+        "generated_headers/vendor/semc/hardware/charger/1.2/BnHwCharger.h",
+        "generated_headers/vendor/semc/hardware/charger/1.2/ICharger.h",
+        "generated_headers/vendor/semc/hardware/charger/1.2/BsCharger.h",
+        "generated_headers/vendor/semc/hardware/charger/1.2/BpHwCharger.h",
+    ],
+    export_include_dirs: ["generated_headers/vendor/semc/hardware/charger/1.2"],
+    vendor: true,
+}
+
+// vendor.hardware.biometrics.fingerprintRbs (AIDL)
+aidl_interface {
+    name: "vendor.hardware.biometrics.fingerprintRbs",
+    srcs: ["vendor/hardware/biometrics/fingerprintRbs/IFingerprintRbs.aidl"],
+    vendor: true,
+    stability: "vintf",
+    owner: "sony",
+    backend: {cpp: { enabled: true, }, java: { enabled: false, }, ndk: { enabled: false, },},
+}

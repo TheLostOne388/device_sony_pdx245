@@ -35,6 +35,9 @@ $(call inherit-product, device/sony/sm8650-common/common.mk)
 
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
+# Include Sony hardware interfaces
+$(call inherit-product-if-exists, hardware/sony/Android.mk)
+
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -79,7 +82,8 @@ PRODUCT_SOONG_NAMESPACES += \
     vendor/qcom/opensource/interfaces \
     kernel/sony/pdx245 \
     vendor/sony/pdx245/sensors \
-    device/sony/pdx245/vintf/interfaces
+    device/sony/pdx245/vintf/interfaces \
+    $(LOCAL_PATH)/interfaces/stubs
 
 # Prebuilt kernel files
 PRODUCT_COPY_FILES += \
@@ -199,6 +203,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.boot.product.vendor.sku=pdx245 \
     ro.boot.product.hardware.sku=pdx245 \
     ro.vendor.kernel.version=6.1.43
+
+# Sony VINTF compatibility matrix
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += hardware/sony/vintf/device_framework_matrix.xml
 
 # VINTF paths and configuration
 PRODUCT_VENDOR_PROPERTIES += \
@@ -338,16 +345,14 @@ PRODUCT_PACKAGES -= \
 
 DEVICE_PACKAGE_OVERLAYS += device/sony/pdx245/overlay
 
-# Replace the original sepolicy include with our simplified version
-# Sepolicy includes commented out - we're starting fresh
-#include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
-#include device/sony/pdx245/sepolicy_fixed.mk
-
 # Inherit from vendor blobs
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 $(call inherit-product, vendor/sony/sm8650-common/sm8650-common-vendor.mk)
 
-# Packages that conflict with LineageOS which we aim to override and use Sony's versions
+# Include VINTF stub interfaces to satisfy build
+$(call inherit-product, device/sony/pdx245/pdx245-vintf.mk)
+
+
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.config-V1-ndk \
     vendor.qti.hardware.display.config-V2-ndk \
@@ -480,9 +485,62 @@ PRODUCT_ENFORCE_RRO_TARGETS :=
 RELAX_USES_LIBRARY_CHECK := true
 ALLOW_MISSING_DEPENDENCIES := true
 
-# Audio Configs
-include $(LOCAL_PATH)/audio/audio_effects.mk
-include $(LOCAL_PATH)/audio/audio_primary.mk
+# Override to ensure prebuilt libar-pal is used instead of source from hardware/qcom-caf/sm8650
+PRODUCT_PACKAGES += libar-pal
+
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+
+# Use sepolicy version matching vendor manifest
+BOARD_SEPOLICY_VERS := 34.0
+
+# Kernel version
+ro.vendor.kernel.version=6.1.43
+
+# Enforce VINTF
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.product.hardware.sku=pdx245 \
+    ro.vendor.kernel.version=6.1.43
+
+# Sony VINTF compatibility matrix
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += hardware/sony/vintf/device_framework_matrix.xml
+
+# Add FCM version properties for Level 8 format
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.board.api_level=34 \
+    ro.board.first_api_level=34 \
+    ro.vendor.fcm.version=8
+
+# Enable ignoring VINTF version mismatches for vendor components
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.api_level=34 \
+    ro.build.version.known_codenames=REL
+
+# Enforce VINTF requirements
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
+
+# Include Sony VINTF compatibility matrix
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += hardware/sony/vintf/device_framework_matrix.xml
+
+# Vendor VINTF manifests
+DEVICE_MANIFEST_SKUS := pdx245
+DEVICE_MANIFEST_PDX245_FILES := \
+    $(LOCAL_PATH)/vintf/manifest.xml \
+    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/fingerprint-rbs.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.aidlcharge-somc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.extlight-somc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlmiscta-somc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsensor-somc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsuperstamina.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.camera.provider.manifest.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.perfagent-somc.xml \
+    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.radio.xml
+
 
 
 

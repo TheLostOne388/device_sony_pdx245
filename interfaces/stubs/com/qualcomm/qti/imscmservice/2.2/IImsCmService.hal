@@ -1,0 +1,7 @@
+// Stub for com.qualcomm.qti.imscmservice@2.2
+package com.qualcomm.qti.imscmservice@2.2;
+
+/** Minimal stub */
+interface IImsCmService {
+    // Methods TBD
+}; 

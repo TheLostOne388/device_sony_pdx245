@@ -1,0 +1,7 @@
+// Stub for vendor.qti.hardware.secureprocessor.device@1.0
+package vendor.qti.hardware.secureprocessor.device@1.0;
+
+/** Minimal stub */
+interface ISecureProcessor {
+    // Methods TBD
+}; 

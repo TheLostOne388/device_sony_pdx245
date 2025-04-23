@@ -1,0 +1,7 @@
+// Stub for vendor.qti.ims.factory@1.0
+package vendor.qti.ims.factory@1.0;
+
+/** Minimal stub */
+interface IImsFactory {
+    // Methods TBD
+}; 

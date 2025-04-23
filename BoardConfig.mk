@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# In device/sony/pdx245/BoardConfig.mk
+TARGET_USES_QCOM_MM_AUDIO := false
+BOARD_SUPPORTS_OPENSOURCE_STHAL := false
+# Add a custom comment or flag if possible to exclude audio PAL builds
+BOARD_EXCLUDE_QCOM_AUDIO_PAL := true
+
 # TARGET_BOARD_PLATFORM already defined in BoardConfigCommon.mk
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 
@@ -114,41 +120,38 @@ TARGET_SPECIFIC_HEADER_PATH := \
     
 TARGET_SEPOLICY_DIR := sm8650
 
-# SKU-specific manifests
-DEVICE_MANIFEST_SKUS := pdx245
-DEVICE_MANIFEST_PDX245_FILES := \
-    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/fingerprint-rbs.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.aidlcharge-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.extlight-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlmiscta-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsensor-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsuperstamina.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.camera.provider.manifest.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.perfagent-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.radio.xml
-
 # Override the common declaration
 override DEVICE_MATRIX_FILE := \
     $(DEVICE_PATH)/vintf/device_compatibility_matrix.xml
 
-# Override the complex QTI framework compatibility matrix with our simplified one
-override DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    $(DEVICE_PATH)/vintf/simplified_matrix.xml \
-    $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
+# Override the common declaration
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+    $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
 
-# Set FCM Version for VINTF compatibility
+# VINTF Configuration
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/vintf/manifest.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/vintf/framework_manifest.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
+DEVICE_MATRIX_FILE := $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
+
+# Add flag to handle vendor manifest level mismatch
+BUILD_BROKEN_VINTF_LEVEL_MISMATCH := true
+
+# Sepolicy version settings
 BOARD_SHIPPING_API_LEVEL := 34
-BOARD_SHIPPING_FCM_VERSION := 8
+BOARD_SHIPPING_FCM_VERSION := 8 # Keep Level 8
 BOARD_SYSTEMSDK_VERSIONS := 34 35
-BOARD_SEPOLICY_VERS := 30
-PLATFORM_SEPOLICY_VERSION := 202404
-BOARD_SEPOLICY_VERS_API := 30
+BOARD_SEPOLICY_VERS := 34.0 # Match vendor manifest
+BOARD_SEPOLICY_VERS_API := 34 # Align API level for sepolicy
+PLATFORM_SEPOLICY_COMPAT_VERSIONS := 29.0 30.0 31.0 32.0 33.0 34.0 # Ensure 34.0 is present
 
-# Set POLICYVERS as a Soong config variable
-SOONG_CONFIG_NAMESPACES += vintf 
-SOONG_CONFIG_vintf += POLICYVERS
-SOONG_CONFIG_vintf_POLICYVERS := 30
+# Custom hook to fix sepolicy compatibility issues
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
+BUILD_BROKEN_VINTF_VALIDATES_SEPOLICY_VERSION := true
+
+BOARD_SEPOLICY_M4DEFS += module_dataoem=true
+BOARD_SEPOLICY_M4DEFS += wifi_qcom_regdom=true
 
 # Load our fixed sepolicy directory first
 include device/sony/pdx245/sepolicy_fixed/sepolicy.mk
@@ -185,9 +188,6 @@ BOARD_SUPPORTS_OPENSOURCE_STHAL := false
 BOARD_VENDOR_SEPOLICY_DIRS := $(filter-out vendor/sony/pdx245/sepolicy,$(BOARD_VENDOR_SEPOLICY_DIRS))
 BOARD_SEPOLICY_REPLACE := $(filter-out vendor_sepolicy.cil vendor_file_contexts,$(BOARD_SEPOLICY_REPLACE))
 
-include $(DEVICE_PATH)/audio/audio_effects.mk
-include $(DEVICE_PATH)/audio/audio_primary.mk
-
 # Super partition configuration for dynamic partitions
 BOARD_SUPER_PARTITION_SIZE := 10737418240  # 10 GB
 BOARD_SUPER_PARTITION_GROUPS := sony_dynamic_partitions
@@ -196,9 +196,6 @@ BOARD_SONY_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor
 
 # Vendor partition configuration
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
-
-# Include audio headers handler
-include $(DEVICE_PATH)/audio/audio_headers.mk
 
 # Product props
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
@@ -246,10 +243,13 @@ BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
 BOARD_PREBUILT_VENDOR_DLKM := $(KERNEL_PREBUILT_DIR)/vendor_dlkm.img
 BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
 
-# Add our boot HAL override manifest
-DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/vintf/manifest_boot_override.xml
+# VINTF additional configuration
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
-# VINTF
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_compatibility_matrix.xml
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/device_framework_matrix_boot_hal.xml
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/vintf/compatibility_matrix.device.xml
+# AVB
+BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 4
+
+# Use 202404 version for compatibility with newer Android versions

@@ -1,0 +1,9 @@
+// Stub for vendor.qti.ims.factory@1.1
+package vendor.qti.ims.factory@1.1;
+
+import vendor.qti.ims.factory@1.0::IImsFactory;
+
+/** Minimal stub extending 1.0 */
+interface IImsFactory extends @1.0::IImsFactory {
+    // Add 1.1 specific methods if needed/known
+}; 

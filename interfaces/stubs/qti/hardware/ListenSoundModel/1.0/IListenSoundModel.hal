@@ -1,0 +1,7 @@
+// Stub for vendor.qti.hardware.ListenSoundModel@1.0
+package vendor.qti.hardware.ListenSoundModel@1.0;
+
+/** Minimal stub */
+interface IListenSoundModel {
+    // Methods TBD
+}; 

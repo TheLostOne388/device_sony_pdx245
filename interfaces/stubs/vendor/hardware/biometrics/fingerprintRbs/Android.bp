@@ -1,0 +1,5 @@
+// Android.bp in device/sony/pdx245/interfaces/stubs/vendor/hardware/biometrics/fingerprintRbs/
+
+// Stub definition for vendor.hardware.biometrics.fingerprintRbs has been moved to the main Android.bp to avoid duplicates.
+
+// No content here to avoid duplication. 

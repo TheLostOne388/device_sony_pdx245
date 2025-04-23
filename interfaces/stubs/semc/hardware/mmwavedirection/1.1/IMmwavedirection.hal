@@ -1,0 +1,7 @@
+// Stub for vendor.semc.hardware.mmwavedirection@1.1
+package vendor.semc.hardware.mmwavedirection@1.1;
+
+/** Minimal stub */
+interface IMmwavedirection {
+    // Methods TBD
+}; 

@@ -1,0 +1,7 @@
+// Stub for vendor.qti.spu@1.0
+package vendor.qti.spu@1.0;
+
+/** Minimal stub */
+interface ISPUManager {
+    // Methods TBD
+}; 

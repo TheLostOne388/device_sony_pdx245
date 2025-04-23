@@ -1,0 +1,9 @@
+// Stub for vendor.qti.spu@1.1
+package vendor.qti.spu@1.1;
+
+import vendor.qti.spu@1.0::ISPUManager;
+
+/** Minimal stub extending 1.0 */
+interface ISPUManager extends @1.0::ISPUManager {
+    // Add 1.1 specific methods if needed/known
+}; 

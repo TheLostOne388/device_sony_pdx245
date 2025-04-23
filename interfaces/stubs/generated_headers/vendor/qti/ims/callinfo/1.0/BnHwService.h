@@ -1,0 +1,53 @@
+#ifndef HIDL_GENERATED_VENDOR_QTI_IMS_CALLINFO_V1_0_BNHWSERVICE_H
+#define HIDL_GENERATED_VENDOR_QTI_IMS_CALLINFO_V1_0_BNHWSERVICE_H
+
+#include <vendor/qti/ims/callinfo/1.0/IHwService.h>
+
+namespace vendor {
+namespace qti {
+namespace ims {
+namespace callinfo {
+namespace V1_0 {
+
+struct BnHwService : public ::android::hidl::base::V1_0::BnHwBase {
+    explicit BnHwService(const ::android::sp<IService> &_hidl_impl);
+    explicit BnHwService(const ::android::sp<IService> &_hidl_impl, const std::string& HidlInstrumentor_package, const std::string& HidlInstrumentor_interface);
+
+    virtual ~BnHwService();
+
+    ::android::status_t onTransact(
+            uint32_t _hidl_code,
+            const ::android::hardware::Parcel &_hidl_data,
+            ::android::hardware::Parcel *_hidl_reply,
+            uint32_t _hidl_flags = 0,
+            TransactCallback _hidl_cb = nullptr) override;
+
+
+    /**
+     * The pure class is what this class wraps.
+     */
+    typedef IService Pure;
+
+    /**
+     * Type tag for use in template logic that indicates this is a 'native' class.
+     */
+    typedef ::android::hardware::details::bnhw_tag _hidl_tag;
+
+    ::android::sp<IService> getImpl() { return _hidl_mImpl; }
+
+private:
+    // Methods from ::android::hidl::base::V1_0::IBase follow.
+    ::android::hardware::Return<void> ping();
+    using getDebugInfo_cb = ::android::hidl::base::V1_0::IBase::getDebugInfo_cb;
+    ::android::hardware::Return<void> getDebugInfo(getDebugInfo_cb _hidl_cb);
+
+    ::android::sp<IService> _hidl_mImpl;
+};
+
+}  // namespace V1_0
+}  // namespace callinfo
+}  // namespace ims
+}  // namespace qti
+}  // namespace vendor
+
+#endif  // HIDL_GENERATED_VENDOR_QTI_IMS_CALLINFO_V1_0_BNHWSERVICE_H

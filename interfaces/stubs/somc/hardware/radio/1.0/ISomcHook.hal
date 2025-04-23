@@ -1,0 +1,7 @@
+// Stub for vendor.somc.hardware.radio@1.0
+package vendor.somc.hardware.radio@1.0;
+
+/** Minimal stub */
+interface ISomcHook {
+    // Methods TBD
+}; 
