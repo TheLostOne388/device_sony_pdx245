@@ -1,0 +1,5 @@
+package com.qualcomm.qti.dpm.api@1.0;
+
+interface IdpmQmi {
+    getVersion() generates (string version);
+};

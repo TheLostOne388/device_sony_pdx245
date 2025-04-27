@@ -1,7 +1,0 @@
-// Stub for vendor.qti.hardware.fm@1.0
-package vendor.qti.hardware.fm@1.0;
-
-/** Minimal stub */
-interface IFmHci {
-    // Methods TBD
-}; 

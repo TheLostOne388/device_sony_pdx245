@@ -1,0 +1,5 @@
+package com.qualcomm.qti.imscmservice@2.2;
+
+interface IImsCmService {
+    getVersion() generates (string version);
+};

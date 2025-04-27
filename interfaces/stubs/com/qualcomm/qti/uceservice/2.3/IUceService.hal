@@ -1,7 +1,0 @@
-// Stub for com.qualcomm.qti.uceservice@2.3
-package com.qualcomm.qti.uceservice@2.3;
-
-/** Minimal stub */
-interface IUceService {
-    // Methods TBD
-}; 

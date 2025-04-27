@@ -1,8 +1,1 @@
-// Stub for vendor.qti.hardware.spu (AIDL V2)
-package vendor.qti.hardware.spu;
-
-/** Minimal stub */
-@VintfStability
-interface ISPUManager {
-    // Methods TBD
-}; 
+package vendor.qti.hardware.spu;\n\ninterface ISPUManager {\n    // Placeholder for SPU manager interface\n    void placeholder();\n}

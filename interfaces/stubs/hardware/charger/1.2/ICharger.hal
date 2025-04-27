@@ -1,0 +1,6 @@
+package vendor.semc.hardware.charger@1.2;
+
+// Interface for build purposes
+interface ICharger {
+    getVersion() generates (string version);
+};

@@ -60,7 +60,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-
     <!-- Only require SDK version 34, not 35 -->
     <system-sdk>
         <version>34</version>

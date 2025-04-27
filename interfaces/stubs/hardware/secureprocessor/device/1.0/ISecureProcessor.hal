@@ -1,0 +1,5 @@
+package vendor.qti.hardware.secureprocessor.device@1.0;
+
+interface ISecureProcessor {
+    getVersion() generates (string version);
+};

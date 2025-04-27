@@ -1,7 +1,0 @@
-// Stub for vendor.qti.hardware.cacert@1.0
-package vendor.qti.hardware.cacert@1.0;
-
-/** Minimal stub */
-interface IService {
-    // Methods TBD - Note: Standard name is IService for many HALs
-}; 

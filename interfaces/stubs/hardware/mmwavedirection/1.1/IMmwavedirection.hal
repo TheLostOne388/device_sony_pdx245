@@ -1,0 +1,5 @@
+package vendor.semc.hardware.mmwavedirection@1.1;
+
+interface IMmwavedirection {
+    getVersion() generates (string version);
+};

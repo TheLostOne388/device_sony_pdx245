@@ -1,0 +1,5 @@
+package vendor.qti.hardware.factory@1.1;
+
+interface IFactory {
+    getVersion() generates (string version);
+};

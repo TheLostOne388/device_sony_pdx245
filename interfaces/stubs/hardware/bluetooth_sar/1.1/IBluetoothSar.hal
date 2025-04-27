@@ -1,0 +1,5 @@
+package vendor.qti.hardware.bluetooth_sar@1.1;
+
+interface IBluetoothSar {
+    getVersion() generates (string version);
+};

@@ -1,7 +1,0 @@
-// Stub for com.qualcomm.qti.dpm.api@1.0
-package com.qualcomm.qti.dpm.api@1.0;
-
-/** Minimal stub */
-interface IdpmQmi {
-    // Methods TBD
-}; 
