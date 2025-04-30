@@ -1,5 +1,5 @@
 package qti.hardware.ListenSoundModel@1.0;
 
 interface IListenSoundModel {
-    // Completely empty interface for testing parsing
-}; 
+    getVersion() generates (string version);
+};

@@ -1,0 +1,16 @@
+// Android.bp for qti.hardware.wifi.wifilearner@1.0 stub
+
+hidl_interface {
+    name: "qti.hardware.wifi.wifilearner@1.0",
+    root: "qti.hardware.wifi.wifilearner",
+    srcs: ["IWifiStats.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "qti.hardware.wifi.wifilearner@1.0_headers",
+    generated_headers: ["qti.hardware.wifi.wifilearner@1.0"],
+    export_generated_headers: ["qti.hardware.wifi.wifilearner@1.0"],
+    vendor: true,
+} 

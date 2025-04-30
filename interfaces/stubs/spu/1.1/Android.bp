@@ -1,0 +1,16 @@
+   hidl_interface {
+       name: "qti.spu@1.1",
+       root: "qti.spu",
+       srcs: ["ISPUManager.hal"],
+       interfaces: [
+           "android.hidl.base@1.0",
+           "qti.spu@1.0",
+       ],
+       gen_java: false,
+   }
+   cc_library_headers {
+       name: "qti.spu@1.1_headers",
+       generated_headers: ["qti.spu@1.1"],
+       export_generated_headers: ["qti.spu@1.1"],
+       vendor: true,
+   }

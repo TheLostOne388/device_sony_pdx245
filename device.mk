@@ -541,6 +541,26 @@ DEVICE_MANIFEST_PDX245_FILES := \
     vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.perfagent-somc.xml \
     vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.radio.xml
 
+# Stub Interface Packages for VINTF Check
+PRODUCT_PACKAGES += \
+    android.hardware.fingerprint@2.3 \
+    com.qualcomm.qti.uceservice@2.3 \
+    qti.hardware.ListenSoundModel@1.0 \
+    qti.hardware.bluetooth_sar@1.1 \
+    qti.hardware.cacert@1.0 \
+    qti.hardware.fm@1.0 \
+    qti.hardware.secureprocessor.device@1.0 \
+    vendor.qti.hardware.spu \
+    qti.hardware.wifi.wifilearner@1.0 \
+    qti.ims.callinfo@1.0 \
+    qti.ims.factory@1.0 \
+    qti.ims.factory@1.1 \
+    qti.spu@1.0 \
+    qti.spu@1.1 \
+    semc.hardware.charger@1.2 \
+    semc.hardware.mmwavedirection@1.1 \
+    somc.hardware.radio@1.0
+
 
 
 

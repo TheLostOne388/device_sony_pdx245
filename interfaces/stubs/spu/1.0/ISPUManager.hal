@@ -1,4 +1,4 @@
-package vendor.qti.spu@1.0;
+package qti.spu@1.0;
 
 interface ISPUManager {
     getVersion() generates (string version);

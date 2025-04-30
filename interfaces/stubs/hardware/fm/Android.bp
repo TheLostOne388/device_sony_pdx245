@@ -1,0 +1,16 @@
+// Android.bp for qti.hardware.fm@1.0 stub
+
+hidl_interface {
+    name: "qti.hardware.fm@1.0",
+    root: "qti.hardware.fm",
+    srcs: ["IFmHci.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "qti.hardware.fm@1.0_headers",
+    generated_headers: ["qti.hardware.fm@1.0"],
+    export_generated_headers: ["qti.hardware.fm@1.0"],
+    vendor: true,
+} 

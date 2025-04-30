@@ -1,5 +1,7 @@
-package vendor.qti.spu@1.0;
+package qti.spu@1.1;
 
-interface ISPUManager {
-    getVersion() generates (string version);
+import qti.spu@1.0::ISPUManager;
+
+interface ISPUManager extends @1.0::ISPUManager {
+    // Add new methods here, or leave empty if none
 };

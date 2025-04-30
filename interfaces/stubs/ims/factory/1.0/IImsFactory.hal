@@ -1,4 +1,4 @@
-package vendor.qti.ims.factory@1.0;
+package qti.ims.factory@1.0;
 
 interface IImsFactory {
     getVersion() generates (string version);

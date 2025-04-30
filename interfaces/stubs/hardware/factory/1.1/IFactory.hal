@@ -1,5 +1,5 @@
-package vendor.qti.hardware.factory@1.1;
+package qti.hardware.factory@1.1;
 
 interface IFactory {
-    getVersion() generates (string version);
-};
+    // Minimal stub
+}; 

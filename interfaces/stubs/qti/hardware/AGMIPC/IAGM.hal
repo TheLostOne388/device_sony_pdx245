@@ -1,4 +1,4 @@
-package vendor.qti.hardware.AGMIPC@1.0;
+package qti.hardware.AGMIPC@1.0;
 
 interface IAGM {
     getVersion() generates (string version);

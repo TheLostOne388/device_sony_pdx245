@@ -1,0 +1,16 @@
+// Android.bp for qti.ims.callinfo@1.0 stub
+
+hidl_interface {
+    name: "qti.ims.callinfo@1.0",
+    root: "qti.ims.callinfo",
+    srcs: ["IService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "qti.ims.callinfo@1.0_headers",
+    generated_headers: ["qti.ims.callinfo@1.0"],
+    export_generated_headers: ["qti.ims.callinfo@1.0"],
+    vendor: true,
+} 
