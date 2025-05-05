@@ -1,0 +1,16 @@
+// Android.bp for semc.hardware.mmwavedirection@1.1 stub
+
+hidl_interface {
+    name: "vendor.semc.hardware.mmwavedirection@1.1",
+    root: "vendor.semc.hardware.mmwavedirection",
+    srcs: ["IMmwavedirection.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "vendor.semc.hardware.mmwavedirection@1.1_headers",
+    generated_headers: ["vendor.semc.hardware.mmwavedirection@1.1"],
+    export_generated_headers: ["vendor.semc.hardware.mmwavedirection@1.1"],
+    vendor: true,
+} 

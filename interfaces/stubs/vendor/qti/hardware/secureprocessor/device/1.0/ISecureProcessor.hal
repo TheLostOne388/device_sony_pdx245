@@ -1,0 +1,8 @@
+package vendor.qti.hardware.secureprocessor.device@1.0;
+
+import android.hidl.base@1.0;
+
+interface ISecureProcessor {
+    getDeviceInfo() generates (string info);
+    performOperation(string operation) generates (bool success);
+}; 

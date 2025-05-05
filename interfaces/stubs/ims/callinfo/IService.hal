@@ -1,5 +1,0 @@
-package qti.ims.callinfo@1.0;
-
-interface IService {
-    getVersion() generates (string version);
-};

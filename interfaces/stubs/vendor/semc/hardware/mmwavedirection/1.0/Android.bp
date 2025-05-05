@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.semc.hardware.mmwavedirection@1.0",
+    root: "vendor.semc.hardware.mmwavedirection",
+    srcs: [
+        "IMmwavedirection.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

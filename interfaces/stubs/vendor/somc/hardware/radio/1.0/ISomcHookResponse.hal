@@ -1,0 +1,8 @@
+package vendor.somc.hardware.radio@1.0;
+
+import android.hidl.base@1.0;
+
+interface ISomcHookResponse {
+    onResponse(int32_t serial, vec<uint8_t> data);
+    onUnsolicitedResponse(int32_t type, vec<uint8_t> data);
+}; 

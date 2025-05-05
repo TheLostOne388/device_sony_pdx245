@@ -1,5 +1,0 @@
-package qti.hardware.secureprocessor.device@1.0;
-
-interface ISecureProcessor {
-    // Minimal stub
-}; 

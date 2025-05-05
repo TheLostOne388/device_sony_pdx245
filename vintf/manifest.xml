@@ -11,5 +11,4 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <!-- Vendor-specific HALs -->
 </manifest>

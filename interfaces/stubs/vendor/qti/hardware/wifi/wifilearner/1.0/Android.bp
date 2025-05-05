@@ -1,0 +1,12 @@
+hidl_interface {
+    name: "vendor.qti.hardware.wifi.wifilearner@1.0",
+    root: "vendor.qti.hardware.wifi.wifilearner",
+    srcs: [
+        "IWifiLearner.hal",
+        "IWifiStats.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.qti.hardware.bluetooth_sar@1.0",
+    root: "vendor.qti.hardware.bluetooth_sar",
+    srcs: [
+        "IBluetoothSar.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

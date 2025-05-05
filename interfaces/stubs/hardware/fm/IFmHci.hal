@@ -1,5 +1,0 @@
-package qti.hardware.fm@1.0;
-
-interface IFmHci {
-    // Minimal stub
-}; 

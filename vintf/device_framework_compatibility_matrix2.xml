@@ -5,11 +5,28 @@
 -->
 <compatibility-matrix version="1.0" type="framework" level="8">
     <!-- Problematic HALs that need to be addressed individually -->
+    <!-- Ensure AOSP HIDL fingerprint is removed/commented -->
+    <!--
     <hal format="hidl" optional="true">
         <name>android.hardware.fingerprint</name>
         <version>2.3</version>
+        ...
+    </hal>
+    -->
+    <!-- Ensure Vendor AIDL fingerprintRbs is removed/commented -->
+    <!--
+    <hal format="aidl" optional="true">
+        <name>vendor.hardware.biometrics.fingerprintRbs</name>
+        <version>1</version>
+        ...
+    </hal>
+    -->
+    <!-- ADD ENTRY FOR AOSP AIDL FINGERPRINT -->
+    <hal format="aidl" optional="true">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>3</version> <!-- Match version from manifest -->
         <interface>
-            <name>IBiometricsFingerprint</name>
+            <name>IFingerprint</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -70,14 +87,13 @@
             <instance>qti-tvm</instance>
         </interface>
     </hal>
+    <!-- Remove SPU AIDL -->
+    <!--
     <hal format="aidl" optional="true">
         <name>vendor.qti.hardware.spu</name>
-        <version>2</version>
-        <interface>
-            <name>ISPUManager</name>
-            <instance>default</instance>
-        </interface>
+        ...
     </hal>
+    -->
     <hal format="hidl" optional="true">
         <name>vendor.qti.hardware.wifi.wifilearner</name>
         <version>1.0</version>
@@ -133,6 +149,15 @@
             <name>ISomcHook</name>
             <instance>somchook</instance>
             <instance>somchook2</instance>
+        </interface>
+    </hal>
+    <!-- Add Vendor Fingerprint HAL -->
+    <hal format="aidl" optional="true">
+        <name>vendor.hardware.biometrics.fingerprintRbs</name>
+        <version>1</version> <!-- Assuming version 1, verify if possible -->
+        <interface>
+            <name>IFingerprintRbs</name>
+            <instance>Rbs</instance> <!-- Assuming instance Rbs, verify if possible -->
         </interface>
     </hal>
 </compatibility-matrix> 

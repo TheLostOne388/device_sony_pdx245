@@ -419,8 +419,7 @@ PRODUCT_PACKAGES += \
 
 # Legacy HALs still needed
 PRODUCT_PACKAGES += \
-    vendor.semc.hardware.charger@1.2-service \
-    vendor.semc.hardware.mmwavedirection@1.1-service
+    vendor.semc.hardware.charger@1.2-service
 
 # Sony RC files
 PRODUCT_COPY_FILES += \
@@ -545,21 +544,21 @@ DEVICE_MANIFEST_PDX245_FILES := \
 PRODUCT_PACKAGES += \
     android.hardware.fingerprint@2.3 \
     com.qualcomm.qti.uceservice@2.3 \
-    qti.hardware.ListenSoundModel@1.0 \
-    qti.hardware.bluetooth_sar@1.1 \
-    qti.hardware.cacert@1.0 \
-    qti.hardware.fm@1.0 \
-    qti.hardware.secureprocessor.device@1.0 \
+    vendor.qti.hardware.ListenSoundModel@1.0-impl \
+    vendor.qti.hardware.bluetooth_sar@1.1-impl \
+    vendor.qti.hardware.cacert@1.0-impl \
+    vendor.qti.hardware.fm@1.0-impl \
+    vendor.qti.hardware.secureprocessor.device@1.0-impl \
     vendor.qti.hardware.spu \
-    qti.hardware.wifi.wifilearner@1.0 \
-    qti.ims.callinfo@1.0 \
-    qti.ims.factory@1.0 \
-    qti.ims.factory@1.1 \
-    qti.spu@1.0 \
-    qti.spu@1.1 \
-    semc.hardware.charger@1.2 \
-    semc.hardware.mmwavedirection@1.1 \
-    somc.hardware.radio@1.0
+    vendor.qti.hardware.wifi.wifilearner@1.0-impl \
+    vendor.qti.ims.callinfo@1.0-impl \
+    vendor.qti.ims.factory@1.0-impl \
+    vendor.qti.ims.factory@1.1-impl \
+    vendor.qti.spu@1.0-impl \
+    vendor.qti.spu@1.1-impl \
+    vendor.semc.hardware.charger@1.2-impl \
+    vendor.semc.hardware.mmwavedirection@1.1-impl \
+    vendor.somc.hardware.radio@1.0-impl
 
 
 

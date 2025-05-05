@@ -1,0 +1,20 @@
+// device/sony/pdx245/interfaces/stubs/vendor/semc/hardware/charger/1.2/Android.bp
+
+hidl_interface {
+    name: "vendor.semc.hardware.charger@1.2",
+    root: "vendor.semc",
+    srcs: [
+        "ICharger.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+        "vendor.semc.hardware.charger@1.1",
+    ],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "vendor.semc.hardware.charger@1.2_headers",
+    generated_headers: ["vendor.semc.hardware.charger@1.2"],
+    export_generated_headers: ["vendor.semc.hardware.charger@1.2"],
+}

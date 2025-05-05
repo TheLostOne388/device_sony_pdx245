@@ -1,0 +1,21 @@
+// Android.bp for somc.hardware.radio@1.0 stub
+
+hidl_interface {
+    name: "vendor.somc.hardware.radio@1.0",
+    root: "vendor.somc.hardware.radio",
+    srcs: [
+        "ISomcHook.hal",
+        "ISomcHookResponse.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "vendor.somc.hardware.radio@1.0_headers",
+    generated_headers: ["vendor.somc.hardware.radio@1.0"],
+    export_generated_headers: ["vendor.somc.hardware.radio@1.0"],
+    vendor: true,
+} 

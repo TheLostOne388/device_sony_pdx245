@@ -1,0 +1,5 @@
+package vendor.qti.hardware.ListenSoundModel@1.0;
+
+interface IListenSoundModel {
+    getVersion() generates (string version);
+}; 

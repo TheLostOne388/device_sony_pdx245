@@ -1,0 +1,8 @@
+package vendor.qti.hardware.bluetooth_sar@1.0;
+
+import android.hidl.base@1.0;
+
+interface IBluetoothSar {
+    setBluetoothSarEnabled(bool enabled) generates (bool success);
+    getBluetoothSarStatus() generates (bool enabled);
+}; 

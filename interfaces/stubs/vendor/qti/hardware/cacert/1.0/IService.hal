@@ -1,0 +1,8 @@
+package vendor.qti.hardware.cacert@1.0;
+
+import android.hidl.base@1.0;
+
+interface IService {
+    getCertificate(string name) generates (vec<uint8_t> cert);
+    storeCertificate(string name, vec<uint8_t> cert) generates (bool success);
+}; 

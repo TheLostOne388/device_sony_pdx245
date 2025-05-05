@@ -1,0 +1,23 @@
+package vendor.semc.hardware.charger@1.0;
+
+import android.hidl.base@1.0;
+
+interface ICharger extends android.hidl.base@1.0::IBase {
+    /**
+     * Get the charging status
+     * @return status Current charging status
+     */
+    getChargingStatus() generates (int32_t status);
+
+    /**
+     * Get the battery temperature
+     * @return temp Battery temperature in tenths of degrees Celsius
+     */
+    getBatteryTemperature() generates (int32_t temp);
+
+    /**
+     * Get the battery voltage
+     * @return voltage Battery voltage in microvolts
+     */
+    getBatteryVoltage() generates (int32_t voltage);
+}; 

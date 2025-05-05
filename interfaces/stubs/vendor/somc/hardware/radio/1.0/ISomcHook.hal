@@ -1,0 +1,9 @@
+package vendor.somc.hardware.radio@1.0;
+
+import android.hidl.base@1.0;
+import vendor.somc.hardware.radio@1.0::ISomcHookResponse;
+
+interface ISomcHook {
+    sendRequest(int32_t serial, vec<uint8_t> data) generates (bool success);
+    setResponseFunctions(ISomcHookResponse responseCallback) generates (bool success);
+}; 

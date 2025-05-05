@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.qti.hardware.cacert@1.0",
+    root: "vendor.qti.hardware.cacert",
+    srcs: [
+        "IService.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

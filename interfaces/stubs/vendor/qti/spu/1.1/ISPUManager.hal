@@ -1,0 +1,9 @@
+package vendor.qti.spu@1.1;
+
+import vendor.qti.spu@1.0;
+import android.hidl.base@1.0;
+
+interface ISPUManager extends @1.0::ISPUManager {
+    fwUpdate() generates (bool success);
+    getSecureStatus() generates (int32_t status);
+};

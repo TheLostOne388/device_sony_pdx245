@@ -1,0 +1,9 @@
+package vendor.semc.hardware.mmwavedirection@1.1;
+
+import vendor.semc.hardware.mmwavedirection@1.0;
+import android.hidl.base@1.0;
+
+interface IMmwavedirection extends @1.0::IMmwavedirection {
+    setDirection(int32_t direction) generates (bool success);
+    getDirectionStatus() generates (int32_t status);
+}; 

@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.qti.hardware.fm@1.0",
+    root: "vendor.qti.hardware.fm",
+    srcs: [
+        "IFmHci.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

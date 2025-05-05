@@ -1,0 +1,15 @@
+// Android.bp for qti.spu stub
+
+   hidl_interface {
+       name: "vendor.qti.spu@1.0",
+       root: "vendor.qti.spu",
+       srcs: ["ISPUManager.hal"],
+       interfaces: ["android.hidl.base@1.0"],
+       gen_java: false,
+   }
+   cc_library_headers {
+       name: "vendor.qti.spu@1.0_headers",
+       generated_headers: ["vendor.qti.spu@1.0"],
+       export_generated_headers: ["vendor.qti.spu@1.0"],
+       vendor: true,
+   }

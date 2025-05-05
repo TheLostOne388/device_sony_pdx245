@@ -1,0 +1,8 @@
+package vendor.qti.ims.callinfo@1.0;
+
+import android.hidl.base@1.0;
+
+interface IService {
+    getCallInfo() generates (vec<uint8_t> info);
+    updateCallInfo(vec<uint8_t> info) generates (bool success);
+};

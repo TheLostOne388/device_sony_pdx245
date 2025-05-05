@@ -1,0 +1,8 @@
+package vendor.qti.hardware.wifi.wifilearner@1.0;
+
+import android.hidl.base@1.0;
+
+interface IWifiStats {
+    getStats() generates (vec<uint8_t> stats);
+    clearStats() generates (bool success);
+}; 

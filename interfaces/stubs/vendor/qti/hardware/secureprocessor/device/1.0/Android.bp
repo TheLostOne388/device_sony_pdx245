@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.qti.hardware.secureprocessor.device@1.0",
+    root: "vendor.qti.hardware.secureprocessor.device",
+    srcs: [
+        "ISecureProcessor.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

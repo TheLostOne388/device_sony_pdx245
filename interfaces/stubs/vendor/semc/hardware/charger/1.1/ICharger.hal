@@ -1,0 +1,19 @@
+package vendor.semc.hardware.charger@1.1;
+
+import vendor.semc.hardware.charger@1.0;
+import android.hidl.base@1.0;
+
+interface ICharger extends @1.0::ICharger {
+    /**
+     * Enable/disable charging
+     * @param enabled true to enable charging, false to disable
+     * @return success true if the operation was successful
+     */
+    setChargingEnabled(bool enabled) generates (bool success);
+
+    /**
+     * Get charging enabled status
+     * @return enabled true if charging is enabled
+     */
+    isChargingEnabled() generates (bool enabled);
+}; 

@@ -12,5 +12,5 @@ cc_library_headers {
     name: "com.qualcomm.qti.uceservice@2.3_headers",
     generated_headers: ["com.qualcomm.qti.uceservice@2.3"],
     export_generated_headers: ["com.qualcomm.qti.uceservice@2.3"],
-    vendor_available: true,
+
 } 

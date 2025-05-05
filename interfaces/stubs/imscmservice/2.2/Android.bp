@@ -1,0 +1,28 @@
+// Android.bp for com.qualcomm.qti.imscmservice@2.2 stub
+
+hidl_interface {
+    name: "com.qualcomm.qti.imscmservice@2.2",
+    root: "com.qualcomm.qti.imscmservice", // Adjust root if needed based on hidl_package_root
+    srcs: ["IImsCmService.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "com.qualcomm.qti.imscmservice@2.2_headers",
+    generated_headers: ["com.qualcomm.qti.imscmservice@2.2"],
+    export_generated_headers: ["com.qualcomm.qti.imscmservice@2.2"],
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "com.qualcomm.qti.imscmservice@2.2-impl", // The implementation module name
+    vendor: true,                // Mark as vendor module
+    srcs: ["ImsCmServiceStub.cpp"], // Points to dummy C++ file in this directory
+    shared_libs: [               // Link against necessary libraries
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "com.qualcomm.qti.imscmservice@2.2", // Links to interface lib (will use preferred prebuilt)
+    ],
+} 

@@ -1,9 +1,14 @@
-// Android.bp for vendor.hardware.biometrics.fingerprintRbs AIDL stub
-
 aidl_interface {
     name: "vendor.hardware.biometrics.fingerprintRbs",
-    srcs: ["IFingerprintRbs.aidl"], // Path relative to this Android.bp
     vendor: true,
-    unstable: true,
-// ... rest of definition ...
-} 
+    srcs: ["IFingerprintRbs.aidl"],
+    stability: "vintf",
+    // versions: ["1"], // <<< MUST BE COMMENTED OUT FOR THIS STEP
+    owner: "sony",
+    include_dirs: [
+        "device/sony/pdx245/interfaces/stubs",
+        "system/tools/aidl/build", // Standard include [Result 1]
+        "hardware/interfaces",     // Standard include [Result 1]
+    ],
+    backend: { ndk: { enabled: true } },
+}

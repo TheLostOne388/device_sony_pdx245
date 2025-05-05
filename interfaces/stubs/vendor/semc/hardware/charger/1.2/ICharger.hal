@@ -1,0 +1,14 @@
+package vendor.semc.hardware.charger@1.2;
+
+// Use Sony's 1.1 implementation
+import vendor.semc.hardware.charger@1.1::ICharger;
+import android.hidl.base@1.0;
+
+interface ICharger extends @1.1::ICharger {
+    /**
+     * Set charging current limit
+     * @param limit Current limit in milliamps
+     * @return success true if the operation was successful
+     */
+    setChargingLimit(int32_t limit) generates (bool success);
+}; 

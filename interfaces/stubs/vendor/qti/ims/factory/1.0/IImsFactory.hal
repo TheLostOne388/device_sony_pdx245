@@ -1,0 +1,8 @@
+package vendor.qti.ims.factory@1.0;
+
+import android.hidl.base@1.0;
+
+interface IImsFactory {
+    createImsService() generates (bool success);
+    destroyImsService() generates (bool success);
+};

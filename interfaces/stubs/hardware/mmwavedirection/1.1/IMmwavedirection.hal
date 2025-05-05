@@ -1,5 +1,0 @@
-package semc.hardware.mmwavedirection@1.1;
-
-interface IMmwavedirection {
-    // Minimal stub
-}; 

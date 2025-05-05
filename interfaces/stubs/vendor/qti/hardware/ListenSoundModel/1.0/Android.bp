@@ -1,0 +1,10 @@
+// device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/ListenSoundModel/1.0/Android.bp
+hidl_interface {
+    name: "vendor.qti.hardware.ListenSoundModel@1.0",
+    root: "vendor.qti",
+    srcs: ["IListenSoundModel.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+
+}
+

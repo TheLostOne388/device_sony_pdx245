@@ -1,5 +1,0 @@
-package qti.hardware.wifi.wifilearner@1.0;
-
-interface IWifiStats {
-    // Minimal stub
-}; 

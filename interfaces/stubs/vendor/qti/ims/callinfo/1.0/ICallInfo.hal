@@ -1,0 +1,8 @@
+package vendor.qti.ims.callinfo@1.0;
+
+import android.hidl.base@1.0;
+
+interface ICallInfo {
+    getCallInfo(int32_t callId) generates (string info);
+    updateCallState(int32_t callId, int32_t state) generates (bool success);
+}; 

@@ -1,0 +1,8 @@
+package vendor.qti.hardware.wifi.wifilearner@1.0;
+
+import android.hidl.base@1.0;
+
+interface IWifiLearner {
+    learnWifiSettings() generates (bool success);
+    applyLearnedSettings() generates (bool success);
+}; 

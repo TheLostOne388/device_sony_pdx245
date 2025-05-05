@@ -1,0 +1,11 @@
+hidl_interface {
+    name: "vendor.semc.hardware.charger@1.0",
+    root: "vendor.semc",
+    srcs: [
+        "ICharger.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+    gen_java: false,
+} 

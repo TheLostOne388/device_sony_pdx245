@@ -1,5 +1,0 @@
-package qti.hardware.cacert@1.0;
-
-interface IService {
-    // Minimal stub
-}; 

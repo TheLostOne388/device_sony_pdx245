@@ -1,7 +1,0 @@
-package qti.spu@1.1;
-
-import qti.spu@1.0::ISPUManager;
-
-interface ISPUManager extends @1.0::ISPUManager {
-    // Add new methods here, or leave empty if none
-};

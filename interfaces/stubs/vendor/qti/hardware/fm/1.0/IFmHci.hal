@@ -1,0 +1,8 @@
+package vendor.qti.hardware.fm@1.0;
+
+import android.hidl.base@1.0;
+
+interface IFmHci {
+    initialize() generates (bool success);
+    sendHciCommand(vec<uint8_t> command) generates (bool success);
+}; 

@@ -1,5 +1,0 @@
-package qti.hardware.bluetooth_sar@1.1;
-
-interface IBluetoothSar {
-    // Minimal stub
-}; 

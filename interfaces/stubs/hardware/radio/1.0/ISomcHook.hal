@@ -1,5 +1,0 @@
-package somc.hardware.radio@1.0;
-
-interface ISomcHook {
-    // Minimal stub
-}; 
