@@ -1,0 +1,32 @@
+hidl_interface {
+    name: "qti.hardware.AGMIPC@1.0",
+    root: "qti.hardware.AGMIPC", // This should match the name in hidl_package_root
+    srcs: ["IAGM.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+    // vendor: true, // Let's omit this for now, based on recent errors
+}
+
+cc_library_headers {
+    name: "qti.hardware.AGMIPC@1.0_headers",
+    generated_headers: ["qti.hardware.AGMIPC@1.0"],
+    export_generated_headers: ["qti.hardware.AGMIPC@1.0"],
+    vendor: true,
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "qti.hardware.AGMIPC@1.0-impl",
+    vendor: true,
+    srcs: ["AGMIPCStub.cpp"],
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "qti.hardware.AGMIPC@1.0",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/AGMIPC/1.0:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
+} 

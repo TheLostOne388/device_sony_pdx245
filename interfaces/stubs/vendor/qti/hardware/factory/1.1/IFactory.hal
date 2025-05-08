@@ -1,0 +1,9 @@
+package qti.hardware.factory@1.1;
+
+import qti.hardware.factory@1.0::IFactory;
+
+interface IFactory extends @1.0::IFactory {
+    // Placeholder for 1.1 specific methods
+    // For example:
+    // getAdvancedFeatureStatus() generates (bool enabled);
+}; 

@@ -8,4 +8,26 @@ hidl_interface {
     gen_java: false,
 }
 
-// ... cc_library_headers ... 
+cc_library_headers {
+    name: "com.qualcomm.qti.dpm.api@1.0_headers",
+    generated_headers: ["com.qualcomm.qti.dpm.api@1.0"],
+    export_generated_headers: ["com.qualcomm.qti.dpm.api@1.0"],
+    vendor: true,
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "com.qualcomm.qti.dpm.api@1.0-impl",
+    vendor: true,
+    srcs: ["DpmApiStub.cpp"], // Assuming a dummy C++ file
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "com.qualcomm.qti.dpm.api@1.0",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/dpm/api/1.0:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
+} 

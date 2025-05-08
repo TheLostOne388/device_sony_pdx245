@@ -60,6 +60,15 @@
             <instance>default</instance>
         </interface>
     </hal>
+
+    <hal format="aidl" optional="true">
+        <name>vendor.qti.hardware.spu</name>
+        <version>1</version>
+        <interface>
+            <name>ISPUManager</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <!-- Only require SDK version 34, not 35 -->
     <system-sdk>
         <version>34</version>

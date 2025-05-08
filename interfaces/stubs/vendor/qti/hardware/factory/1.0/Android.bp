@@ -1,0 +1,31 @@
+hidl_interface {
+    name: "qti.hardware.factory@1.0",
+    root: "qti.hardware.factory",
+    srcs: ["IFactory.hal"],
+    interfaces: ["android.hidl.base@1.0"],
+    gen_java: false,
+}
+
+cc_library_headers {
+    name: "qti.hardware.factory@1.0_headers",
+    generated_headers: ["qti.hardware.factory@1.0"],
+    export_generated_headers: ["qti.hardware.factory@1.0"],
+    vendor: true,
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "qti.hardware.factory@1.0-impl",
+    vendor: true,
+    srcs: ["FactoryStub.cpp"],
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "qti.hardware.factory@1.0",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/factory/1.0:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
+} 

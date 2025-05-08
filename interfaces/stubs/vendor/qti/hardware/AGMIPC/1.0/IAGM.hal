@@ -1,0 +1,7 @@
+package qti.hardware.AGMIPC@1.0;
+
+interface IAGM {
+    // Placeholder for actual methods
+    // For example:
+    // getStatus() generates (int32_t status);
+}; 

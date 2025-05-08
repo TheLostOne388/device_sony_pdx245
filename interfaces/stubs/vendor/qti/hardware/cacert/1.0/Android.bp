@@ -8,4 +8,28 @@ hidl_interface {
         "android.hidl.base@1.0",
     ],
     gen_java: false,
+}
+
+cc_library_headers {
+    name: "vendor.qti.hardware.cacert@1.0_headers",
+    generated_headers: ["vendor.qti.hardware.cacert@1.0"],
+    export_generated_headers: ["vendor.qti.hardware.cacert@1.0"],
+    vendor: true,
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "vendor.qti.hardware.cacert@1.0-impl",
+    vendor: true,
+    srcs: ["CacertStub.cpp"], // Assuming a dummy C++ file. Note: HAL uses IService.hal
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "vendor.qti.hardware.cacert@1.0",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/cacert/1.0:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
 } 

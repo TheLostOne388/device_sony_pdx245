@@ -16,3 +16,20 @@ cc_library_headers {
     export_generated_headers: ["vendor.qti.ims.factory@1.1"],
     vendor: true,
 }
+
+// Stub implementation library
+cc_library_shared {
+    name: "vendor.qti.ims.factory@1.1-impl",
+    vendor: true,
+    srcs: ["ImsFactoryStub.cpp"], // Assuming a dummy C++ file
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "vendor.qti.ims.factory@1.1",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/vendor/qti/ims/factory/1.1:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
+}

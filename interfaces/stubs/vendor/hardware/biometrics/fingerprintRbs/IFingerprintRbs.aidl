@@ -2,5 +2,5 @@ package vendor.hardware.biometrics.fingerprintRbs;
 
 @VintfStability
 interface IFingerprintRbs {
-    // Minimal stub
+    void dummy(); // Essential: non-empty interface
 }

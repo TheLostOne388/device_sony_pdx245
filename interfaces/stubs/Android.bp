@@ -1,98 +1,29 @@
 // Android.bp in device/sony/pdx245/interfaces/stubs/
-// Defines package roots only.
 
 // --- Package Root Definitions ---
 
 // Package roots for com.qualcomm.qti.* interfaces
 hidl_package_root {
     name: "com.qualcomm.qti.dpm.api",
-    path: "device/sony/pdx245/interfaces/stubs/dpm/api",
+    path: "device/sony/pdx245/interfaces/stubs/dpm/api", // Relative to workspace root
 }
+
 hidl_package_root {
     name: "com.qualcomm.qti.imscmservice",
-    path: "device/sony/pdx245/interfaces/stubs/imscmservice",
+    path: "device/sony/pdx245/interfaces/stubs/imscmservice", // Relative to workspace root
 }
+
 hidl_package_root {
     name: "com.qualcomm.qti.uceservice",
-    path: "device/sony/pdx245/interfaces/stubs/uceservice", 
+    path: "device/sony/pdx245/interfaces/stubs/uceservice", // Relative to workspace root
 }
 
-// Restore generic Package root for qti.* interfaces
+// Keep Vendor-specific roots (Ensure paths are correct relative to workspace root)
 hidl_package_root {
-    name: "qti",
-    path: "device/sony/pdx245/interfaces/stubs",
+    name: "vendor.qti",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/qti",
 }
 
-// Specific QTI hardware roots
-hidl_package_root {
-    name: "qti.hardware.AGMIPC",
-    path: "device/sony/pdx245/interfaces/stubs/qti/hardware/AGMIPC",
-}
-hidl_package_root {
-    name: "qti.hardware.bluetooth_sar",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/bluetooth_sar",
-}
-hidl_package_root {
-    name: "qti.hardware.cacert",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/cacert",
-}
-hidl_package_root {
-    name: "qti.hardware.factory",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/factory",
-}
-hidl_package_root {
-    name: "qti.hardware.fm",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/fm",
-}
-hidl_package_root {
-    name: "qti.hardware.secureprocessor.device",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/secureprocessor/device",
-}
-hidl_package_root {
-    name: "qti.hardware.wifi.wifilearner",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/wifi/wifilearner",
-}
-
-// Specific QTI IMS roots
-hidl_package_root {
-    name: "qti.ims.callinfo",
-    path: "device/sony/pdx245/interfaces/stubs/ims/callinfo",
-}
-// QTI IMS factory package root
-hidl_package_root {
-    name: "qti.ims.factory",
-    path: "device/sony/pdx245/interfaces/stubs/ims/factory",
-}
-
-// Specific QTI SPU root
-hidl_package_root {
-    name: "qti.spu",
-    path: "device/sony/pdx245/interfaces/stubs/spu",
-}
-
-// Specific SEMC roots
-hidl_package_root {
-    name: "semc.hardware.charger",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/charger",
-}
-hidl_package_root {
-    name: "semc.hardware.mmwavedirection",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/mmwavedirection",
-}
-
-// Specific SOMC root
-hidl_package_root {
-    name: "somc.hardware.radio",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/radio",
-}
-
-// ... wifilearner package root ...
-hidl_package_root {
-    name: "qti.hardware.ListenSoundModel",
-    path: "device/sony/pdx245/interfaces/stubs/hardware/ListenSoundModel",
-}
-
-// Vendor-specific package roots
 hidl_package_root {
     name: "vendor.qti.hardware.ListenSoundModel",
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/ListenSoundModel",
@@ -103,7 +34,6 @@ hidl_package_root {
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/bluetooth_sar",
 }
 
-// Add missing cacert root
 hidl_package_root {
     name: "vendor.qti.hardware.cacert",
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/cacert",
@@ -114,7 +44,6 @@ hidl_package_root {
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/fm",
 }
 
-// Add missing secureprocessor.device root
 hidl_package_root {
     name: "vendor.qti.hardware.secureprocessor.device",
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/secureprocessor/device",
@@ -140,16 +69,77 @@ hidl_package_root {
     path: "device/sony/pdx245/interfaces/stubs/vendor/qti/spu",
 }
 
-// Sony HIDL interfaces root path
+// SEMC/SOMC Roots
 hidl_package_root {
-    name: "hardware.sony.interfaces",
-    path: "hardware/sony/interfaces",
+    name: "vendor.semc",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/semc",
 }
 
-// Add root for vendor.qti
 hidl_package_root {
-    name: "vendor.qti",
-    path: "device/sony/pdx245/interfaces/stubs/vendor/qti",
+    name: "vendor.semc.hardware.charger",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/semc/hardware/charger",
+}
+
+hidl_package_root {
+    name: "vendor.semc.hardware.mmwavedirection",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/semc/hardware/mmwavedirection",
+}
+
+hidl_package_root {
+    name: "vendor.somc.hardware.radio",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/somc/hardware/radio",
+}
+
+hidl_package_root {
+    name: "qti.hardware.AGMIPC",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/AGMIPC",
+}
+
+hidl_package_root {
+    name: "qti.hardware.factory",
+    path: "device/sony/pdx245/interfaces/stubs/vendor/qti/hardware/factory",
 }
 
 // --- AIDL Package Root Definitions ---
+
+aidl_interface {
+    name: "vendor.hardware.biometrics.fingerprintRbs",
+    vendor: true,
+    srcs: ["vendor/hardware/biometrics/fingerprintRbs/IFingerprintRbs.aidl"],
+    stability: "vintf",
+    versions: ["1"],
+    owner: "sony",
+    backend: {
+        ndk: {
+            enabled: true,
+        },
+    },
+}
+
+aidl_interface {
+    name: "vendor.qti.hardware.spu",
+    vendor: true,
+    srcs: ["vendor/qti/hardware/spu/ISPUManager.aidl"], // Path to your ToT AIDL file
+    stability: "vintf",
+    // V1 is frozen. "2" is NOT in this array yet.
+    owner: "qti",
+    backend: {
+        ndk: {
+            enabled: true,
+        },
+    },
+    versions_with_info: [
+        {
+            version: "1",
+            imports: [],
+        },
+        {
+            version: "2",
+            imports: [],
+        },
+
+    ],
+    frozen: true,
+
+    // Ensure no "api_dir" or "frozen" properties are here
+}

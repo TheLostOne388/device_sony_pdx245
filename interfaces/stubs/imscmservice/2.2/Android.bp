@@ -12,6 +12,7 @@ cc_library_headers {
     name: "com.qualcomm.qti.imscmservice@2.2_headers",
     generated_headers: ["com.qualcomm.qti.imscmservice@2.2"],
     export_generated_headers: ["com.qualcomm.qti.imscmservice@2.2"],
+    vendor: true,
 }
 
 // Stub implementation library
@@ -24,5 +25,9 @@ cc_library_shared {
         "liblog",
         "libutils",
         "com.qualcomm.qti.imscmservice@2.2", // Links to interface lib (will use preferred prebuilt)
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/imscmservice/2.2:__subpackages__",
+        "//system/libhidl:__subpackages__",
     ],
 } 

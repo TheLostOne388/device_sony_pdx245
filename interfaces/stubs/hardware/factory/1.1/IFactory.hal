@@ -1,5 +1,0 @@
-package qti.hardware.factory@1.1;
-
-interface IFactory {
-    // Minimal stub
-}; 

@@ -1,5 +1,0 @@
-package com.qualcomm.qti.uceservice@2.3;
-
-interface IUceService {
-    getVersion() generates (string version);
-};

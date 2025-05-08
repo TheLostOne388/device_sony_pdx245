@@ -9,4 +9,28 @@ hidl_interface {
         "android.hidl.base@1.0",
     ],
     gen_java: false,
-} 
+}
+
+cc_library_headers {
+    name: "vendor.qti.ims.callinfo@1.0_headers",
+    generated_headers: ["vendor.qti.ims.callinfo@1.0"],
+    export_generated_headers: ["vendor.qti.ims.callinfo@1.0"],
+    vendor: true,
+}
+
+// Stub implementation library
+cc_library_shared {
+    name: "vendor.qti.ims.callinfo@1.0-impl",
+    vendor: true,
+    srcs: ["CallInfoStub.cpp"], // Assuming a dummy C++ file
+    shared_libs: [
+        "libhidlbase",
+        "liblog",
+        "libutils",
+        "vendor.qti.ims.callinfo@1.0",
+    ],
+    visibility: [
+        "//device/sony/pdx245/interfaces/stubs/vendor/qti/ims/callinfo/1.0:__subpackages__",
+        "//system/libhidl:__subpackages__",
+    ],
+}
