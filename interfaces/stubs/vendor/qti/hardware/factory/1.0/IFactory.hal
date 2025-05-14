@@ -1,5 +1,5 @@
 package qti.hardware.factory@1.0;
-
+ 
 interface IFactory {
     // Placeholder for 1.0 methods
     // For example:

@@ -203,7 +203,6 @@ TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
 # A/B partition configuration for seamless updates
 AB_OTA_UPDATER := true
-BOARD_USES_RECOVERY_AS_BOOT := true
 TARGET_NO_RECOVERY := true
 AB_OTA_PARTITIONS := \
     boot \
@@ -215,19 +214,26 @@ AB_OTA_PARTITIONS := \
     system_ext \
     system_dlkm \
     vbmeta \
+    vbmeta_system \
     vendor \
     vendor_boot \
     vendor_dlkm
 
+
 # Boot and related partition sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296  # ~96 MB
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512  # ~112 MB
-BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608  # 8 MB
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296  # ~96 MB (was 117440512)
+BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608 # ~8 MB
+TARGET_NO_INIT_BOOT := true
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Init boot configuration
 BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
+
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+
 
 # AVB configuration for init_boot
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -251,6 +257,15 @@ BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 4
+BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 3
+
+# AVB configuration for vbmeta_system
+BOARD_AVB_VBMETA_SYSTEM := system system_ext system_dlkm
+BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
+
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(PRODUCT_OUT)/vbmeta_system.img
 
 # Use 202404 version for compatibility with newer Android versions
