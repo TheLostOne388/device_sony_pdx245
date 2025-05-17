@@ -46,7 +46,9 @@ $(call inherit-product, device/sony/pdx245/kernel.mk)
 IS_PHONE := true
 
 PRODUCT_PACKAGES += \
-    vendor.qti.hardware.display.color-V1-ndk
+    vendor.qti.hardware.display.color-V1-ndk \
+    recovery_fstab.pdx245 \
+    recovery_updater
 
 PRODUCT_NAME := lineage_pdx245
 PRODUCT_DEVICE := pdx245

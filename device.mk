@@ -474,9 +474,9 @@ PRODUCT_PACKAGES += \
 # A/B specific properties
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.ab_update=true \
-    ro.virtual_ab.enabled=true
+#    ro.virtual_ab.enabled=true
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
+# $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
 
 # Additional variables to handle duplicate modules
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := false
@@ -490,7 +490,7 @@ PRODUCT_PACKAGES += libar-pal
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+# $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 

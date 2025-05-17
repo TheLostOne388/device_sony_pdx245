@@ -108,6 +108,7 @@ aidl_interface {
     srcs: ["vendor/hardware/biometrics/fingerprintRbs/IFingerprintRbs.aidl"],
     stability: "vintf",
     versions: ["1"],
+    frozen: true,
     owner: "sony",
     backend: {
         ndk: {

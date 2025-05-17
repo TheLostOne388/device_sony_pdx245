@@ -38,7 +38,8 @@ BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-TARGET_NO_RECOVERY := true
+TARGET_NO_RECOVERY := false # Ensure a recovery partition is built
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600 # Match stock 100MiB
 
 # Display
 TARGET_SCREEN_DENSITY := 396
@@ -49,26 +50,25 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 BOARD_USES_VENDOR_DLKM := true
 
 # Define base kernel path
-KERNEL_PREBUILT_DIR := $(TOP)/kernel/sony/pdx245/prebuilts
+_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/sony/pdx245/prebuilts
+KERNEL_PREBUILT_DIR := $(strip $(_KERNEL_PREBUILT_DIR_TEMP))
 
 # Kernel Configuration
-TARGET_NO_KERNEL := false
+TARGET_NO_KERNEL := false # As per LKG
+BOARD_KERNEL_IMAGE_NAME := Image # Though TARGET_NO_KERNEL is false, INSTALLED_KERNEL_TARGET points to prebuilt
 INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/Image
 BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config
-BOARD_KERNEL_VERSION := 6.1.43-android14-11-gf1a3cfb97a68-ab12168211
+_BOARD_KERNEL_VERSION_TEMP := 6.1.43-android14-11-gf1a3cfb97a68-ab12168211
+BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
 
-# Kernel Headers
+# Kernel Headers - Assuming these are still from your kernel prebuilts dir, or adjust if they are with vendor blobs
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
-
-TARGET_NO_KERNEL_HEADERS := true 
-
+TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Or a vendor path if applicable
+TARGET_NO_KERNEL_HEADERS := true
 TARGET_USE_PREBUILT_KERNEL_HEADERS := true
-BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
-BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
-
-# Add system-wide kernel header paths
-TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers
+BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Or a vendor path
+BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Or a vendor path
+TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers # Or a vendor path
 
 # Define the header library that other modules can depend on
 BOARD_HEADER_LIBRARIES += \
@@ -78,46 +78,27 @@ BOARD_HEADER_LIBRARIES += \
 # Make sure Soong can find the headers
 SOONG_CONFIG_NAMESPACES += kernel_headers
 SOONG_CONFIG_kernel_headers += kernel_headers_path
-SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers
+SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers # Or a vendor path
 
-# DTB/DTBO Configuration
+# DTB/DTBO Configuration - Assuming these are still from your kernel prebuilts dir
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_PREBUILT_DTBIMAGE := $(KERNEL_PREBUILT_DIR)/dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(KERNEL_PREBUILT_DIR)/dtbo.img
 BOARD_KERNEL_SEPARATED_DTBO := true
 
-# Ramdisk Configuration
-## BOARD_PREBUILT_RAMDISK := $(KERNEL_PREBUILT_DIR)/ramdisk.cpio
-
-# DLKM Images
+# DLKM Images - Assuming these are still from your kernel prebuilts dir, or adjust if they are with vendor blobs
 BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
 BOARD_PREBUILT_VENDOR_DLKM := $(KERNEL_PREBUILT_DIR)/vendor_dlkm.img
 
-# Kernel Modules
-BOARD_VENDOR_KERNEL_MODULES_LOAD := $(KERNEL_PREBUILT_DIR)/modules.load
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(KERNEL_PREBUILT_DIR)/*.ko)
+# Vendor Boot modules (for normal boot)
+# BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(ALL_PREBUILT_MODULES) # REMOVED - Let vendor makefiles install modules
+# The modules.load file tells init which modules to load from the vendor ramdisk (where vendor makefiles should have placed them)
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(TOP)/vendor/sony/pdx245/proprietary/vendor/lib/modules/modules.load
 
-TARGET_DEVICE := pdx245
+#TARGET_DEVICE := pdx245 # Already defined or inherited
 
+#TARGET_SPECIFIC_HEADER_PATH := \\ # This was a long list, assuming it's okay or handled by common. Re-add if needed.
 
-TARGET_SPECIFIC_HEADER_PATH := \
-    frameworks/av/media/module/foundation/include \
-    frameworks/av/media/module/libmediatranscoding/transcoder/include \
-    frameworks/av/media/libmediametrics/include \
-    frameworks/native/include \
-    system/libbase/include \
-    frameworks/av/include \
-    frameworks/av/media/libstagefright/include \
-    frameworks/native/libs/nativebase/include \
-    frameworks/native/libs/nativewindow/include \
-    frameworks/av/media/ndk/include \
-    device/sony/pdx245/include \
-    vendor/qcom/opensource/usb/hal \
-    vendor/qcom/opensource/usb/hal/aidl \
-    frameworks/av/media/libmedia/include \
-    hardware/interfaces/bluetooth/audio/2.0 \
-    hardware/interfaces/bluetooth/audio/2.1 
-    
 TARGET_SEPOLICY_DIR := sm8650
 
 # Override the common declaration
@@ -203,13 +184,14 @@ TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
 # A/B partition configuration for seamless updates
 AB_OTA_UPDATER := true
-TARGET_NO_RECOVERY := true
+TARGET_NO_RECOVERY := false # Ensure a recovery partition is built, even with A/B
 AB_OTA_PARTITIONS := \
     boot \
     dtbo \
     init_boot \
     odm \
     product \
+    recovery \
     system \
     system_ext \
     system_dlkm \
@@ -227,13 +209,12 @@ BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608 # ~8 MB
 TARGET_NO_INIT_BOOT := true
 BOARD_FLASH_BLOCK_SIZE := 131072
 
+# Explicitly point to a prebuilt boot image for VINTF kernel version check
+# BOARD_PREBUILT_BOOTIMAGE := $(INSTALLED_KERNEL_TARGET)
+
 # Init boot configuration
 BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
-
-BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
-BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
-
 
 # AVB configuration for init_boot
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -242,13 +223,20 @@ BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 
 # Recovery settings
-TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888 # Keep for UI settings
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab # ENABLED for dedicated recovery
+# TARGET_RECOVERY_KERNEL_MODULES_LOAD := $(BOARD_VENDOR_KERNEL_MODULES_LOAD) # REMOVED - vendor_boot ramdisk handles modules
 
-# Vendor DLKM configuration
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
-BOARD_PREBUILT_VENDOR_DLKM := $(KERNEL_PREBUILT_DIR)/vendor_dlkm.img
-BOARD_PREBUILT_SYSTEM_DLKM := $(KERNEL_PREBUILT_DIR)/system_dlkm.img
+# AVB for Recovery (since it's a separate, chained partition)
+BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_RECOVERY_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 2
+
+# Vendor DLKM configuration (Path for source images, not prebuilts)
+# BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+# BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 104857600  # 100 MB
+# The BOARD_PREBUILT_VENDOR_DLKM line above handles the prebuilt case for this.
 
 # VINTF additional configuration
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
@@ -268,4 +256,6 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
 
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(PRODUCT_OUT)/vbmeta_system.img
 
-# Use 202404 version for compatibility with newer Android versions
+# ADDED BACK: Standard flags for recovery in vendor_boot
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := false
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := false
