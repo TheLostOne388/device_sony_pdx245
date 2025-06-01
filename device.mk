@@ -61,6 +61,20 @@ PRODUCT_PACKAGES += \
     SonyPDX245NfcNciRes \
     SonyPDX245FrameworksRes \
 
+# Boot Control (Recovery)
+PRODUCT_PACKAGES += \
+    android.hardware.boot-service.qti.recovery
+
+# Recovery configuration
+PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/recovery/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
+#    $(LOCAL_PATH)/recovery/android.hardware.boot-service.qti.recovery.rc:$(TARGET_COPY_OUT_RECOVERY)/root/android.hardware.boot-service.qti.recovery.rc \
+    $(LOCAL_PATH)/configs/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/component-overrides.xml \
+    $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.qcom
+
+# Minimal Hybrid Recovery Configuration
+$(call inherit-product-if-exists, $(LOCAL_PATH)/recovery/minimal_recovery.mk)
+
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage
@@ -559,6 +573,12 @@ PRODUCT_PACKAGES += \
     vendor.semc.hardware.charger@1.2-impl \
     vendor.semc.hardware.mmwavedirection@1.1-impl \
     vendor.somc.hardware.radio@1.0-impl
+
+# Include custom overrides for prebuilt images
+# -include $(DEVICE_PATH)/custom_image_overrides.mk # Reverted
+
+# Additional properties if needed for specific features
+# ...
 
 
 
