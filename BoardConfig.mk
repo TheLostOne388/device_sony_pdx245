@@ -5,9 +5,9 @@ PDX245_SECURITY_PATCH_OVERRIDE_VARS := \
 PDX245_SECURITY_PATCH_OVERRIDE_FILE := $(DEVICE_PATH)/custom_build_vars.mk
 
 # Override LineageOS flag to allow our GKI prebuilt logic to work
-TARGET_FORCE_PREBUILT_KERNEL := false
+TARGET_FORCE_PREBUILT_KERNEL := true
 # Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.1/arm64/kernel-6.1-gz
+TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6-gz
 
 # Include BoardConfigSoong.mk early, before SOONG_CONFIG_NAMESPACES is modified by this file.
 include vendor/lineage/config/BoardConfigSoong.mk
@@ -90,32 +90,58 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 BOARD_USES_VENDOR_DLKM := true
 
 # Define base kernel path for crDroid GKI prebuilt
-_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/prebuilts/6.1/arm64
+_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/prebuilts/6.6/arm64
 KERNEL_PREBUILT_DIR := $(strip $(_KERNEL_PREBUILT_DIR_TEMP))
 
 # Kernel Configuration
 TARGET_NO_KERNEL := false # As per LKG
 # TEMPORARY TEST: Override the common config to disable kernel in recovery (like stock)
 TARGET_NO_KERNEL_OVERRIDE := false
-# Use GKI base config
-TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.1/android-base.config
-BOARD_KERNEL_IMAGE_NAME := kernel-6.1-gz # Explicitly set the prebuilt image name
+# Use GKI base config for Kernel 6.6
+TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.6/android-base.config
+BOARD_KERNEL_IMAGE_NAME := kernel-6.6-gz # Explicitly set the prebuilt image name
 # Point to the crDroid prebuilt kernel image
 INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/$(BOARD_KERNEL_IMAGE_NAME)
 # BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config # This would be for a config file in the prebuilt dir
-_BOARD_KERNEL_VERSION_TEMP := 6.1.84-android14-11-gf3437db87063-ab12109370 # Exact GKI version
+
+# Offsets for boot.img contents
+# BOARD_KERNEL_BASE is 0x00000000 from sm8650-common/BoardConfigCommon.mk
+# BOARD_KERNEL_PAGESIZE is 4096 from sm8650-common/BoardConfigCommon.mk
+# BOARD_BOOT_HEADER_VERSION is 4 from sm8650-common/BoardConfigCommon.mk (ensure it's set or inherited)
+BOARD_KERNEL_OFFSET      := 0x00008000
+BOARD_RAMDISK_OFFSET     := 0x01000000 # Ramdisk itself is empty in boot.img (it's in init_boot.img for header v4)
+                                      # This offset is primarily for mkbootimg's internal layout calculations.
+BOARD_DTB_OFFSET         := 0x01F00000 # Offset for the DTB when using --dtb with mkbootimg.
+
+# Add these to BOARD_MKBOOTIMG_ARGS.
+# sm8650-common/BoardConfigCommon.mk already adds --header_version to BOARD_MKBOOTIMG_ARGS.
+# Your pdx245/BoardConfig.mk clears BOARD_BOOTIMAGE_MKBOOTIMG_ARGS (more specific var for boot.img),
+# so we define it fully here.
+BOARD_BOOTIMAGE_MKBOOTIMG_ARGS := \
+    --header_version $(BOARD_BOOT_HEADER_VERSION) \
+    --kernel_offset $(BOARD_KERNEL_OFFSET) \
+    --ramdisk_offset $(BOARD_RAMDISK_OFFSET) \
+    --dtb $(BOARD_PREBUILT_DTBIMAGE) \
+    --dtb_offset $(BOARD_DTB_OFFSET)
+
+# The kernel version string might be derived differently or automatically by the build system
+# for these newer GKIs if prebuilt-info.txt doesn't contain the full string.
+# We'll keep the old one for now and see if the build complains or if it's correctly inferred.
+# If errors, we may need to find the exact version string for the 6.6 GKI or adjust this.
+_BOARD_KERNEL_VERSION_TEMP := 6.6.57-android15-8-g8b48c9979699-ab12748506-4k # Placeholder - adjust if exact version is found/needed
 BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
 
 # Kernel Headers
 TARGET_KERNEL_HEADER_ARCH := arm64
-# The following paths will now point to $(TOP)/kernel/prebuilts/6.1/arm64/kernel-headers
-# This directory might not exist. If build fails, we need to find correct GKI headers path.
-TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
+# The following paths will now point to $(TOP)/kernel/prebuilts/6.6/arm64/
+# The build system might use kheaders.ko if available, or expect a kernel-headers dir.
+# If build fails related to headers, these paths or TARGET_USE_PREBUILT_KERNEL_HEADERS may need adjustment.
+TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change if only kheaders.ko exists
 TARGET_NO_KERNEL_HEADERS := true
 TARGET_USE_PREBUILT_KERNEL_HEADERS := true
-BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
-BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers
-TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers
+BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
+BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
+TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
 
 # Define the header library that other modules can depend on
 BOARD_HEADER_LIBRARIES += \
@@ -125,7 +151,7 @@ BOARD_HEADER_LIBRARIES += \
 # Make sure Soong can find the headers
 SOONG_CONFIG_NAMESPACES += kernel_headers
 SOONG_CONFIG_kernel_headers += kernel_headers_path
-SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers
+SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
 
 # DTB/DTBO Configuration - Keep using Sony prebuilts for these
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
@@ -144,6 +170,8 @@ BOARD_PREBUILT_VENDOR_DLKM := $(TOP)/kernel/sony/pdx245/prebuilts/vendor_dlkm.im
 # Use prebuilt stock vendor_boot.img
 TARGET_PREBUILT_VENDOR_BOOTIMAGE := $(DEVICE_PATH)/prebuilt_vendor_boot/vendor_boot.img # Ensure stock vendor_boot_216.img is here
 # NOTE: This ensures vendor_boot uses stock image with hash descriptor in vbmeta
+# Ensure vbmeta.img hashes the content of the prebuilt vendor_boot.img, do not add a new footer to vendor_boot.img itself.
+BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
 
 TARGET_SEPOLICY_DIR := sm8650
 
@@ -195,7 +223,7 @@ BOARD_SUPER_PARTITION_SIZE := 10737418240
 BOARD_SUPER_PARTITION_GROUPS := sony_dynamic_partitions
 BOARD_SONY_DYNAMIC_PARTITIONS_SIZE := 8589934592
 BOARD_SONY_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
 # A/B Updates
@@ -213,7 +241,8 @@ AB_OTA_PARTITIONS := \
     vbmeta \
     vbmeta_system \
     vendor \
-    vendor_dlkm
+    vendor_dlkm \
+    vendor_boot
 
 # Partition Sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
@@ -238,6 +267,21 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS := \
     --rollback_index $(TARGET_DESIRED_ROLLBACK_TIMESTAMP) \
     --padding_size 4096
 
+# Add these lines to explicitly include descriptors for dtbo and vendor_boot in vbmeta.img
+# This tells vbmeta.img to hash the content of these partitions.
+# Option 1: If your prebuilts dtbo.img and vendor_boot.img already contain the *exact*
+#           hash descriptors you want vbmeta.img to use (meaning their footers are
+#           already set up for vbmeta.img to consume directly).
+# BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(PRODUCT_OUT)/dtbo.img
+# BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_descriptors_from_image $(PRODUCT_OUT)/vendor_boot.img
+
+# Option 2: If vbmeta.img should hash the raw content of the prebuilts found in $(PRODUCT_OUT)
+#           This is generally what you want if BOARD_AVB_[PARTITION]_ADD_HASH_FOOTER_ARGS are empty.
+#           The build system will calculate the hash of the content of $(PRODUCT_OUT)/dtbo.img
+#           (which should be your untouched prebuilt) and $(PRODUCT_OUT)/vendor_boot.img.
+# BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_hashtree_descriptor_from_prebuilt_image $(PRODUCT_OUT)/dtbo.img
+# BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --include_hashtree_descriptor_from_prebuilt_image $(PRODUCT_OUT)/vendor_boot.img
+
 # Directly Chained Partitions (from main vbmeta)
 # Boot
 BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -248,32 +292,37 @@ BOARD_AVB_CHAIN_PARTITION_BOOT_VBMETA_ARGS := --flags 0 --rollback_index $(TARGE
 # Ensure RIL is in footer args as well, with literal flags
 BOARD_AVB_BOOT_ADD_HASH_FOOTER_ARGS := --flags 3 --rollback_index $(BOARD_AVB_BOOT_ROLLBACK_INDEX) --rollback_index_location $(BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION) --algorithm $(BOARD_AVB_BOOT_ALGORITHM) --key $(BOARD_AVB_BOOT_KEY_PATH) --hash_algorithm sha256
 
-# Init Boot - Using Prebuilt (my_custom_init_boot.img from TestImageFiles)
-# Path to the prebuilt init_boot.img that already has the correct AVB footer (Flags:3, RIL:4)
-TARGET_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt_init_boot/init_boot.img
+# Init Boot - Configure to be built by the system with correct AVB Footer
+# TARGET_PREBUILT_INIT_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt_init_boot/init_boot.img # REMOVED - Let system build it
 
-# These are for vbmeta.img to correctly create its chain descriptor for init_boot
+# These are for init_boot.img's own footer and for vbmeta.img to correctly create its chain descriptor
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(TARGET_DESIRED_ROLLBACK_TIMESTAMP)
-_BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION_TEMP := 4 # For vbmeta\'s chain descriptor RIL
+_BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION_TEMP := 4 # For init_boot's footer RIL and vbmeta's chain descriptor RIL
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := $(strip $(_BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION_TEMP))
 
-# Arguments for vbmeta.img\'s chain partition descriptor pointing to init_boot
-# We are now attempting to define this directly in BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS,
-# so this variable might become redundant or might still be used by other parts of the build.
-# For safety, keep its definition but ensure it's clean.
+# Arguments for vbmeta.img's chain partition descriptor pointing to init_boot
 BOARD_AVB_CHAIN_PARTITION_INIT_BOOT_VBMETA_ARGS := \
     --flags 0 \
     --rollback_index $(BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX)
-    # The public key for chaining is implicitly taken from BOARD_AVB_INIT_BOOT_KEY_PATH by the build system when creating vbmeta.
+    # The public key for chaining is implicitly taken from BOARD_AVB_INIT_BOOT_KEY_PATH.
+    # The RIL for the chain descriptor will point to BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION.
 
-# Tell the build system NOT to add its own AVB footer to init_boot.img, as our prebuilt already has one.
-BOARD_AVB_INIT_BOOT_ADD_HASHTREE_FOOTER_ARGS :=
-BOARD_AVB_INIT_BOOT_FLAGS := # Clear any previous attempts to set this for the image's own footer
+# Tell the build system to add an AVB HASH footer to the init_boot.img it generates.
+# Using _ADD_HASH_FOOTER_ARGS similar to boot.img and recovery.img
+BOARD_AVB_INIT_BOOT_ADD_HASH_FOOTER_ARGS := \
+    --flags 3 \
+    --rollback_index $(BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX) \
+    --rollback_index_location $(BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION) \
+    --algorithm $(BOARD_AVB_INIT_BOOT_ALGORITHM) \
+    --key $(BOARD_AVB_INIT_BOOT_KEY_PATH) \
+    --hash_algorithm sha256
 
-# Keep init boot mkbootimg args minimal, mainly for header version if it were not prebuilt.
-# Since it's prebuilt, this has less effect on the content/footer.
+# BOARD_AVB_INIT_BOOT_ADD_HASHTREE_FOOTER_ARGS := # OLD - Ensure this is not set if using _ADD_HASH_FOOTER_ARGS
+# BOARD_AVB_INIT_BOOT_FLAGS := # Clear any previous attempts to set this for the image's own footer
+
+# Keep init boot mkbootimg args minimal, mainly for header version.
 BOARD_MKBOOTIMG_INIT_ARGS := --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
 # Recovery
@@ -288,7 +337,7 @@ BOARD_AVB_RECOVERY_ADD_HASH_FOOTER_ARGS := --flags 0 --rollback_index $(BOARD_AV
 # DTBO - Configuration for Hashtree descriptor in main vbmeta
 # The goal is for vbmeta.img to contain a hash of the dtbo partition,
 # rather than chain to a dtbo.img that has its own AVB footer.
-BOARD_PREBUILT_DTBOIMAGE := kernel/sony/pdx245/prebuilts/dtbo.img # Ensure this is the stock dtbo_216.img content
+# BOARD_PREBUILT_DTBOIMAGE := kernel/sony/pdx245/prebuilts/dtbo.img # Ensure this is the stock dtbo_216.img content
 # This matches the working configuration observed in my_super_final_vbmeta_v9.img.
 # By not specifying a KEY_PATH or CHAIN_ARGS, and having dtbo in AB_OTA_PARTITIONS,
 # the build system should default to creating a hash descriptor.
@@ -390,3 +439,9 @@ BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 # Recovery in vendor_boot (standard flags)
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := false
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := false
+
+# Force copy of prebuilt dtbo.img and vendor_boot.img to PRODUCT_OUT
+# This ensures the versions vbmeta will hash are our known-good prebuilts.
+PRODUCT_COPY_FILES += \
+    kernel/sony/pdx245/prebuilts/dtbo.img:$(PRODUCT_OUT)/dtbo.img \
+    $(DEVICE_PATH)/prebuilt_vendor_boot/vendor_boot.img:$(PRODUCT_OUT)/vendor_boot.img
