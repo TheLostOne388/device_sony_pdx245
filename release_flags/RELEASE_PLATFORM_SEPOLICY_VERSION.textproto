@@ -1,0 +1,2 @@
+name: "RELEASE_PLATFORM_SEPOLICY_VERSION"
+value: { string_value: "34.0" } 

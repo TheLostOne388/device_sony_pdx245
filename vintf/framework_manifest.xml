@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest version="1.0" type="framework">
     <sepolicy>
-        <version>202404</version>
-        <!-- <version>34.0</version> --> <!-- Keep commented for now -->
+        <version>34.0</version>
     </sepolicy>
 </manifest> 

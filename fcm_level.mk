@@ -17,7 +17,7 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.api_level=34 \
     ro.vendor.shipping_api_level=34
 
-# Set Android 15 date-based SEPolicy version
+# Set Android 15 API-level based SEPolicy version
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.system.build.sepolicy.version=202404 \
+    ro.system.build.sepolicy.version=34.0 \
     ro.system.build.sepolicy.vers_api=34

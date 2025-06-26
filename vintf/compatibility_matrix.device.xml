@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<compatibility-matrix version="1.0" type="device" level="202404">
+<compatibility-matrix version="1.0" type="device" level="8">
     <sepolicy>
         <kernel-sepolicy-version>30</kernel-sepolicy-version>
         <sepolicy-version>202404</sepolicy-version>

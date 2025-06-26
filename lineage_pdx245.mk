@@ -32,13 +32,22 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Inherit from device-specific configuration
 $(call inherit-product, device/sony/pdx245/device.mk)
 
+# Add the genrule module to the build graph to ensure the prebuilt dtbo is available
+PRODUCT_PACKAGES += pdx245_prebuilt_dtbo_intermediate
+
+# Copy the prebuilt dtbo.img to the output directory.
+# This is now the primary mechanism for handling the prebuilt dtbo,
+# after disabling the kernel build system's dtbo generation.
+PRODUCT_COPY_FILES += \
+    $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/etc/dtbo.img
+
 # Inherit from vendor configuration
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Include the prebuilt kernel
 $(call inherit-product, device/sony/pdx245/kernel.mk)
@@ -79,3 +88,21 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.build.description="XQ-EC72-userdebug 15 69.1.A.2.78 069001A002007800522519484 test-keys"
 
 BUILD_FINGERPRINT := Sony/XQ-EC72/XQ-EC72:15/69.1.A.2.78/069001A002007800522519484:userdebug/test-keys
+
+# Add product-specific properties
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.telephony.ipv6_capability=1
+
+# Additional settings
+TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_INCLUDE_LIVE_WALLPAPERS := false
+TARGET_SUPPORTS_QUICK_TAP := true
+
+# GMS / Gapps
+WITH_GMS := true
+#ifeq ($(WITH_GMS),true)
+#$(call inherit-product, vendor/google/gms/config.mk)
+#endif
+
+# Overlays
+DEVICE_PACKAGE_OVERLAYS +=

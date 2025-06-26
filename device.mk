@@ -501,6 +501,11 @@ ALLOW_MISSING_DEPENDENCIES := true
 # Override to ensure prebuilt libar-pal is used instead of source from hardware/qcom-caf/sm8650
 PRODUCT_PACKAGES += libar-pal
 
+# This makefile is included from BoardConfig.mk to add device-specific packages.
+
+# Ensure the vendor_ramdisk is built and available for our custom vendor_boot module.
+PRODUCT_PACKAGES += vendor_ramdisk
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
