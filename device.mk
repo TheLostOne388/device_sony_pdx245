@@ -535,8 +535,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Enable ignoring VINTF version mismatches for vendor components
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.api_level=34 \
-    ro.build.version.known_codenames=REL
+    ro.vendor.api_level=34
 
 # Enforce VINTF requirements
 PRODUCT_ENFORCE_VINTF_MANIFEST := true

@@ -56,7 +56,8 @@ BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USES_VENDOR_DLKMIMAGE := true
-BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB
+# BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB - Let build system auto-size
+# NOTE: See vendor partition size note above.
 
 # Recovery partition configuration
 # TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
@@ -225,7 +226,10 @@ BOARD_SONY_DYNAMIC_PARTITIONS_SIZE := 8589934592
 BOARD_SONY_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
 
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDORIMAGE_PARTITION_SIZE := 2415919104 # 2.25GB
+# BOARD_VENDORIMAGE_PARTITION_SIZE := 2415919104 # 2.25GB - Let build system auto-size
+# NOTE: Explicitly defining sizes for logical partitions is discouraged when a group size
+# is defined, as it can lead to mismatches between the generated filesystem and the
+# AVB hashtree descriptor. The build system will auto-size these based on content.
 
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
@@ -265,8 +269,12 @@ AB_OTA_PARTITIONS := \
 
 # Partition Sizes
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
-BOARD_DTBOIMAGE_PARTITION_SIZE := 33554432       # 32 MiB, aligned.
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512  # 112 MiB. Set explicitly to fix hash descriptor mismatch.
+# DTBO partition – real slot size is 24 MiB (0x01800000 = 25 165 824 bytes)
+BOARD_DTBOIMG_PARTITION_SIZE := 25165824
+# BOARD_DTBOIMAGE_PARTITION_SIZE := 25165824   # (old variable name – ignored by Soong)
+
+# vendor_boot slot on-device is 96 MiB (0x06000000 = 100 663 296 bytes)
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
 TARGET_NO_INIT_BOOT := false
 BOARD_FLASH_BLOCK_SIZE := 131072
