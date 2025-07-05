@@ -1,10 +1,10 @@
 # AVB Configuration - Explicit and Permissive for Development
 # This configuration defines a full chain-of-trust for all critical partitions,
 # ensuring that build-time tools and OTA packaging work correctly.
-# However, it uses "--flags 3" on the top-level vbmeta.img, which disables
-# verification at boot time. This is ideal for development, allowing modified
-# partitions to boot without signature errors.
-# For a production/release build, remove "--flags 3".
+# It uses "--flags 3" throughout, which enables verification but allows the user
+# to bypass it on an unlocked device. This is ideal for development, as it
+# mirrors the "yellow" warning state of a production device running custom code.
+# For a "green" production build, use "--flags 0" and sign with release keys.
 
 BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -57,12 +57,12 @@ BOARD_AVB_CHAIN_PARTITION_DTBO_VBMETA_ARGS :=
 
 # 2. Provide full arguments for adding a new hash footer. This is the critical step.
 #    The build system will now run 'avbtool add_hash_footer' on the clean dtbo image.
-BOARD_AVB_DTBO_ALGORITHM := NONE
+BOARD_AVB_DTBO_ALGORITHM :=
 # BOARD_AVB_DTBO_ROLLBACK_INDEX := $(TARGET_DESIRED_ROLLBACK_TIMESTAMP)
 # BOARD_AVB_DTBO_ROLLBACK_INDEX_LOCATION := 5
-BOARD_AVB_DTBO_ADD_HASH_FOOTER_ARGS := \
-    --algorithm NONE \
-    --hash_algorithm sha256
+BOARD_AVB_DTBO_ADD_HASH_FOOTER_ARGS :=
+#    --algorithm NONE \
+#    --hash_algorithm sha256
 
 # BOOT (RIL 3)
 BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
@@ -93,9 +93,9 @@ BOARD_AVB_INIT_BOOT_ADD_HASH_FOOTER_ARGS := \
 # complete vendor_boot.img, avoiding mismatches.
 BOARD_AVB_VENDOR_BOOT_KEY_PATH :=
 BOARD_AVB_CHAIN_PARTITION_VENDOR_BOOT_VBMETA_ARGS :=
-BOARD_AVB_VENDOR_BOOT_ALGORITHM := NONE
+BOARD_AVB_VENDOR_BOOT_ALGORITHM :=
 # BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX := $(TARGET_DESIRED_ROLLBACK_TIMESTAMP)
 # BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX_LOCATION := 6
-BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS := \
-    --algorithm NONE \
-    --hash_algorithm sha256
+BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
+#    --algorithm NONE \
+#    --hash_algorithm sha256

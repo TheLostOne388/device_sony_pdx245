@@ -67,13 +67,18 @@ PRODUCT_PACKAGES += \
 
 # Recovery configuration
 PRODUCT_COPY_FILES += \
-#    $(LOCAL_PATH)/recovery/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
-#    $(LOCAL_PATH)/recovery/android.hardware.boot-service.qti.recovery.rc:$(TARGET_COPY_OUT_RECOVERY)/root/android.hardware.boot-service.qti.recovery.rc \
-    $(LOCAL_PATH)/configs/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/component-overrides.xml \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.qcom
 
 # Minimal Hybrid Recovery Configuration
-$(call inherit-product-if-exists, $(LOCAL_PATH)/recovery/minimal_recovery.mk)
+PRODUCT_COPY_FILES += \
+    device/sony/sm8650-common/rootdir/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc
+
+# Recovery packages (commented out - causing boot conflicts)
+# PRODUCT_PACKAGES += \
+#     android.hardware.boot@1.0-impl.recovery \
+#     android.hardware.boot@1.0-service.recovery \
+#     bootctrl.$(TARGET_BOARD_PLATFORM).recovery \
+#     android.hardware.boot@1.0-impl-qti.recovery
 
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \

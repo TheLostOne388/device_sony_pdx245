@@ -297,4 +297,3 @@ BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
 
 
 include $(DEVICE_PATH)/avb_config2.mk
-TARGET_RECOVERY_UTILS_PROGS += fsck.f2fs f2fsresize mkfs.f2fs

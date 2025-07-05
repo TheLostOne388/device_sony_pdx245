@@ -1,0 +1,14 @@
+on init
+    # Device-specific recovery initialization
+    # Note: Common init.recovery.qcom.rc handles most setup
+    
+    # Set device-specific properties
+    setprop ro.recovery.device pdx245
+    
+on fs
+    # Device-specific filesystem setup if needed
+    # Common script handles most mounting
+    
+on boot
+    # Device-specific boot actions
+    # Let common script handle service startup 

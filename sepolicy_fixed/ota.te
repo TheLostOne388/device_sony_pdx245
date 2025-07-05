@@ -1,0 +1,3 @@
+# Grant update_engine access to the ota_metadata_file type
+allow update_engine ota_metadata_file:dir { create read write search open add_name remove_name rmdir };
+allow update_engine ota_metadata_file:file { create read write open unlink getattr setattr }; 

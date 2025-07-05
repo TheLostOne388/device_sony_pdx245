@@ -1,0 +1,28 @@
+# Copyright (c) 2022-2023, The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+on early-init
+    start ueventd
+
+on init
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64
+
+    # Mount partitions specified by fstab.
+    mount_all /first_stage_ramdisk/fstab.default --early
+
+    start adbd
+
+on boot
+    setprop ro.crypto.state unlocked
+    setprop sys.usb.config adb
+    
+    # ... existing code ...
+    #Create ota folder for update engine
+    mkdir /metadata/ota 0770 system system
+    chown system system /metadata/ota
+    chmod 0770 /metadata/ota
+    
+    setprop ro.crypto.state unlocked
+    # ... existing code ... 
