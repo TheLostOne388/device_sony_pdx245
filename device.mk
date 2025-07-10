@@ -38,6 +38,7 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Include Sony hardware interfaces
 $(call inherit-product-if-exists, hardware/sony/Android.mk)
 
+PRODUCT_PACKAGES += lpdump lpflash dmctl
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -71,7 +72,8 @@ PRODUCT_COPY_FILES += \
 
 # Minimal Hybrid Recovery Configuration
 PRODUCT_COPY_FILES += \
-    device/sony/sm8650-common/rootdir/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc
+    device/sony/sm8650-common/rootdir/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
+    $(LOCAL_PATH)/recovery/root/init.early_lpmake.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.early_lpmake.rc
 
 # Recovery packages (commented out - causing boot conflicts)
 # PRODUCT_PACKAGES += \
@@ -590,7 +592,14 @@ PRODUCT_PACKAGES += \
 # ...
 
 
+PRODUCT_VENDOR_PROPERTIES += ro.sys.fs_mgr.ignore_unknown_opt=1
 
 
 
-
+# Force include dynamic partition tools into recovery
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/lpdump:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpdump \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/lpflash:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpflash \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/dmctl:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/dmctl \
+    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/liblpdump_interface-cpp.so \
+    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/lib64/liblpdump_interface-cpp.so

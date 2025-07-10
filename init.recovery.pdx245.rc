@@ -12,17 +12,14 @@ on init
     # Mount partitions specified by fstab.
     mount_all /first_stage_ramdisk/fstab.default --early
 
+    # Ensure OTA directory exists for update_engine snapshots
+    mkdir /metadata/ota 0770 system system
+    restorecon_recursive /metadata/ota
+
     start adbd
 
 on boot
     setprop ro.crypto.state unlocked
-    setprop sys.usb.config adb
-    
-    # ... existing code ...
-    #Create ota folder for update engine
-    mkdir /metadata/ota 0770 system system
-    chown system system /metadata/ota
-    chmod 0770 /metadata/ota
-    
-    setprop ro.crypto.state unlocked
-    # ... existing code ... 
+    setprop sys.usb.config adb 
+on early-init
+    setprop ro.boot.dynamic_partitions true

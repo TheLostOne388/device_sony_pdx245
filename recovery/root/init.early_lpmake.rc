@@ -1,0 +1,9 @@
+on early-init
+    # Create device-mapper nodes for dynamic partitions.
+    # Stock recovery and standard LineageOS builds do not support this on pdx245
+    # due to bootloader/AVB restrictions. We must add this feature manually.
+    # Super partition for pdx245 is /dev/block/sda97.
+    # 1. Use lpflash to generate a device-mapper table from the super partition.
+    # 2. Use dmctl to create the logical devices from that table.
+    exec - root root -- /system/bin/lpflash -s 0 /dev/block/sda97 /tmp/dm_table.txt
+    exec - root root -- /system/bin/dmctl -f /tmp/dm_table.txt

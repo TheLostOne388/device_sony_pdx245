@@ -1,4 +1,12 @@
 #<src>                                                  <mnt_point>  <type>  <mnt_flags> <fs_mgr_flags>
 /dev/block/bootdevice/by-name/userdata                          /data        f2fs    noatime,nosuid,nodev    wait,check,formattable,encryptable=footer,quota,wrappedkey
-/dev/block/by-name/metadata                                   /metadata    f2fs    noatime,nosuid,nodev    wait,check,formattable,resize
+/dev/block/by-name/metadata                          /metadata    ext4    noatime,nosuid,nodev    wait,check,formattable
 /dev/block/bootdevice/by-name/misc                              /misc        emmc    defaults                                                 defaults 
+# Logical partitions – create dm-linear devices (not mounted here)
+system                                      /system         ext4    ro                    logical,slotselect,first_stage_mount
+vendor                                      /vendor         ext4    ro                    logical,slotselect
+product                                     /product        ext4    ro                    logical,slotselect 
+odm                                         /odm            ext4    ro                    logical,slotselect
+system_ext                                  /system_ext     ext4    ro                    logical,slotselect
+system_dlkm                                 /system_dlkm    ext4    ro                    logical,slotselect
+vendor_dlkm                                 /vendor_dlkm    ext4    ro                    logical,slotselect 

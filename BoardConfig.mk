@@ -75,6 +75,16 @@ TARGET_NO_RECOVERY := false # Ensure a recovery partition is built
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/recovery.fstab
 # TARGET_RECOVERY_INIT_RC := $(DEVICE_PATH)/recovery/root/init.recovery.pdx245.rc
 
+# Add lpmake and its rc script to recovery
+TARGET_RECOVERY_DEVICE_MODULES += \
+    lpdump \
+    lpflash \
+    dmctl \
+    liblp
+
+# Ensure the rc file is placed in the ramdisk root
+TARGET_RECOVERY_ROOT_OUT += $(DEVICE_PATH)/recovery/root/init.early_lpmake.rc
+
 # Exclude kernel from recovery image (ramdisk-only like stock)
 BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
 
@@ -298,3 +308,6 @@ BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
 
 include $(DEVICE_PATH)/avb_config2.mk
 TARGET_RECOVERY_UTILS_PROGS += fsck.f2fs f2fsresize mkfs.f2fs
+# Enable logical-partition tools in recovery ramdisk
+BOARD_BUILD_RECOVERY_DYNAMIC_PARTITION := true
+TARGET_RECOVERY_DEVICE_MODULES += lpdump lpflash dmctl
