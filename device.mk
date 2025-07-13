@@ -38,7 +38,7 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Include Sony hardware interfaces
 $(call inherit-product-if-exists, hardware/sony/Android.mk)
 
-PRODUCT_PACKAGES += lpdump lpflash dmctl
+PRODUCT_PACKAGES += lpdump lpflash dmctl lptodm
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
