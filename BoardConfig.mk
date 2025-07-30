@@ -6,6 +6,9 @@ PDX245_SECURITY_PATCH_OVERRIDE_VARS := \
     PLATFORM_VERSION_LAST_STABLE
 PDX245_SECURITY_PATCH_OVERRIDE_FILE := $(DEVICE_PATH)/custom_build_vars.mk
 
+# Inherit from common config first, so device-specific settings can override.
+include device/sony/sm8650-common/BoardConfigCommon.mk
+
 # Override LineageOS flag to allow our GKI prebuilt logic to work
 TARGET_FORCE_PREBUILT_KERNEL := true
 # Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
@@ -40,7 +43,6 @@ BOARD_SUPPORTS_OPENSOURCE_STHAL := false
 DEVICE_PATH := device/sony/pdx245
 TARGET_DESIRED_ROLLBACK_TIMESTAMP := 1743465600 # Corresponds to 2025-04-01
 
-include device/sony/sm8650-common/BoardConfigCommon.mk
 BOARD_USES_RECOVERY_AS_BOOT := false  # ensure init_boot.img is built
 PRODUCT_REPACK_RECOVERY_IMAGES := false # Override from common to prevent conflicts
 
@@ -51,7 +53,7 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_VNDK_VERSION := current
 
 # SELinux Permissive for diagnostics
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive ramoops.mem_address=0xaff00000 ramoops.mem_size=0x100000 ramoops.record_size=0x10000 ramoops.console_size=0x10000
 
 # Move vendor_dlkm out of vendor
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
@@ -60,7 +62,19 @@ BOARD_USES_VENDOR_DLKMIMAGE := true
 # BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB - Let build system auto-size
 # NOTE: See vendor partition size note above.
 
+# Ensure dmctl is built from source and included in recovery
+# PRODUCT_PACKAGES += dmctl # Moved to device.mk
+
 # Recovery partition configuration
+BOARD_RECOVERY_FILESYSTEM_TYPE := f2fs
+BOARD_ROOT_EXTRA_FOLDERS += metadata/ota
+RECOVERY_VARIANT := lineage
+
+# Ensure the full-featured dmctl is included in recovery for logical partitions
+# TARGET_RECOVERY_DEVICE_MODULES += dmctl  # Moved to device.mk
+
+TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
+
 # TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
@@ -68,12 +82,12 @@ TARGET_USERIMAGES_USE_F2FS := true
 # If you're using erofs (common in Android 15)
 TARGET_USERIMAGES_USE_EROFS := false
 TARGET_NO_RECOVERY := false # Ensure a recovery partition is built
-# BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600 # Match stock 100MiB
+# BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600
 # NOTE: This is already defined in sm8650-common/BoardConfigCommon.mk (104857600)
 # Uncommenting this would override the common value - only do if device-specific size needed
 # Use common fstab instead of device-specific minimal one  
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/recovery.fstab
-# TARGET_RECOVERY_INIT_RC := $(DEVICE_PATH)/recovery/root/init.recovery.pdx245.rc
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+TARGET_RECOVERY_INIT_RC := $(DEVICE_PATH)/recovery/root/init.rc
 
 # Add lpmake and its rc script to recovery
 TARGET_RECOVERY_DEVICE_MODULES += \
@@ -81,9 +95,6 @@ TARGET_RECOVERY_DEVICE_MODULES += \
     lpflash \
     dmctl \
     liblp
-
-# Ensure the rc file is placed in the ramdisk root
-TARGET_RECOVERY_ROOT_OUT += $(DEVICE_PATH)/recovery/root/init.early_lpmake.rc
 
 # Exclude kernel from recovery image (ramdisk-only like stock)
 BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
@@ -102,7 +113,7 @@ TARGET_BOOT_DISABLE_MKBOOTIMG_VERSION_ARGS := true
 BOARD_RECOVERY_MKBOOTIMG_ARGS := # Revert to empty
 # Revert to minimal boot image arguments, removing the offsets that caused boot failures.
 # The stock bootloader does not expect these custom offsets.
-BOARD_BOOTIMAGE_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --cmdline "$(BOARD_KERNEL_CMDLINE)"
 
 # Display
 TARGET_SCREEN_DENSITY := 396
@@ -292,22 +303,49 @@ BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
 TARGET_NO_INIT_BOOT := false
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-
 # Init boot
-BOARD_INIT_BOOT_HEADER_VERSION := 4
+BOARD_INIT_BOOT_HEADER_VERSION := 3
 # BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
-# AVB configuration is handled in avb_config2.mk
-# Clear vendor_boot AVB variables to force hash descriptor creation
-BOARD_AVB_VENDOR_BOOT_KEY_PATH :=
-BOARD_AVB_VENDOR_BOOT_ALGORITHM :=
-BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX :=
-BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX_LOCATION :=
-BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
+BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
-
+# AVB has been fully disabled to simplify boot process debugging.
+# All vbmeta generation and signing is turned off.
+BOARD_AVB_ENABLE := true
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS :=
 include $(DEVICE_PATH)/avb_config2.mk
+
+# include $(DEVICE_PATH)/avb_config2.mk  # AVB Disabled
 TARGET_RECOVERY_UTILS_PROGS += fsck.f2fs f2fsresize mkfs.f2fs
 # Enable logical-partition tools in recovery ramdisk
 BOARD_BUILD_RECOVERY_DYNAMIC_PARTITION := true
 TARGET_RECOVERY_DEVICE_MODULES += lpdump lpflash dmctl
+
+# Statically include filesystem tools in recovery
+TARGET_RECOVERY_DEVICE_MODULES += \
+    e2fsck \
+    mke2fs \
+    tune2fs \
+    resize2fs \
+    blkid \
+    fsck.f2fs \
+    make_f2fs \
+    sload_f2fs
+
+BOARD_RECOVERY_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/recovery
+
+# GKI v4 layout fix - omit ramdisk from boot.img
+BOARD_EXCLUDE_KERNEL_RAMDISK := true
+
+# Match stock uncompressed kernel
+BOARD_KERNEL_COMPRESSION := none
+
+# GKI v4 layout
+BOARD_BOOTIMG_HEADER_VERSION := 4
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_EXCLUDE_KERNEL_RAMDISK := true
+# BOARD_BUILD_INIT_BOOT_IMAGE := true
+#BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_RAMDISK_USE_LZ4 := true
+BOARD_INCLUDE_DTB_IN_BOOTIMG := false
+BOARD_KERNEL_CMDLINE += androidboot.force_normal_boot=1 ramoops.mem_address=0xFFE00000 ramoops.mem_size=0xC0000 ramoops.record_size=0x8000 ramoops.console_size=0x8000 earlycon=qcom_geni_serial console=ttyMSM0,115200,n8

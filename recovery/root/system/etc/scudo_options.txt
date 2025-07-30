@@ -1,0 +1,6 @@
+# Scudo Hardened Allocator Configuration for Recovery
+# Increases memory region sizes to prevent exhaustion during large OTA operations.
+region_size=33554432
+max_region_size=67108864
+primary_enable_random=true
+secondary_enable_random=true 

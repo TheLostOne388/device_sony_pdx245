@@ -1,0 +1,9 @@
+import /init.recovery.qcom.rc
+
+on early-init
+    # Create logical partition mappings
+    exec /system/bin/sh /system/bin/create_mappings.sh
+
+on init
+    # Set device-specific properties
+    setprop ro.recovery.device pdx245 

@@ -72,8 +72,7 @@ PRODUCT_COPY_FILES += \
 
 # Minimal Hybrid Recovery Configuration
 PRODUCT_COPY_FILES += \
-    device/sony/sm8650-common/rootdir/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
-    $(LOCAL_PATH)/recovery/root/init.early_lpmake.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.early_lpmake.rc
+    device/sony/sm8650-common/rootdir/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc
 
 # Recovery packages (commented out - causing boot conflicts)
 # PRODUCT_PACKAGES += \
@@ -450,7 +449,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     vendor.semc.hardware.display@2.2-5 \
     vendor.semc.hardware.charger@1.0-1 \
-    vendor.semc.system.idd@1.1 \
+    vendor.system.idd@1.1 \
     vendor.somc.hardware.aidlmiscta-V1-ndk_platform
 
 PRODUCT_PACKAGES += \
@@ -601,5 +600,43 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilts/recovery/bin/lpdump:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpdump \
     $(LOCAL_PATH)/prebuilts/recovery/bin/lpflash:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpflash \
     $(LOCAL_PATH)/prebuilts/recovery/bin/dmctl:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/dmctl \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/toybox:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/toybox \
     $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/liblpdump_interface-cpp.so \
-    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/lib64/liblpdump_interface-cpp.so
+    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/lib64/liblpdump_interface-cpp.so \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/create_mappings.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/create_mappings.sh \
+    $(LOCAL_PATH)/prebuilts/recovery/bin/toybox:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/toybox
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilts/recovery/copy_partitions.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/copy_partitions.sh
+
+PRODUCT_COPY_FILES += \
+    $(OUT_DIR)/host/linux-x86/bin/avbtool:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/avbtool
+
+# F2FS tools for recovery
+PRODUCT_COPY_FILES += \
+$(LOCAL_PATH)/prebuilts/recovery/bin/make_f2fs:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/make_f2fs \
+$(LOCAL_PATH)/prebuilts/recovery/bin/fsck.f2fs:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/fsck.f2fs
+
+# Restore init.early_lpmake.rc copy for ramdisk inclusion
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/root/init.early_lpmake.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.early_lpmake.rc
+
+PRODUCT_PACKAGES += \
+    blkid \
+    e2fsck \
+    fsck \
+    fsck.ext4 \
+    fsck.f2fs \
+    lpdump
+
+# Add device-specific recovery init script
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/etc/init.recovery.pdx245.rc:$(TARGET_COPY_OUT_RECOVERY)/root/system/etc/init/init.recovery.pdx245.rc
+
+# Telephony
+PRODUCT_PACKAGES += \
+    ims-ext-common
+
+# Build full dmctl from source
+PRODUCT_PACKAGES += dmctl
+

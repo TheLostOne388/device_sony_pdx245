@@ -22,6 +22,13 @@ BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true
 # Chained Partitions - Each has its own AVB footer
 # ------------------------------------------------------------------------------
 
+# Clear vendor_boot AVB variables to force hash descriptor creation
+BOARD_AVB_VENDOR_BOOT_KEY_PATH :=
+BOARD_AVB_VENDOR_BOOT_ALGORITHM :=
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX :=
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX_LOCATION :=
+BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS :=
+
 # RECOVERY (RIL 1)
 BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096

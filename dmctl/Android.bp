@@ -1,0 +1,74 @@
+// device/sony/pdx245/dmctl/Android.bp
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+// -----------------------------------------------------------------
+// dmctl – statically linked, recovery-only
+// -----------------------------------------------------------------
+cc_binary {
+    name: "dmctl_recovery",
+    stem: "dmctl",               // installed file name
+    recovery: true,              // only build for recovery
+    static_executable: true,     // link EVERYTHING static
+    // -------------------------------------------------------------
+    // Sources
+    // -------------------------------------------------------------
+    srcs: [
+        // upstream file lives in system/core; pull it in via relative path
+        "//system/core/fs_mgr/tools/dmctl.cpp",
+    ],
+
+    // -------------------------------------------------------------
+    // Static libraries – FULL transitive closure for recovery
+    // (order does not matter for Soong)
+    // -------------------------------------------------------------
+    static_libs: [
+        // primary fs_mgr stack
+        "libdm",                 // device-mapper C++ wrapper
+        "liblp",                 // logical-partition metadata
+        "libfs_mgr",             // fs_mgr helpers
+        // crypto / verity
+        "libcrypto",             // OpenSSL (static flavour)
+        "libcrypto_static_dispatch",
+        "libavb",
+        // file-system & hashing utilities
+        "libext4_utils",
+        "libfec",
+        "libfec_rs",
+        "libfscrypt",
+        "libz",                  // zlib
+        "libbase",               // android-base
+        "liblog",
+        "libselinux",
+        "libsparse",
+        "libkeyutils",
+    ],
+
+    // -------------------------------------------------------------
+    // Build flags
+    // -------------------------------------------------------------
+    cppflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-Werror",
+    ],
+    ldflags: [
+        "-Wl,--fatal-warnings",
+        // shrink binary a little; optional
+        "-Wl,-s",
+    ],
+
+    // -------------------------------------------------------------
+    // Exclude any dynamic pieces that sneak in via libavb / libcrypto
+    // -------------------------------------------------------------
+    stl: "none",                 // avoid pulling in libc++_shared
+    strip: {
+        all: true,
+    },
+
+    // -------------------------------------------------------------
+    // Visibility: make it available only to recovery image
+    // -------------------------------------------------------------
+    visibility: [":__subpackages__"],
+}
+ 

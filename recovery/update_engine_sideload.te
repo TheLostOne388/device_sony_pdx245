@@ -1,0 +1,1 @@
+recovery_only(\ # allow update_engine_sideload to create /metadata/ota/snapshots/* allow update_engine_sideload metadata_file:dir { create write add_name }; allow update_engine_sideload metadata_file:file { create open write };\)

@@ -1,0 +1,2 @@
+# Allow recovery to manage f2fs filesystems
+allow recovery f2fs fs_type; 

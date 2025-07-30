@@ -1,0 +1,12 @@
+on post-fs
+    # Mount metadata partition to ensure it's available
+    mount f2fs /dev/block/by-name/metadata /metadata wait
+    
+    # Create /metadata/ota directory and set permissions
+    mkdir /metadata/ota 0770 system system
+    chown system system /metadata/ota
+    chmod 0770 /metadata/ota
+    restorecon /metadata/ota
+    
+    # Log to kernel message buffer for debugging
+    write /dev/kmsg "PDX245 Recovery: Ensured /metadata/ota directory exists." 
