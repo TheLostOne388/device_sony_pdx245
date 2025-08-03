@@ -349,3 +349,14 @@ BOARD_EXCLUDE_KERNEL_RAMDISK := true
 BOARD_RAMDISK_USE_LZ4 := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := false
 BOARD_KERNEL_CMDLINE += androidboot.force_normal_boot=1 ramoops.mem_address=0xFFE00000 ramoops.mem_size=0xC0000 ramoops.record_size=0x8000 ramoops.console_size=0x8000 earlycon=qcom_geni_serial console=ttyMSM0,115200,n8
+
+# Disable building host tools for other operating systems
+HOST_CROSS_OS := 
+TARGET_PROVIDES_LIBAR_PAL := true
+
+# Exclude mk based conficting modules - examples below
+#SCAN_EXCLUDE_DIRS := \
+#    vendor/qcom/opensource/commonsys-intf/audio \
+#    hardware/qcom-caf/sm8450/audio/agm \
+#    hardware/qcom-caf/sm8550/audio/agm \
+#    hardware/qcom-caf/sm8650/audio/agm
