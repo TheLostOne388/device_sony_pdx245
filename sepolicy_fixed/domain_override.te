@@ -1,6 +1,0 @@
-# Override for device/qcom/sepolicy_vndr/sm8650/generic/vendor/common/domain.te
-# This allows WPA supplicant access to vendor system files
-
-# Comment out problematic neverallow from line 137 and 162
-# neverallow { domain -coredomain -vendor_coredomain -wpa_supplicant } { vendor_sys_sp_comp vendor_sys_nonsp_comp }:file *;
-# neverallow { domain -coredomain -vendor_coredomain -wpa_supplicant } { vendor_sys_sp_comp vendor_sys_nonsp_comp }:dir *; 

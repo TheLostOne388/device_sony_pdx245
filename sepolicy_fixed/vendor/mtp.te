@@ -1,5 +1,0 @@
-# Vendor-specific MTP rules for PDX245
-allow mtp mtp_device:chr_file { read write ioctl open };
-allow mtp mtpd_socket:sock_file { create read write };
-# Allow access to USB device paths (adjust for PDX245)
-allow mtp usb_device:chr_file { read write ioctl open };

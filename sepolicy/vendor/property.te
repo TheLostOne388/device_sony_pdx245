@@ -1,0 +1,5 @@
+# Define crDroid-compatible property types (vendor-prefixed)
+vendor_internal_prop(vendor_crdroid_device_prop)
+system_vendor_config_prop(vendor_sony_device_prop)
+vendor_public_prop(vendor_pdx245_public_prop)
+vendor_internal_prop(sony_device_prop) 

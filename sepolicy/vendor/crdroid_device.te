@@ -1,0 +1,14 @@
+# crdroid_device.te — Sony PDX245 custom SELinux rules
+# Defines property access for crDroid components.
+
+# Allow crDroid init to read custom device properties
+get_prop(init, vendor_crdroid_device_prop)
+
+# Allow system_server to read public properties
+get_prop(system_server, vendor_pdx245_public_prop)
+
+# The following rules are commented out as they reference undefined types.
+# This can be revisited if these properties are defined in property.te.
+# get_prop(dumpstate, vendor_sony_device_prop)
+# get_prop(hal_camera_default, vendor_sony_device_prop)
+# get_prop(vendor_init, vendor_sony_device_prop) 

@@ -38,7 +38,7 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Include Sony hardware interfaces
 $(call inherit-product-if-exists, hardware/sony/Android.mk)
 
-PRODUCT_PACKAGES += lpdump lpflash dmctl lptodm
+PRODUCT_PACKAGES += lpdump lpflash lptodm
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -46,6 +46,10 @@ TARGET_SCREEN_WIDTH := 1080
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
+
+# Add crDroid properties
+PRODUCT_SYSTEM_PROPERTIES += $(LOCAL_PATH)/system.prop
+PRODUCT_VENDOR_PROPERTIES += $(LOCAL_PATH)/vendor.prop
 
 # ODM files
 PRODUCT_PACKAGES += \
@@ -155,18 +159,41 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@3.0 \
     android.hardware.graphics.mapper@4.0
 
-# DRM HIDL
+# DRM HIDL Headers (needed for source builds)
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service \
-    android.hardware.drm@1.0
+    android.hardware.drm@1.0_headers \
+    android.hardware.drm@1.1_headers \
+    android.hardware.drm@1.2_headers \
+    android.hardware.drm@1.3_headers \
+    android.hardware.drm@1.4_headers
 
-# If needed, also add:
+# Bluetooth Audio HIDL Headers (needed for source builds)
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.1 \
-    android.hardware.drm@1.2 \
-    android.hardware.drm@1.3 \
-    android.hardware.drm@1.4
+    android.hardware.bluetooth.audio@2.0_headers \
+    android.hardware.bluetooth.audio@2.1_headers
+
+# DRM HIDL Services and Implementations
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.1-service \
+    android.hardware.drm@1.2-service \
+    android.hardware.drm@1.3-service \
+    android.hardware.drm@1.4-service \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.1-impl \
+    android.hardware.drm@1.2-impl \
+    android.hardware.drm@1.3-impl \
+    android.hardware.drm@1.4-impl
+
+# Include clearkey and widevine services
+PRODUCT_PACKAGES += \
+    android.hardware.drm-service.clearkey \
+    android.hardware.drm-service.widevine
+
+# Disable AIDL DRM
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.drm=hidl \
+    drm.service.enabled=false
 
 # Additional HAL interfaces needed for build
 PRODUCT_PACKAGES += \
@@ -180,18 +207,16 @@ PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.1 \
     android.hardware.secure_element@1.2
 
-# Bluetooth Audio HIDL
+# Bluetooth Audio HIDL (interfaces only, no problematic implementations)
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth.audio@2.0 \
-    android.hardware.bluetooth.audio@2.0-impl \
-    android.hardware.bluetooth.audio@2.1 \
-    android.hardware.bluetooth.audio@2.1-impl
+    android.hardware.bluetooth.audio@2.1
 
-# Bluetooth Audio (System) - Needed for A2DP
-PRODUCT_PACKAGES += \
-    audio.bluetooth.default \
-    android.hardware.bluetooth.a2dp@1.0 \
-    android.hardware.bluetooth.a2dp@1.0-impl
+# Bluetooth Audio (System) - Disabled in favor of Qualcomm implementation
+# PRODUCT_PACKAGES += \
+#     audio.bluetooth.default \
+#     android.hardware.bluetooth.a2dp@1.0 \
+#     android.hardware.bluetooth.a2dp@1.0-impl
 
 # Qualcomm Bluetooth Audio
 PRODUCT_PACKAGES += \
@@ -207,8 +232,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@2.0
 
 PRODUCT_PACKAGES += libOpenCL
-
-$(shell bash $(LOCAL_PATH)/patches/fix_init_rc.sh)
 
 # Remove any wifi-related packages that might conflict
 PRODUCT_PACKAGES_REMOVE += \
@@ -372,6 +395,9 @@ $(call inherit-product, vendor/sony/sm8650-common/sm8650-common-vendor.mk)
 # Include VINTF stub interfaces to satisfy build
 $(call inherit-product, device/sony/pdx245/pdx245-vintf.mk)
 
+# Include QCOM Audio HAL override
+$(call inherit-product-if-exists, device/sony/pdx245/qcom_audio_override.mk)
+
 
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.config-V1-ndk \
@@ -422,8 +448,8 @@ PRODUCT_PACKAGES += \
 
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.1-impl-qti \
-    android.hardware.bluetooth.audio-impl-qti
+    android.hardware.bluetooth@1.1-impl-qti
+    # android.hardware.bluetooth.audio-impl-qti
 
 # Sony AIDL HAL Services
 PRODUCT_PACKAGES += \
@@ -458,7 +484,12 @@ PRODUCT_PACKAGES += \
    
 # HIDL
 PRODUCT_PACKAGES += \
-    vendor.qti.hardware.pal@1.0 \
+    android.hardware.drm-V1-ndk \
+    android.hardware.drm@1.0 \
+    android.hardware.drm@1.1 \
+    android.hardware.drm@1.2 \
+    android.hardware.drm@1.3 \
+    android.hardware.drm@1.4 \
     vendor.qti.hardware.AGMIPC@1.0
 
 # Audio HAL
@@ -637,6 +668,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     ims-ext-common
 
-# Build full dmctl from source
-PRODUCT_PACKAGES += dmctl
+PRODUCT_PUBLIC_SEPOLICY_DIRS += \
+    device/sony/pdx245/sepolicy/product/public
+PRODUCT_PRIVATE_SEPOLICY_DIRS += \
+    device/sony/pdx245/sepolicy/product/private
 

@@ -1,0 +1,4 @@
+# System server policy for Sony PDX245
+# Grant access to the specific vendor_sysfs_battery_supply type,
+# avoiding broad sysfs access that violates neverallow rules.
+allow system_server vendor_sysfs_battery_supply:file { getattr open read }; 

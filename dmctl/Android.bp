@@ -6,6 +6,8 @@ package {
 // -----------------------------------------------------------------
 // dmctl – statically linked, recovery-only
 // -----------------------------------------------------------------
+// Disabled: Using prebuilt dmctl from recovery/bin instead
+/*
 cc_binary {
     name: "dmctl_recovery",
     stem: "dmctl",               // installed file name
@@ -29,7 +31,7 @@ cc_binary {
         "liblp",                 // logical-partition metadata
         "libfs_mgr",             // fs_mgr helpers
         // crypto / verity
-        "libcrypto",             // OpenSSL (static flavour)
+        "libcrypto_static",      // Use static variant for recovery
         "libcrypto_static_dispatch",
         "libavb",
         // file-system & hashing utilities
@@ -43,6 +45,11 @@ cc_binary {
         "libselinux",
         "libsparse",
         "libkeyutils",
+        // Additional recovery dependencies
+        "libc++_static",
+        "libc",
+        "libm",
+        "libdl_static",
     ],
 
     // -------------------------------------------------------------
@@ -71,4 +78,5 @@ cc_binary {
     // -------------------------------------------------------------
     visibility: [":__subpackages__"],
 }
+*/
  

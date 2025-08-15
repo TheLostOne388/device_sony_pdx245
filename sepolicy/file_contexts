@@ -1,0 +1,2 @@
+# Disable AIDL DRM service contexts
+/(vendor|system/vendor)/bin/hw/android\.hardware\.drm@1\.[0-9]+-service.*   u:object_r:hal_drm_default_exec:s0 

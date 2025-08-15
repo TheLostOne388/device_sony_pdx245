@@ -1,0 +1,2 @@
+ro.vendor.sony.device          u:object_r:vendor_sony_device_prop:s0
+vendor.display.crdroid        u:object_r:vendor_pdx245_public_prop:s0 

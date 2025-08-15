@@ -1,0 +1,4 @@
+# Sony camera HAL specific rules for SM8650
+allow hal_camera_default sysfs_sony_camera:dir search;
+allow hal_camera_default sysfs_sony_camera:file { read open };
+# allow hal_camera_default sony_device_prop:file { read open getattr map }; 

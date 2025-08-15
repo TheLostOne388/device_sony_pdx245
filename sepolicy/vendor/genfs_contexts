@@ -1,0 +1,6 @@
+# Use genfs_contexts for sysfs properties instead of file access
+genfscon sysfs /devices/platform/soc/soc:qcom,smp2p_sleepstate/power_state u:object_r:sysfs_power:s0
+genfscon sysfs /devices/platform/soc/soc:qcom,dsi-display-primary u:object_r:sysfs_graphics:s0
+# Battery supply sysfs paths using QCOM-defined type
+genfscon sysfs /sys/class/power_supply/battery u:object_r:sysfs_battery_supply:s0
+genfscon sysfs /sys/class/qcom-battery u:object_r:sysfs_battery_supply:s0 

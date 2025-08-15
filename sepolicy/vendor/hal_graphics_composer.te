@@ -1,0 +1,2 @@
+# Display composer rules for PDX245
+allow hal_graphics_composer_default sysfs_sony_display:file { read write open }; 

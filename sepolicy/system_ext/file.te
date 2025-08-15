@@ -1,0 +1,2 @@
+# Make vendor_sysfs_battery_supply type visible to system_ext partition
+type vendor_sysfs_battery_supply, sysfs_type, fs_type; 

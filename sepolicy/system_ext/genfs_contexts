@@ -1,0 +1,3 @@
+# System_ext GenFS contexts for Sony PDX245
+# Map battery supply sysfs for system_server access
+genfscon sysfs /sys/class/power_supply u:object_r:vendor_sysfs_battery_supply:s0 
