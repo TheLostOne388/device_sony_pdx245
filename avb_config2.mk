@@ -10,7 +10,7 @@ BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS := \
-    --flags 0 \
+    --flags 2 \
     --rollback_index $(TARGET_DESIRED_ROLLBACK_TIMESTAMP)
 
 # ------------------------------------------------------------------------------

@@ -1,19 +1,33 @@
-# Minimal fstab for recovery.
-# This fstab is intentionally simple. Its only job is to inform fs_mgr
-# that logical partitions exist so that device-mapper can create them.
-# It does not perform AVB checks or complex mounts, as that is not
-# recovery's responsibility.
+# crDroid-compatible recovery fstab for PDX245
+# Based on PDX234 working configuration with crDroid-specific adaptations
 
-#<src>          <mnt_point>     <type>  <mnt_flags and options> <fs_mgr_flags>
-system          /system         ext4    ro,barrier=1            wait,slotselect,logical
-system_ext      /system_ext     ext4    ro,barrier=1            wait,slotselect,logical
-product         /product        ext4    ro,barrier=1            wait,slotselect,logical
-vendor          /vendor         erofs   ro                      wait,slotselect,logical
-vendor_dlkm     /vendor_dlkm    erofs   ro                      wait,slotselect,logical
-system_dlkm     /system_dlkm    ext4    ro,barrier=1            wait,slotselect,logical
-odm             /odm            erofs   ro                      wait,slotselect,logical
+#<src>                                  <mnt_point>     <type>  <mnt_flags and options>                         <fs_mgr_flags>
 
-# Standard partitions required for recovery operation.
-/dev/block/by-name/metadata      /metadata       f2fs    noatime,nosuid,nodev,discard      wait,check,formattable
-/dev/block/bootdevice/by-name/userdata  /data    f2fs    noatime,nosuid,nodev,discard      latemount,wait,check,formattable
-/dev/block/bootdevice/by-name/misc      /misc           emmc    defaults                  defaults 
+# Super partition - minimal access for logical partition creation
+/dev/block/by-name/super                none            none    defaults                                        wait,logical
+
+system                                  /system         ext4    ro,barrier=1,discard
+              wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+
+system_ext                              /system_ext     ext4    ro,barrier=1,discard
+              wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+
+product                                 /product        ext4    ro,barrier=1,discard
+              wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+
+vendor                                  /vendor         erofs   ro
+              wait,slotselect,avb=vbmeta,logical,first_stage_mount
+
+vendor_dlkm                             /vendor_dlkm    erofs   ro
+              wait,slotselect,avb=vbmeta,logical,first_stage_mount
+
+system_dlkm                             /system_dlkm    ext4    ro,barrier=1,discard
+              wait,slotselect,avb=vbmeta,logical,first_stage_mount
+
+odm                                     /odm            erofs   ro
+              wait,slotselect,avb=vbmeta,logical,first_stage_mount
+
+# Standard physical partitions
+/dev/block/by-name/metadata             /metadata       f2fs    noatime,nosuid,nodev                            wait,check,formattable,first_stage_mount
+/dev/block/bootdevice/by-name/userdata  /data           f2fs    noatime,nosuid,nodev                            latemount,wait,check,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption
+/dev/block/bootdevice/by-name/misc      /misc           emmc    defaults                                        defaults 

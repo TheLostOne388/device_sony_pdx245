@@ -1,12 +1,7 @@
-on post-fs
-    # Mount metadata partition to ensure it's available
-    mount f2fs /dev/block/by-name/metadata /metadata wait
-    
-    # Create /metadata/ota directory and set permissions
-    mkdir /metadata/ota 0770 system system
-    chown system system /metadata/ota
-    chmod 0770 /metadata/ota
-    restorecon /metadata/ota
-    
-    # Log to kernel message buffer for debugging
-    write /dev/kmsg "PDX245 Recovery: Ensured /metadata/ota directory exists." 
+# PDX245 Recovery init script - LineageOS-compatible approach
+# Standard recovery init without custom device-mapper manipulation
+
+# Standard LineageOS recovery setup - let fs_mgr handle logical partitions
+on init
+    # Basic recovery logging
+    write /dev/kmsg "PDX245 Recovery: Starting LineageOS-compatible recovery" 

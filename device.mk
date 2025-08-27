@@ -38,7 +38,10 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Include Sony hardware interfaces
 $(call inherit-product-if-exists, hardware/sony/Android.mk)
 
-PRODUCT_PACKAGES += lpdump lpflash lptodm
+# Dynamic partition tools included via LineageOS recovery configuration
+
+# Force 64-bit recovery shell - Simplified approach
+# Shell and tools already defined in BoardConfig.mk with RECOVERY_BINARY_SOURCE_DIRS
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2330
 TARGET_SCREEN_WIDTH := 1080
@@ -172,6 +175,10 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth.audio@2.0_headers \
     android.hardware.bluetooth.audio@2.1_headers
 
+# Device Mapper Tools (needed for logical partitions in GKI recovery)
+PRODUCT_PACKAGES += \
+    dmctl_recovery
+
 # DRM HIDL Services and Implementations
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-service \
@@ -240,6 +247,15 @@ PRODUCT_PACKAGES_REMOVE += \
     android.hardware.wifi.hostapd@1.1 \
     android.hardware.wifi.hostapd@1.2 \
     android.hardware.wifi.hostapd@1.3
+
+# Exclude car-related packages (pdx245 is a phone, not a car)
+PRODUCT_EXCLUDE_PACKAGES += \
+    CarSettings \
+    CarMediaApp \
+    CarLauncher \
+    CarDialerApp \
+    CarCalendarApp \
+    CompanionDeviceSupport
 
 # VINTF properties
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -626,27 +642,16 @@ PRODUCT_VENDOR_PROPERTIES += ro.sys.fs_mgr.ignore_unknown_opt=1
 
 
 
-# Force include dynamic partition tools into recovery
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/lpdump:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpdump \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/lpflash:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/lpflash \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/dmctl:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/dmctl \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/toybox:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/toybox \
-    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/liblpdump_interface-cpp.so \
-    $(LOCAL_PATH)/prebuilts/recovery/lib64/liblpdump_interface-cpp.so:$(TARGET_COPY_OUT_RECOVERY)/root/lib64/liblpdump_interface-cpp.so \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/create_mappings.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/create_mappings.sh \
-    $(LOCAL_PATH)/prebuilts/recovery/bin/toybox:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/toybox
+# Dynamic partition tools will be included via standard LineageOS recovery method
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilts/recovery/copy_partitions.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/copy_partitions.sh
+    $(LOCAL_PATH)/prebuilts/recovery/copy_partitions.sh:$(TARGET_COPY_OUT_RECOVERY)/root/sbin/copy_partitions.sh
 
 PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/host/linux-x86/bin/avbtool:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/avbtool
+    $(OUT_DIR)/host/linux-x86/bin/avbtool:$(TARGET_COPY_OUT_RECOVERY)/root/sbin/avbtool
 
 # F2FS tools for recovery
-PRODUCT_COPY_FILES += \
-$(LOCAL_PATH)/prebuilts/recovery/bin/make_f2fs:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/make_f2fs \
-$(LOCAL_PATH)/prebuilts/recovery/bin/fsck.f2fs:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/fsck.f2fs
+# F2FS tools will be included via standard LineageOS recovery method
 
 # Restore init.early_lpmake.rc copy for ramdisk inclusion
 PRODUCT_COPY_FILES += \
@@ -658,11 +663,11 @@ PRODUCT_PACKAGES += \
     fsck \
     fsck.ext4 \
     fsck.f2fs \
-    lpdump
+
 
 # Add device-specific recovery init script
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/etc/init.recovery.pdx245.rc:$(TARGET_COPY_OUT_RECOVERY)/root/system/etc/init/init.recovery.pdx245.rc
+    $(LOCAL_PATH)/recovery/etc/init.recovery.pdx245.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.pdx245.rc
 
 # Telephony
 PRODUCT_PACKAGES += \
@@ -673,3 +678,4 @@ PRODUCT_PUBLIC_SEPOLICY_DIRS += \
 PRODUCT_PRIVATE_SEPOLICY_DIRS += \
     device/sony/pdx245/sepolicy/product/private
 
+PRODUCT_PACKAGES_DEBUG += bootable_deprecated-ota

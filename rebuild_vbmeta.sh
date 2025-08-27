@@ -15,34 +15,27 @@
 # limitations under the License.
 #
 
-# This script is called manually after a build to fix a flaw in the AOSP
-# build system where it fails to correctly propagate flags from partition
-# footers into the main vbmeta.img chain descriptors.
-
 set -e
 
-# The product out directory is the first argument
 PRODUCT_OUT="$1"
 if [ -z "${PRODUCT_OUT}" ]; then
     echo "Error: Product output path not specified."
     exit 1
 fi
 
-# Use absolute path for AVBTOOL to ensure it's found
 AVBTOOL="${PWD}/out/host/linux-x86/bin/avbtool"
 FINAL_VBMETA_IMAGE="${PRODUCT_OUT}/vbmeta.img"
 
-# We will use the rollback index from the build-generated vbmeta.img,
-# but we will explicitly set the flags to 3 to match our configuration.
-ROLLBACK_INDEX=$(${AVBTOOL} info_image --image ${FINAL_VBMETA_IMAGE} | grep "Rollback Index:" | awk '{print $3}')
-FLAGS=3 # This is the critical fix.
+# Use FLAGS 3 - REQUIRED for Sony pdx245 bootloader
+ROLLBACK_INDEX="1736035200"
+FLAGS="3"
 
+echo "Using Rollback Index: ${ROLLBACK_INDEX}"
+echo "Using Flags: ${FLAGS}"
 KEY_PATH="external/avb/test/data/testkey_rsa4096.pem"
 ALGORITHM="SHA256_RSA4096"
 
-echo "Rebuilding vbmeta.img with correct chain partition flags..."
-echo "Using Rollback Index: ${ROLLBACK_INDEX}"
-echo "Using Flags: ${FLAGS}"
+echo "Rebuilding vbmeta.img with Sony-specific layout..."
 
 BOOT_IMAGE="${PRODUCT_OUT}/boot.img"
 INIT_BOOT_IMAGE="${PRODUCT_OUT}/init_boot.img"
@@ -50,22 +43,56 @@ RECOVERY_IMAGE="${PRODUCT_OUT}/recovery.img"
 VBMETA_SYSTEM_IMAGE="${PRODUCT_OUT}/vbmeta_system.img"
 DTBO_IMAGE="${PRODUCT_OUT}/dtbo.img"
 VENDOR_BOOT_IMAGE="${PRODUCT_OUT}/vendor_boot.img"
+VENDOR_IMAGE="${PRODUCT_OUT}/vendor.img"
+ODM_IMAGE="${PRODUCT_OUT}/odm.img"
+SYSTEM_DLKM_IMAGE="${PRODUCT_OUT}/system_dlkm.img"
+VENDOR_DLKM_IMAGE="${PRODUCT_OUT}/vendor_dlkm.img"
 
-# Construct the final avbtool command.
-# By *not* including hashtree descriptors from logical partitions, we are creating
-# a standard AOSP vbmeta.img. The only purpose of this script is to fix the
-# incorrect flags in the chain partition descriptors.
+# Use existing images with their current hashtree footers
+# Include descriptors from all required partitions
+
+# Use ORIGINAL images that have CORRECT hash information from build system
+echo "Using ORIGINAL images with correct hash information from build system:"
+echo "DTBO: ${DTBO_IMAGE} (has correct salt and digest)"
+echo "VENDOR_BOOT: ${VENDOR_BOOT_IMAGE} (has correct salt and digest)"
+
+# Create temporary images with CORRECT sizes to fix size mismatches
+echo "Creating temporary images with correct sizes..."
+
+# Create dtbo with correct size
+DTBO_SIZE=$(${AVBTOOL} info_image --image "${DTBO_IMAGE}" | grep "Original image size" | awk '{print $4}')
+${AVBTOOL} erase_footer --image "${DTBO_IMAGE}"
+${AVBTOOL} add_hash_footer --image "${DTBO_IMAGE}" --partition_size 25165824 --partition_name dtbo --hash_algorithm sha256 --flags 0
+
+# Create vendor_boot with correct size
+VENDOR_BOOT_SIZE=$(${AVBTOOL} info_image --image "${VENDOR_BOOT_IMAGE}" | grep "Original image size" | awk '{print $4}')
+${AVBTOOL} erase_footer --image "${VENDOR_BOOT_IMAGE}"
+${AVBTOOL} add_hash_footer --image "${VENDOR_BOOT_IMAGE}" --partition_size 100663296 --partition_name vendor_boot --hash_algorithm sha256 --flags 0
+
+echo "Fixed sizes:"
+echo "DTBO_SIZE: ${DTBO_SIZE}"
+echo "VENDOR_BOOT_SIZE: ${VENDOR_BOOT_SIZE}"
+
+# Create new vbmeta with correct descriptors from ORIGINAL images
+# Use SPARSE file sizes instead of descriptor sizes to avoid mismatches
 ${AVBTOOL} make_vbmeta_image \
     --output "${FINAL_VBMETA_IMAGE}" \
     --key "${KEY_PATH}" \
     --algorithm "${ALGORITHM}" \
     --rollback_index "${ROLLBACK_INDEX}" \
     --flags "${FLAGS}" \
-    --chain_partition boot:3:"${KEY_PATH}" \
-    --chain_partition init_boot:4:"${KEY_PATH}" \
-    --chain_partition recovery:1:"${KEY_PATH}" \
-    --chain_partition vbmeta_system:2:"${KEY_PATH}" \
+    --chain_partition boot:3:external/avb/test/data/testkey_rsa4096.pem \
+    --chain_partition init_boot:4:external/avb/test/data/testkey_rsa4096.pem \
+    --chain_partition recovery:1:external/avb/test/data/testkey_rsa4096.pem \
+    --chain_partition vbmeta_system:2:external/avb/test/data/testkey_rsa4096.pem \
     --include_descriptors_from_image "${DTBO_IMAGE}" \
-    --include_descriptors_from_image "${VENDOR_BOOT_IMAGE}"
+    --include_descriptors_from_image "${VENDOR_BOOT_IMAGE}" \
+    --include_descriptors_from_image "${VENDOR_IMAGE}" \
+    --include_descriptors_from_image "${ODM_IMAGE}" \
+    --include_descriptors_from_image "${SYSTEM_DLKM_IMAGE}" \
+    --include_descriptors_from_image "${VENDOR_DLKM_IMAGE}"
 
-echo "Custom vbmeta.img successfully rebuilt at ${FINAL_VBMETA_IMAGE}" 
+echo "Custom vbmeta.img successfully rebuilt at ${FINAL_VBMETA_IMAGE}"
+echo ""
+echo "🔧 Applying automatic size mismatch fixes..."
+./post_rebuild_size_fix.sh

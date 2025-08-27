@@ -1,8 +1,27 @@
 import /init.recovery.qcom.rc
 
 on early-init
-    # Create logical partition mappings
-    exec /system/bin/sh /system/bin/create_mappings.sh
+    # Set the security context of /postinstall if present.
+    restorecon /postinstall
+
+    # Copy prebuilt ld.config.txt into linkerconfig directory
+    copy /system/etc/ld.config.txt /linkerconfig/ld.config.txt
+    chmod 444 /linkerconfig/ld.config.txt
+
+    start ueventd
+
+    setprop sys.usb.configfs 0
+
+    # Minimal logical partition setup - let Android handle most of it
+    mkdir -p /dev/block/mapper
+
+    # Only create essential mappings if super partition is available
+    # This prevents hanging during recovery boot
+    if [ -b /dev/block/by-name/super ]; then
+        # Let fs_mgr handle logical partitions through fstab entries
+        # Avoid manual dmctl creation during early init to prevent hangs
+        true  # Placeholder - logical partitions handled by fstab
+    fi
 
 on init
     # Set device-specific properties

@@ -1,0 +1,47 @@
+# Minimal init.recovery.qcom.rc for PDX245 recovery
+# This file is imported by recovery init.rc but was missing from the ramdisk
+
+on init
+    # Set USB configuration for recovery
+    setprop sys.usb.configfs 1
+
+    # Set recovery-specific properties
+    setprop ro.recovery.ui.margin_height 50
+    setprop ro.recovery.ui.progress_bar_margin_height 100
+
+    # Enable recovery services
+    start logd
+    start servicemanager
+
+# Recovery UI service
+service recovery /sbin/recovery
+    class main
+    socket recovery stream 422 system system
+    seclabel u:r:recovery:s0
+    user root
+
+# USB debugging for recovery
+service adbd /sbin/adbd --root_seclabel=u:r:su:s0 --device_banner=recovery
+    class main
+    disabled
+    socket adbd stream 660 system system
+    seclabel u:r:adbd:s0
+    user root
+
+# Fastboot service
+service fastbootd /sbin/fastbootd
+    class main
+    disabled
+    group system
+    seclabel u:r:fastbootd:s0
+    user root
+
+# Trigger USB services based on configuration
+on property:sys.usb.config=adb
+    start adbd
+
+on property:sys.usb.config=fastboot
+    start fastbootd
+
+on property:sys.usb.config=sideload
+    start adbd
