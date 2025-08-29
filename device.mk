@@ -274,6 +274,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Include FCM level configuration
 include $(LOCAL_PATH)/fcm_level.mk
 
+# AVB validation is available via standalone script: ./verify_avb_sizes.sh
+
 # Set shipping API level to match Android 14
 PRODUCT_SHIPPING_API_LEVEL := 34
 

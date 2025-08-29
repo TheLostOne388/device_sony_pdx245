@@ -257,9 +257,9 @@ SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/system_ext/priva
 BOARD_USES_DYNAMIC_PARTITIONS := true
 BOARD_BUILD_SUPER_PARTITION := true
 BOARD_SUPER_PARTITION_SIZE := 15032385536        # 14GB (actual device size)
-BOARD_SUPER_PARTITION_GROUPS := somc_dynamic_partitions
-BOARD_SO_DYNAMIC_PARTITIONS_SIZE := 15029239808  # Leave 3MB for metadata overhead  
-BOARD_SOMC_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
+BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
+BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 15029239808 
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
 
 # Super partition configuration for fastboot flashing
 BOARD_SUPER_PARTITION_METADATA_DEVICE := super
