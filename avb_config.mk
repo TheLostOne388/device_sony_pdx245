@@ -1,125 +1,82 @@
-# Sony pdx245 AVB Configuration - Stock Compatible  
-# Based on stock firmware analysis - matches exact partition assignment
-# Build system handles everything - no post-build scripts required
-
+# Sony pdx245 AVB Configuration - CORRECTED
 # =============================================================================
-# CORE AVB SETTINGS - Stock Compatible
+# CORE AVB SETTINGS
 # =============================================================================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
 
-# Main vbmeta configuration - FLAGS 3 required for Sony (critical discovery)
+# FIXED: Correct variable name for FLAGS
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+
 BOARD_AVB_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_ROLLBACK_INDEX_LOCATION := 0
 
 # =============================================================================
-# CHAINED PARTITIONS - Build System Handles Automatically  
+# CHAINED PARTITIONS - FIXED RIL CONFLICTS
 # =============================================================================
-# Stock chains: boot, init_boot, recovery, vbmeta_system
-
-# BOOT - Chain Partition (RIL 3)
+# BOOT - Chain Partition (RIL 3) - CORRECTED
 BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 3
-BOARD_AVB_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm SHA256_RSA4096
+BOARD_AVB_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm SHA256_RSA4096 \
+    --hash_algorithm sha256 \
+    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
+    --rollback_index_location 3
 
-# INIT_BOOT - Chain Partition (RIL 4)
+# INIT_BOOT - Chain Partition (RIL 4) - CORRECTED
 BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
-BOARD_AVB_INIT_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm SHA256_RSA4096
+BOARD_AVB_INIT_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm SHA256_RSA4096 \
+    --hash_algorithm sha256 \
+    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
+    --rollback_index_location 4
 
-# RECOVERY - Chain Partition (RIL 1) - NO footer per LineageOS approach
+# RECOVERY - Chain Partition (RIL 1) - CORRECTED
 BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
+BOARD_AVB_RECOVERY_ADD_HASH_FOOTER_ARGS += --algorithm SHA256_RSA4096 \
+    --hash_algorithm sha256 \
+    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
+    --rollback_index_location 1
 
 # =============================================================================
-# HASH PARTITIONS - Stock Method (unsigned footers)
+# HASH PARTITIONS - Stock Method
 # =============================================================================
-# Stock hashes: dtbo, vendor_boot (Algorithm: NONE)
-
-# DTBO - Hash Descriptor (matches stock: Algorithm NONE, no rollback index)
+# DTBO - Hash Descriptor (no rollback index)
+BOARD_AVB_DTBO_KEY_PATH :=
 BOARD_AVB_DTBO_ALGORITHM := NONE
 BOARD_AVB_DTBO_ADD_HASH_FOOTER_ARGS += --algorithm NONE --hash_algorithm sha256
 
-# VENDOR_BOOT - Hash Descriptor (matches stock: Algorithm NONE, no rollback index)
-BOARD_AVB_VENDOR_BOOT_ALGORITHM := NONE  
-BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm NONE --hash_algorithm sha256
+# VENDOR_BOOT - Hash Descriptor (no rollback index, stock partition size)
+BOARD_AVB_VENDOR_BOOT_KEY_PATH :=
+BOARD_AVB_VENDOR_BOOT_ALGORITHM := NONE
+BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS += --algorithm NONE --hash_algorithm sha256 --partition_size 100663296
 
 # =============================================================================
-# MAIN VBMETA HASHTREE DESCRIPTORS - Stock Analysis Method
+# VBMETA_SYSTEM CONFIGURATION
 # =============================================================================
-# Stock main vbmeta contains hashtree descriptors for vendor-related partitions
-
-# VENDOR - Hashtree in main vbmeta (vendor-related) - EXPLICIT CONFIGURATION
-BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += \
-    --algorithm SHA256_RSA4096 \
-    --hash_algorithm sha256 \
-    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
-    --rollback_index_location 2 \
-    --key external/avb/test/data/testkey_rsa4096.pem \
-    --setup_as_rootfs_from_kernel
-
-# ODM - Hashtree in main vbmeta (vendor-related) - EXPLICIT CONFIGURATION
-BOARD_AVB_ODM_ADD_HASHTREE_FOOTER_ARGS += \
-    --algorithm SHA256_RSA4096 \
-    --hash_algorithm sha256 \
-    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
-    --rollback_index_location 2 \
-    --key external/avb/test/data/testkey_rsa4096.pem \
-    --setup_as_rootfs_from_kernel
-
-# SYSTEM_DLKM - Hashtree in main vbmeta (vendor-related) - EXPLICIT CONFIGURATION
-BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += \
-    --algorithm SHA256_RSA4096 \
-    --hash_algorithm sha256 \
-    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
-    --rollback_index_location 2 \
-    --key external/avb/test/data/testkey_rsa4096.pem \
-    --setup_as_rootfs_from_kernel
-
-# VENDOR_DLKM - Hashtree in main vbmeta (vendor-related) - EXPLICIT CONFIGURATION
-BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += \
-    --algorithm SHA256_RSA4096 \
-    --hash_algorithm sha256 \
-    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
-    --rollback_index_location 2 \
-    --key external/avb/test/data/testkey_rsa4096.pem \
-    --setup_as_rootfs_from_kernel
-
-# =============================================================================
-# VBMETA_SYSTEM CONFIGURATION - Stock Analysis Method
-# =============================================================================
-# Controls which partitions go in vbmeta_system
-
-# OPTION 4: Move system OUT of vbmeta_system - handle via main vbmeta
-BOARD_AVB_VBMETA_SYSTEM := product system_ext
+BOARD_AVB_VBMETA_SYSTEM := system system_ext product
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
+BOARD_AVB_MAKE_VBMETA_SYSTEM_IMAGE_ARGS += --flags 0
+
+# Hashtree footers for vbmeta_system partitions (complete args with FEC)
+BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 10 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
+BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 11 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
+BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 12 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
 
 # =============================================================================
-# VBMETA_SYSTEM HASHTREE DESCRIPTORS - Critical Discovery
+# MAIN VBMETA HASHTREE DESCRIPTORS - Complete args
 # =============================================================================
-# Stock analysis revealed: system and system_ext MUST have hashtree footers
-
-# SYSTEM - Hashtree in MAIN vbmeta (moved from vbmeta_system due to corruption bug)
-BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
-
-# SYSTEM_EXT - Hashtree in vbmeta_system (system-related) - EXPLICIT CONFIGURATION
-BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += \
-    --algorithm SHA256_RSA4096 \
-    --hash_algorithm sha256 \
-    --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) \
-    --rollback_index_location 2 \
-    --key external/avb/test/data/testkey_rsa4096.pem \
-    --setup_as_rootfs_from_kernel
-
-# PRODUCT - Automatically handled by BOARD_AVB_VBMETA_SYSTEM assignment above
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 6 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
+BOARD_AVB_ODM_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 7 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
+BOARD_AVB_SYSTEM_DLKM_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 8 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2
+BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --algorithm SHA256_RSA4096 --hash_algorithm sha256 --rollback_index $(PLATFORM_SECURITY_PATCH_TIMESTAMP) --rollback_index_location 9 --key external/avb/test/data/testkey_rsa4096.pem --setup_as_rootfs_from_kernel --flags 0 --fec_num_roots 2

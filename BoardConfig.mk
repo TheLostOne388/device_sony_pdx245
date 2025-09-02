@@ -180,20 +180,6 @@ SOONG_CONFIG_NAMESPACES += kernel_headers
 SOONG_CONFIG_kernel_headers += kernel_headers_path
 SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
 
-# Use custom makefile hook to restore stock dtbo with footer
-# BOARD_CUSTOM_DTBOIMG_MK := $(DEVICE_PATH)/dtbo_prebuilt.mk
-
-# DLKM Images - These might need to come from crDroid GKI prebuilts too, or be rebuilt.
-# For now, keeping Sony ones. If errors, investigate kernel/prebuilts/6.1/arm64/system_dlkm_staging/
-# BOARD_PREBUILT_SYSTEM_DLKM := $(TOP)/kernel/sony/pdx245/prebuilts/system_dlkm.img # Commented out to allow build from GKI modules
-# BOARD_PREBUILT_VENDOR_DLKM := $(TOP)/kernel/sony/pdx245/prebuilts/vendor_dlkm.img # REMOVED to enable GKI-compliant source build
-
-# Vendor Boot - Use prebuilt image to avoid build issues
-# The DTB is correctly sourced from the dtbo partition.
-# By removing the TARGET_PREBUILT_VENDOR_BOOT_IMAGE and related AVB signing flags,
-# we instruct the build system to treat vendor_boot as a simple HASHED partition in vbmeta,
-# which aligns with the modern configuration observed in the Pixel "caiman" dump.
-# TARGET_PREBUILT_VENDOR_BOOT_IMAGE := $(DEVICE_PATH)/prebuilt_vendor_boot/vendor_boot.img
 
 # VINTF Overrides & Settings
 override DEVICE_MATRIX_FILE := \
@@ -292,11 +278,6 @@ BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 
-# BOARD_VENDORIMAGE_PARTITION_SIZE := 2415919104 # 2.25GB - Let build system auto-size
-# NOTE: Explicitly defining sizes for logical partitions is discouraged when a group size
-# is defined, as it can lead to mismatches between the generated filesystem and the
-# AVB hashtree descriptor. The build system will auto-size these based on content.
-
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
 # A/B Updates
@@ -315,11 +296,7 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 # Recovery configuration moved to recovery.mk for better organization
 
-# This list determines which partitions are included in OTA packages and what
-# partitions vbmeta will create descriptors for.
-# Chained partitions should be here.
-# HASHED partitions (dtbo, vendor_boot) MUST ALSO be here for vbmeta to create hash descriptors.
-# NOTE: Include 'recovery' since we're creating a traditional recovery.img
+
 AB_OTA_PARTITIONS := \
     system \
     system_ext \
@@ -355,7 +332,7 @@ BOARD_INIT_BOOT_HEADER_VERSION := 3
 
 # # BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
-include $(DEVICE_PATH)/avb_config.mk
+include $(DEVICE_PATH)/avb_AOSP.mk
 include $(DEVICE_PATH)/recovery.mk
 # Recovery settings moved to recovery.mk
 
