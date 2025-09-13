@@ -44,7 +44,6 @@ BOARD_ROOT_EXTRA_FOLDERS += metadata/ota
 # TARGET_NO_RECOVERY := false  # Commented out for GKI - recovery integrated into vendor_boot
 
 # Recovery image settings - not applicable for GKI vendor_boot recovery
-# BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
 # TARGET_RECOVERY_DISABLE_MKBOOTIMG_VERSION_ARGS := true
 # BOARD_RECOVERY_MKBOOTIMG_ARGS :=
 
@@ -82,9 +81,6 @@ TARGET_RECOVERY_DISABLE_MKBOOTIMG_VERSION_ARGS := true
 # Recovery mkbootimg arguments
 BOARD_RECOVERY_MKBOOTIMG_ARGS :=
 
-# TEMPORARY TEST: Override the common config to disable kernel in recovery (like stock)
-# BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
-
 # Recovery post-install commands
 TARGET_RECOVERY_POST_INSTALL_CMD := \
     ln -sf /system/bin/init $(TARGET_RECOVERY_ROOT_OUT)/init
@@ -104,9 +100,37 @@ TARGET_RECOVERY_DEVICE_MODULES += \
     blkid \
     fsck.f2fs \
     make_f2fs \
-    sload_f2fs
+    sload_f2fs \
+    hexdump \
+    od \
+    logcat
 
 # GKI: Recovery gets tools via vendor_boot integration
 
 # Recovery SELinux policies
 BOARD_RECOVERY_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/recovery
+
+PRODUCT_COPY_FILES += \
+    device/sony/sm8650-common/rootdir/fstab.default:recovery/root/system/etc/fstab.default \
+    device/sony/sm8650-common/rootdir/fstab.default:recovery/root/system/etc/recovery.fstab
+
+# Sony PDX234-based recovery config for PDX245
+# BOARD_USES_RECOVERY_AS_BOOT := false
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := false
+# TARGET_NO_KERNEL := true
+# BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
+
+# PDX234 recovery specifics
+TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
+TARGET_RECOVERY_UI_MARGIN_HEIGHT := 50
+TARGET_RECOVERY_UI_MARGIN_WIDTH := 0
+BOARD_HAS_NO_SELECT_BUTTON := true
+
+# Sony UEFI compatibility (from PDX234 source)
+BOARD_RECOVERY_BLDRMSG_OFFSET := 2048
+BOARD_RECOVERY_DTBOIMG_PARTITION_SIZE := 0
+RECOVERY_VARIANT := lineageos
+
+# Critical: Sony init compatibility
+# TARGET_INIT_VENDOR_LIB := libinit_sony
+TARGET_RECOVERY_INITRC := device/sony/pdx245/init.recovery.pdx245.rc

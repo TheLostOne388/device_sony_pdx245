@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-LINEAGE_BUILD := true
+LINEAGE_BUILD := pdx245
 
 LOCAL_PATH := $(call my-dir)
 
@@ -51,6 +51,8 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Include the prebuilt kernel
 $(call inherit-product, device/sony/pdx245/kernel.mk)
+
+PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
 
 IS_PHONE := true
 

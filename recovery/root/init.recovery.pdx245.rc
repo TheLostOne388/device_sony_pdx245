@@ -1,0 +1,28 @@
+# Sony recovery init (PDX234-based for PDX245)
+on early-init
+    mkdir /firmware 0771 system system
+    mkdir /persist 0771 system system
+    
+on init
+    # Sony dynamic partition setup
+    write /proc/sys/kernel/firmware_signature_verify 0
+    
+    # USB setup for Sony
+    write /sys/class/android_usb/android0/idVendor 0FCE
+    write /sys/class/android_usb/android0/idProduct D001
+    write /sys/class/android_usb/android0/f_ffs/aliases adb
+
+on fs
+    # Sony bootdevice symlink
+    symlink /dev/block/platform/soc/1d84000.ufshc /dev/block/bootdevice
+    
+    # Mount Sony partitions
+    wait /dev/block/bootdevice/by-name/persist
+    mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev barrier=1
+
+on boot
+    # Sony-specific USB PID
+    write /sys/class/android_usb/android0/idProduct 5${ro.usb.pid_suffix}
+
+service recovery /system/bin/recovery
+    seclabel u:r:recovery:s0

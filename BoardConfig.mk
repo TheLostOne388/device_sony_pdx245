@@ -1,4 +1,4 @@
-# Copyright (C) 2018 The LineageOS Project
+# Copyright (C) 2018 The LINEAGE_BUILDTYPE OS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,58 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+DEVICE_PATH := device/sony/pdx245
 
-# This file is included by the top-level Android build system.
-# It allows us to add custom build steps and overrides.
+# This file is included by the top-level Android build system.It allows us to add custom build steps and overrides.
 CUSTOM_BUILD_VARS += PDX245_SECURITY_PATCH_OVERRIDE
 PDX245_SECURITY_PATCH_OVERRIDE_VARS := \
     PLATFORM_SECURITY_PATCH \
     PLATFORM_VERSION_LAST_STABLE
 PDX245_SECURITY_PATCH_OVERRIDE_FILE := $(DEVICE_PATH)/custom_build_vars.mk
 
-# Inherit from common config first, so device-specific settings can override.
 include device/sony/sm8650-common/BoardConfigCommon.mk
+include vendor/lineage/config/BoardConfigSoong.mk 
 
-# Override LineageOS flag to allow our GKI prebuilt logic to work
+#Override LineageOS flag to allow our GKI prebuilt logic to work
 TARGET_FORCE_PREBUILT_KERNEL := true
 # Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
 TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6-gz
-
-# Include BoardConfigSoong.mk early, before SOONG_CONFIG_NAMESPACES is modified by this file.
-include vendor/lineage/config/BoardConfigSoong.mk
-
-# Replace platform property.te to remove conflicting neverallow
+# Inherit from common config first, so device-specific settings can override.
 
 # In device/sony/pdx245/BoardConfig.mk
 TARGET_USES_QCOM_MM_AUDIO := false
 BOARD_SUPPORTS_OPENSOURCE_STHAL := false
-# Add a custom comment or flag if possible to exclude audio PAL builds
-# BOARD_EXCLUDE_QCOM_AUDIO_PAL := true
 
-# TARGET_BOARD_PLATFORM already defined in BoardConfigCommon.mk
-# TARGET_COMPILE_WITH_MSM_KERNEL := true
-
-DEVICE_PATH := device/sony/pdx245
-
-# Execute pre-build sepolicy fix
-
-TARGET_DESIRED_ROLLBACK_TIMESTAMP := 1743465600 # Corresponds to 2025-04-01
-
-# Recovery configuration moved to recovery.mk
-
-# Recovery settings moved to recovery.mk
-
-# Recovery device modules moved to recovery.mk
-# PRODUCT_REPACK_RECOVERY_IMAGES moved to recovery.mk<
-
-TARGET_VENDOR_PLATFORM_SECURITY_PATCH := 2025-04-01
+# Synchronize all security patches (critical for Sony bootloader)
+BOOT_SECURITY_PATCH := 2025-04-01
+VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
+TARGET_DESIRED_ROLLBACK_TIMESTAMP := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 
 # Enable Treble Support
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_VNDK_VERSION := current
 
 # SELinux Configuration - Following LineageOS best practices
-# BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive  # Testing enforcing mode
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive  # Testing enforcing mode
 SELINUX_IGNORE_NEVERALLOWS := true  # TODO: Migrate to selective permissive domains
 
 # Bypass sepolicy freeze test completely to allow 100% build completion
@@ -71,20 +52,6 @@ BUILD_BROKEN_TREBLE_SEPOLICY_TESTS := true
 BUILD_BROKEN_SEPOLICY_TESTS := true
 BUILD_BROKEN_ENFORCE_SEPOLICY_API := true
 BUILD_BROKEN_SEPOLICY_FREEZE_TEST := true
-
-# Conditional neverallow testing - uncomment to test specific improvements
-# ifeq ($(TARGET_BUILD_VARIANT),eng)
-#   SELINUX_IGNORE_NEVERALLOWS := false  # Test without ignoring in eng builds
-# endif
-
-# Future improvement: Replace global neverallow ignore with selective permissive domains
-# This requires extensive testing to identify specific domains that need permissive mode
-# Examples from QCOM: qti-testscripts, vendor_pdt_app, aoncameraservice_app, vendor_logkit_app
-
-# Alternative approach: Use selective permissive domains instead of ignoring all neverallows
-# This follows LineageOS pattern for better security
-
-# BOARD_KERNEL_CMDLINE += ramoops.mem_address=0xaff00000 ramoops.mem_size=0x100000 ramoops.record_size=0x10000 ramoops.console_size=0x10000  # Duplicate - removed
 
 # Move vendor_dlkm out of vendor
 TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
@@ -218,7 +185,7 @@ BOARD_SEPOLICY_M4DEFS += PLATFORM_SEPOLICY_VERSION=34.0
 
 # crDroid 11 specific flags
 CRDROID_OFFICIAL := false
-CRDROID_MAINTAINER := erik
+CRDROID_MAINTAINER := TheLostOne
 TARGET_FACE_UNLOCK_SUPPORTED := true
 
 # Sepolicy configuration for crDroid
@@ -239,44 +206,39 @@ BOARD_SEPOLICY_DIRS += device/crdroid/sepolicy/common
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/system_ext/public
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/system_ext/private
 
-# Dynamic Partitions - CORRECTED CONFIGURATION
+# Dynamic Partitions - A/B Compatible Configuration
 BOARD_USES_DYNAMIC_PARTITIONS := true
-BOARD_BUILD_SUPER_PARTITION := true
-BOARD_SUPER_PARTITION_SIZE := 15032385536        # 14GB (actual device size)
-BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
-BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 15029239808 
-BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
+BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
+BOARD_BUILD_SUPER_IMAGE := true
 
-# Super partition configuration for fastboot flashing
-BOARD_SUPER_PARTITION_METADATA_DEVICE := super
-BOARD_SUPER_PARTITION_BLOCK_DEVICES := super
+# Super partition - Match LineageOS sm8550-common/PDX234 for auto-allocation (fixes empty by removing custom args)
+BOARD_SUPER_PARTITION_SIZE := 15032385536
+BOARD_SUPER_PARTITION_GROUPS := somc_dynamic_partitions
+BOARD_SOMC_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
+BOARD_SOMC_DYNAMIC_PARTITIONS_SIZE := 14999633920  # Stock - 32768 overhead
 
-# Legacy dynamic partitions flag (ensure compatibility)
-BOARD_DYNAMIC_PARTITIONS := true
+# Remove custom lpmake args (Lineage uses default build system)
 
-# Ensure all logical partitions are built for super.img
-BOARD_BUILD_SYSTEM_IMAGE := true
-BOARD_BUILD_PRODUCT_IMAGE := true
-BOARD_BUILD_SYSTEM_EXT_IMAGE := true
-BOARD_BUILD_VENDOR_IMAGE := true
-BOARD_BUILD_ODM_IMAGE := true
-BOARD_BUILD_VENDOR_DLKM_IMAGE := true
-BOARD_BUILD_SYSTEM_DLKM_IMAGE := true
+# Explicit min sizes for allocation (removed reserved to fix 'Should not define both' error)
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560
+BOARD_PRODUCTIMAGE_PARTITION_SIZE := 1073741824
+BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE := 1073741824
+BOARD_VENDORIMAGE_PARTITION_SIZE := 858992640
+BOARD_ODMIMAGE_PARTITION_SIZE := 268435456
+BOARD_SYSTEM_DLKMIMAGE_PARTITION_SIZE := 268435456
+BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 268435456
 
-# Enable partition resizing for logical partitions (critical for super.img)
-BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 104857600  # 100MB
-BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 104857600  # 100MB
-BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 104857600  # 100MB
-BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 104857600  # 100MB
+# Minimal lpmake args with auto-suffix for A/B (enables population)
+BOARD_LPMAKE_ARGS += --metadata-slots 2 --sparse --auto-slot-suffixing
 
-# Logical Partition Filesystem Types (CRITICAL - MUST DEFINE FOR super.img GENERATION)
-BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+# Filesystem types - erofs for vendor/odm/dlkm like Lineage
+BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
@@ -293,9 +255,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
     FILESYSTEM_TYPE_vendor=ext4 \
     RUN_POSTINSTALL_product=false \
     FILESYSTEM_TYPE_product=ext4
-
-# Recovery configuration moved to recovery.mk for better organization
-
 
 AB_OTA_PARTITIONS := \
     system \
@@ -323,14 +282,11 @@ BOARD_DTBOIMG_PARTITION_SIZE := 25165824
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296
 BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
 TARGET_NO_INIT_BOOT := false
-BOARD_FLASH_BLOCK_SIZE := 131072
+BOARD_FLASH_BLOCK_SIZE := 131072  # Match PDX234 for UFS alignment
 
 # Init boot
-
 BOARD_INIT_BOOT_HEADER_VERSION := 3
 # BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
-
-# # BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 include $(DEVICE_PATH)/avb_AOSP.mk
 include $(DEVICE_PATH)/recovery.mk
@@ -354,8 +310,6 @@ BOARD_KERNEL_CMDLINE += androidboot.force_normal_boot=1
 BOARD_KERNEL_CMDLINE += ramoops.mem_address=0x9ff00000
 BOARD_KERNEL_CMDLINE += ramoops.mem_size=0x100000
 BOARD_KERNEL_CMDLINE += ramoops.console_size=0x80000
-BOARD_KERNEL_CMDLINE += earlycon=qcom_geni_serial console=ttyMSM0,115200,n8
-
 
 # Disable building host tools for other operating systems
 HOST_CROSS_OS := 
@@ -389,4 +343,29 @@ DEVICE_SPECIFIC_MEDIA_PATH := device/sony/pdx245/media
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 DEVICE_SPECIFIC_DATA_IPA_CFG_MGR_PATH := device/sony/pdx245/data
 
+# Custom rule to generate super_empty.img (integrates manual lpmake to fix missing file)
+super_empty.img:
+	@echo "Generating super_empty.img"
+	$(hide) $(HOST_OUT)/bin/lpmake --device super:$(BOARD_SUPER_PARTITION_SIZE) \
+	  --metadata-size 65536 \
+	  --metadata-slots 2 \
+	  --group qti_dynamic_partitions:$(BOARD_QTI_DYNAMIC_PARTITIONS_SIZE) \
+	  --partition system_a:readonly:$(BOARD_SYSTEMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition system_b:readonly:0:qti_dynamic_partitions \
+	  --partition system_ext_a:readonly:$(BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition system_ext_b:readonly:0:qti_dynamic_partitions \
+	  --partition product_a:readonly:$(BOARD_PRODUCTIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition product_b:readonly:0:qti_dynamic_partitions \
+	  --partition vendor_a:readonly:$(BOARD_VENDORIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition vendor_b:readonly:0:qti_dynamic_partitions \
+	  --partition odm_a:readonly:$(BOARD_ODMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition odm_b:readonly:0:qti_dynamic_partitions \
+	  --partition system_dlkm_a:readonly:$(BOARD_SYSTEM_DLKMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition system_dlkm_b:readonly:0:qti_dynamic_partitions \
+	  --partition vendor_dlkm_a:readonly:$(BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
+	  --partition vendor_dlkm_b:readonly:0:qti_dynamic_partitions \
+	  --sparse \
+	  --output $(PRODUCT_OUT)/super_empty.img
+
+droid_targets += super_empty.img  # Include in build target
 
