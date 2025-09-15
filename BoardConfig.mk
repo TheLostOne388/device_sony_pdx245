@@ -288,6 +288,10 @@ BOARD_FLASH_BLOCK_SIZE := 131072  # Match PDX234 for UFS alignment
 BOARD_INIT_BOOT_HEADER_VERSION := 3
 # BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
+# Disable Virtual A/B based on bootloader analysis (sections 16, 26, 28) to address persistent VAB errors in TA logs
+BOARD_USES_VIRTUAL_AB := false
+BOARD_VIRTUAL_AB_COMPRESSION := false
+
 include $(DEVICE_PATH)/avb_AOSP.mk
 include $(DEVICE_PATH)/recovery.mk
 # Recovery settings moved to recovery.mk
@@ -339,6 +343,17 @@ DEVICE_SPECIFIC_BT_VENDOR_PATH := device/sony/pdx245/bt
 USE_DEVICE_SPECIFIC_MEDIA := true
 DEVICE_SPECIFIC_MEDIA_PATH := device/sony/pdx245/media
 
+# Disable CAF Display HAL to use Sony prebuilts and avoid legacy Qualcomm code
+USE_DEVICE_SPECIFIC_DISPLAY := true
+DEVICE_SPECIFIC_DISPLAY_PATH := device/sony/pdx245/display  # Adjust if your path differs
+
+# Explicitly opt out of Qualcomm legacy/generic display builds
+     TARGET_USES_QCOM_DISPLAY := false
+     TARGET_DISABLE_QTI_DISPLAY := true
+     TARGET_USES_QCOM_LEGACY_DISPLAY := false
+     TARGET_USES_QCOM_BSP := false
+     TARGET_USES_QCOM_LEGACY_BSP := false  # Excludes sdm845-style legacy BSP includes
+
 # DATA_IPA_CFG_MGR (Data/Connectivity)
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 DEVICE_SPECIFIC_DATA_IPA_CFG_MGR_PATH := device/sony/pdx245/data
@@ -366,6 +381,4 @@ super_empty.img:
 	  --partition vendor_dlkm_b:readonly:0:qti_dynamic_partitions \
 	  --sparse \
 	  --output $(PRODUCT_OUT)/super_empty.img
-
-droid_targets += super_empty.img  # Include in build target
 
