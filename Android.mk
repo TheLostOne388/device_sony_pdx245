@@ -31,4 +31,8 @@ $(LOCAL_MODULE): | $(HOST_OUT)/bin/lpmake
 
 include $(BUILD_PHONY_PACKAGE)
 
-# Add to build targets (in BoardConfig.mk, add: droid_targets += super_empty.img)
+# Ensure product_packages.txt exists early for dexpreopt dependencies
+$(PRODUCT_OUT)/product_packages.txt:
+	@echo "Generating placeholder product_packages.txt"
+	$(hide) mkdir -p $(dir $@)
+	$(hide) (for p in $(PRODUCT_PACKAGES); do echo $$p; done) > $@

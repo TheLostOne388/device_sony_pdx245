@@ -13,6 +13,8 @@
 # limitations under the License.
 
 DEVICE_PATH := device/sony/pdx245
+# Ensure Lineage kernel helper picks the correct 6.6 GKI prebuilt kernel
+TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6
 
 # This file is included by the top-level Android build system.It allows us to add custom build steps and overrides.
 CUSTOM_BUILD_VARS += PDX245_SECURITY_PATCH_OVERRIDE
@@ -27,7 +29,7 @@ include vendor/lineage/config/BoardConfigSoong.mk
 #Override LineageOS flag to allow our GKI prebuilt logic to work
 TARGET_FORCE_PREBUILT_KERNEL := true
 # Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6-gz
+TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6
 # Inherit from common config first, so device-specific settings can override.
 
 # In device/sony/pdx245/BoardConfig.mk
@@ -90,15 +92,15 @@ _KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/prebuilts/6.6/arm64
 KERNEL_PREBUILT_DIR := $(strip $(_KERNEL_PREBUILT_DIR_TEMP))
 
 # Kernel Configuration
-TARGET_NO_KERNEL := false # As per LKG
+TARGET_NO_KERNEL := false
 # TEMPORARY TEST: Override the common config to disable kernel in recovery (like stock)
-TARGET_NO_KERNEL_OVERRIDE := false
+TARGET_NO_KERNEL_OVERRIDE := true
 # Use GKI base config for Kernel 6.6
 TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.6/android-base.config
-BOARD_KERNEL_IMAGE_NAME := kernel-6.6-gz # Explicitly set the prebuilt image name
+BOARD_KERNEL_IMAGE_NAME := kernel-6.6 # Explicitly set the prebuilt image name
 # Point to the crDroid prebuilt kernel image
 INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/$(BOARD_KERNEL_IMAGE_NAME)
-# BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config # This would be for a config file in the prebuilt dir
+BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config
 
 # DTB/DTBO Configuration
 #
@@ -122,7 +124,7 @@ BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
 # for these newer GKIs if prebuilt-info.txt doesn't contain the full string.
 # We'll keep the old one for now and see if the build complains or if it's correctly inferred.
 # If errors, we may need to find the exact version string for the 6.6 GKI or adjust this.
-_BOARD_KERNEL_VERSION_TEMP := 6.6.57-android15-8-g8b48c9979699-ab12748506-4k # Placeholder - adjust if exact version is found/needed
+_BOARD_KERNEL_VERSION_TEMP := 6.1.43-android14-11-gf1a3cfb97a68-ab12168211
 BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
 
 # Kernel Headers
@@ -357,28 +359,4 @@ DEVICE_SPECIFIC_DISPLAY_PATH := device/sony/pdx245/display  # Adjust if your pat
 # DATA_IPA_CFG_MGR (Data/Connectivity)
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 DEVICE_SPECIFIC_DATA_IPA_CFG_MGR_PATH := device/sony/pdx245/data
-
-# Custom rule to generate super_empty.img (integrates manual lpmake to fix missing file)
-super_empty.img:
-	@echo "Generating super_empty.img"
-	$(hide) $(HOST_OUT)/bin/lpmake --device super:$(BOARD_SUPER_PARTITION_SIZE) \
-	  --metadata-size 65536 \
-	  --metadata-slots 2 \
-	  --group qti_dynamic_partitions:$(BOARD_QTI_DYNAMIC_PARTITIONS_SIZE) \
-	  --partition system_a:readonly:$(BOARD_SYSTEMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition system_b:readonly:0:qti_dynamic_partitions \
-	  --partition system_ext_a:readonly:$(BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition system_ext_b:readonly:0:qti_dynamic_partitions \
-	  --partition product_a:readonly:$(BOARD_PRODUCTIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition product_b:readonly:0:qti_dynamic_partitions \
-	  --partition vendor_a:readonly:$(BOARD_VENDORIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition vendor_b:readonly:0:qti_dynamic_partitions \
-	  --partition odm_a:readonly:$(BOARD_ODMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition odm_b:readonly:0:qti_dynamic_partitions \
-	  --partition system_dlkm_a:readonly:$(BOARD_SYSTEM_DLKMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition system_dlkm_b:readonly:0:qti_dynamic_partitions \
-	  --partition vendor_dlkm_a:readonly:$(BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE):qti_dynamic_partitions \
-	  --partition vendor_dlkm_b:readonly:0:qti_dynamic_partitions \
-	  --sparse \
-	  --output $(PRODUCT_OUT)/super_empty.img
 

@@ -15,6 +15,9 @@
 #
 LINEAGE_BUILD := pdx245
 
+PRODUCT_BUILD_RECOVERY_IMAGE := true
+TARGET_NO_RECOVERY := false 
+
 LOCAL_PATH := $(call my-dir)
 
 # Prevent AOSP APN list inclusion
@@ -50,7 +53,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Include the prebuilt kernel
-$(call inherit-product, device/sony/pdx245/kernel.mk)
+# $(call inherit-product, device/sony/pdx245/kernel.mk)
 
 PRODUCT_BUILD_GENERIC_OTA_PACKAGE := true
 

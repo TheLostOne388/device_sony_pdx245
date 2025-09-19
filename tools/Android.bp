@@ -1,0 +1,4 @@
+sh_binary_host {
+    name: "apex-ls",
+    src: "apex-ls.sh",
+}
