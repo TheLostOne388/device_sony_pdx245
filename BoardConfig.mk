@@ -238,9 +238,9 @@ BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
 
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
@@ -316,6 +316,8 @@ BOARD_KERNEL_CMDLINE += androidboot.force_normal_boot=1
 BOARD_KERNEL_CMDLINE += ramoops.mem_address=0x9ff00000
 BOARD_KERNEL_CMDLINE += ramoops.mem_size=0x100000
 BOARD_KERNEL_CMDLINE += ramoops.console_size=0x80000
+BOARD_KERNEL_CMDLINE += osP_version=15
+BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx245 androidboot.hardware.sku=c001707 androidboot.hardware.color=176 oembootloader.securityflags=0x00000003
 
 # Disable building host tools for other operating systems
 HOST_CROSS_OS := 
@@ -359,4 +361,7 @@ DEVICE_SPECIFIC_DISPLAY_PATH := device/sony/pdx245/display  # Adjust if your pat
 # DATA_IPA_CFG_MGR (Data/Connectivity)
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 DEVICE_SPECIFIC_DATA_IPA_CFG_MGR_PATH := device/sony/pdx245/data
+
+BOARD_VENDOR_RAMDISK_FRAGMENTS := sony
+BOARD_VENDOR_RAMDISK_FRAGMENT.sony.PREBUILT := device/sony/pdx245/prebuilt/sony_ramdisk.cpio.lz4
 
