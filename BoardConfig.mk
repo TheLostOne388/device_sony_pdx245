@@ -13,8 +13,8 @@
 # limitations under the License.
 
 DEVICE_PATH := device/sony/pdx245
-# Ensure Lineage kernel helper picks the correct 6.6 GKI prebuilt kernel
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6
+# Ensure Lineage kernel helper picks the correct 6.1 prebuilt kernel
+TARGET_PREBUILT_KERNEL := $(TOP)/kernel/sony/pdx245/prebuilts/kernel
 
 # This file is included by the top-level Android build system.It allows us to add custom build steps and overrides.
 CUSTOM_BUILD_VARS += PDX245_SECURITY_PATCH_OVERRIDE
@@ -29,7 +29,7 @@ include vendor/lineage/config/BoardConfigSoong.mk
 #Override LineageOS flag to allow our GKI prebuilt logic to work
 TARGET_FORCE_PREBUILT_KERNEL := true
 # Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/prebuilts/6.6/arm64/kernel-6.6
+TARGET_PREBUILT_KERNEL := $(TOP)/kernel/sony/pdx245/prebuilts/kernel
 # Inherit from common config first, so device-specific settings can override.
 
 # In device/sony/pdx245/BoardConfig.mk
@@ -88,16 +88,16 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 BOARD_USES_VENDOR_DLKM := true
 
 # Define base kernel path for crDroid GKI prebuilt
-_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/prebuilts/6.6/arm64
+_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/sony/pdx245/prebuilts
 KERNEL_PREBUILT_DIR := $(strip $(_KERNEL_PREBUILT_DIR_TEMP))
 
 # Kernel Configuration
 TARGET_NO_KERNEL := false
 # TEMPORARY TEST: Override the common config to disable kernel in recovery (like stock)
 TARGET_NO_KERNEL_OVERRIDE := true
-# Use GKI base config for Kernel 6.6
-TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.6/android-base.config
-BOARD_KERNEL_IMAGE_NAME := kernel-6.6 # Explicitly set the prebuilt image name
+# Use GKI base config for Kernel 6.1
+TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.1/android-base.config
+BOARD_KERNEL_IMAGE_NAME := kernel # Explicitly set the prebuilt image name
 # Point to the crDroid prebuilt kernel image
 INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/$(BOARD_KERNEL_IMAGE_NAME)
 BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config
@@ -114,7 +114,7 @@ BOARD_INCLUDE_DTB_IN_VENDOR_BOOT := true
 # DTBO (Device Tree Blob Overlay)
 # We use a prebuilt dtbo.img and configure AVB to create a hash descriptor for it.
 BOARD_KERNEL_SEPARATED_DTBO :=
-BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
+# BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
 
 # Offsets for boot.img contents are being removed as they caused boot failures.
 # The stock bootloader does not expect custom offsets in the boot.img header.
@@ -123,13 +123,13 @@ BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
 # The kernel version string might be derived differently or automatically by the build system
 # for these newer GKIs if prebuilt-info.txt doesn't contain the full string.
 # We'll keep the old one for now and see if the build complains or if it's correctly inferred.
-# If errors, we may need to find the exact version string for the 6.6 GKI or adjust this.
+# If errors, we may need to find the exact version string for the 6.1 GKI or adjust this.
 _BOARD_KERNEL_VERSION_TEMP := 6.1.43-android14-11-gf1a3cfb97a68-ab12168211
 BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
 
 # Kernel Headers
 TARGET_KERNEL_HEADER_ARCH := arm64
-# The following paths will now point to $(TOP)/kernel/prebuilts/6.6/arm64/
+# The following paths will now point to $(TOP)/kernel/sony/pdx245/prebuilts/
 # The build system might use kheaders.ko if available, or expect a kernel-headers dir.
 # If build fails related to headers, these paths or TARGET_USE_PREBUILT_KERNEL_HEADERS may need adjustment.
 TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change if only kheaders.ko exists
@@ -278,6 +278,8 @@ AB_OTA_PARTITIONS := \
 BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
 # DTBO partition – real slot size is 24 MiB (0x01800000 = 25 165 824 bytes)
 BOARD_DTBOIMG_PARTITION_SIZE := 25165824
+# Let build system generate DTBO instead of using prebuilt
+# BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 # BOARD_DTBOIMAGE_PARTITION_SIZE := 25165824   # (old variable name – ignored by Soong)
 
 # vendor_boot slot on-device is 96 MiB (0x06000000 = 100 663 296 bytes)
@@ -318,6 +320,7 @@ BOARD_KERNEL_CMDLINE += ramoops.mem_size=0x100000
 BOARD_KERNEL_CMDLINE += ramoops.console_size=0x80000
 BOARD_KERNEL_CMDLINE += osP_version=15
 BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx245 androidboot.hardware.sku=c001707 androidboot.hardware.color=176 oembootloader.securityflags=0x00000003
+BOARD_KERNEL_CMDLINE += androidboot.veritymode=disabled
 
 # Disable building host tools for other operating systems
 HOST_CROSS_OS := 

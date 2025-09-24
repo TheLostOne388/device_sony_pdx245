@@ -114,7 +114,7 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Prebuilt kernel files
 PRODUCT_COPY_FILES += \
-    kernel/prebuilts/6.6/arm64/kernel-6.6:kernel \
+    kernel/sony/pdx245/prebuilts/kernel:kernel \
     kernel/sony/pdx245/prebuilts/dtb.img:dtb.img \
     kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
     kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
