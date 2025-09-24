@@ -114,7 +114,6 @@ BOARD_INCLUDE_DTB_IN_VENDOR_BOOT := true
 # DTBO (Device Tree Blob Overlay)
 # We use a prebuilt dtbo.img and configure AVB to create a hash descriptor for it.
 BOARD_KERNEL_SEPARATED_DTBO :=
-# BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
 
 # Offsets for boot.img contents are being removed as they caused boot failures.
 # The stock bootloader does not expect custom offsets in the boot.img header.
@@ -279,8 +278,7 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
 # DTBO partition – real slot size is 24 MiB (0x01800000 = 25 165 824 bytes)
 BOARD_DTBOIMG_PARTITION_SIZE := 25165824
 # Let build system generate DTBO instead of using prebuilt
-# BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
-# BOARD_DTBOIMAGE_PARTITION_SIZE := 25165824   # (old variable name – ignored by Soong)
+BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
 
 # vendor_boot slot on-device is 96 MiB (0x06000000 = 100 663 296 bytes)
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296
