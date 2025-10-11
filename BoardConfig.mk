@@ -123,7 +123,7 @@ BOARD_KERNEL_SEPARATED_DTBO :=
 # for these newer GKIs if prebuilt-info.txt doesn't contain the full string.
 # We'll keep the old one for now and see if the build complains or if it's correctly inferred.
 # If errors, we may need to find the exact version string for the 6.1 GKI or adjust this.
-_BOARD_KERNEL_VERSION_TEMP := 6.1.43-android14-11-gf1a3cfb97a68-ab12168211
+_BOARD_KERNEL_VERSION_TEMP := 6.1.75-android14-11-g48b922851ac5-ab12039954
 BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
 
 # Kernel Headers
@@ -319,6 +319,11 @@ BOARD_KERNEL_CMDLINE += ramoops.console_size=0x80000
 BOARD_KERNEL_CMDLINE += osP_version=15
 BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx245 androidboot.hardware.sku=c001707 androidboot.hardware.color=176 oembootloader.securityflags=0x00000003
 BOARD_KERNEL_CMDLINE += androidboot.veritymode=disabled
+# Enable kernel console logging for debugging
+BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200
+BOARD_KERNEL_CMDLINE += earlycon=qcom_geni,0xa9c000
+BOARD_KERNEL_CMDLINE += loglevel=8
+BOARD_KERNEL_CMDLINE += ignore_loglevel
 
 # Disable building host tools for other operating systems
 HOST_CROSS_OS := 

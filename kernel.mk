@@ -2,8 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-# Specify prebuilt kernel Image
-LOCAL_PREBUILT_KERNEL := prebuilts/Image
+# Specify prebuilt kernel (match BoardConfig.mk path)
+LOCAL_PREBUILT_KERNEL := $(TOP)/kernel/sony/pdx245/prebuilts/kernel
 
 # Specify prebuilt DTB
 LOCAL_PREBUILT_DTB := prebuilts/dtb.img
