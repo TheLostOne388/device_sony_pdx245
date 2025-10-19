@@ -601,17 +601,17 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += hardware/sony/vintf/device_framewo
 # Vendor VINTF manifests
 DEVICE_MANIFEST_SKUS := pdx245
 DEVICE_MANIFEST_PDX245_FILES := \
-    $(LOCAL_PATH)/vintf/manifest.xml \
-    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/fingerprint-rbs.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.aidlcharge-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.extlight-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlmiscta-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsensor-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsuperstamina.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.camera.provider.manifest.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.perfagent-somc.xml \
-    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.radio.xml
+    $(LOCAL_PATH)/vintf/manifest.xml
+#    vendor/sony/sm8650-common/proprietary/vendor/etc/vintf/manifest/manifest_pineapple.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/fingerprint-rbs.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.aidlcharge-somc.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.semc.hardware.extlight-somc.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlmiscta-somc.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsensor-somc.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.aidlsuperstamina.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.camera.provider.manifest.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.perfagent-somc.xml \
+#    vendor/sony/pdx245/proprietary/vendor/etc/vintf/manifest/vendor.somc.hardware.radio.xml
 
 # Stub Interface Packages for VINTF Check
 PRODUCT_PACKAGES += \
