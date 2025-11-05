@@ -1,0 +1,16 @@
+diff --git a/mkbootimg.py b/mkbootimg.py
+index dcf7265..5049889 100755
+--- a/mkbootimg.py
++++ b/mkbootimg.py
+@@ -121,7 +121,10 @@ def write_header_v3_and_above(args):
+     # kernel size in bytes
+     args.output.write(pack('I', filesize(args.kernel)))
+     # ramdisk size in bytes
+-    args.output.write(pack('I', filesize(args.ramdisk)))
++    # Android 15 fix: Explicitly zero ramdisk_size for header v4 (AOSP commit 4f7be12)
++    # When ramdisk is None/omitted, ensure field is zeroed, not uninitialized memory
++    ramdisk_size = 0 if args.header_version >= 4 and args.ramdisk is None else filesize(args.ramdisk)
++    args.output.write(pack('I', ramdisk_size))
+     # os version and patch level
+     args.output.write(pack('I', (args.os_version << 11) | args.os_patch_level))
+     args.output.write(pack('I', boot_header_size))

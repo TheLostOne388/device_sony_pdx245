@@ -35,15 +35,6 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Inherit from device-specific configuration
 $(call inherit-product, device/sony/pdx245/device.mk)
 
-# Add the genrule module to the build graph to ensure the prebuilt dtbo is available
-PRODUCT_PACKAGES += pdx245_prebuilt_dtbo_intermediate
-
-# Copy the prebuilt dtbo.img to the output directory.
-# This is now the primary mechanism for handling the prebuilt dtbo,
-# after disabling the kernel build system's dtbo generation.
-PRODUCT_COPY_FILES += \
-    $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/etc/dtbo.img
-
 # Inherit from vendor configuration
 $(call inherit-product, vendor/sony/pdx245/pdx245-vendor.mk)
 

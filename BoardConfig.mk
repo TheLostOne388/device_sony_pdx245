@@ -13,8 +13,6 @@
 # limitations under the License.
 
 DEVICE_PATH := device/sony/pdx245
-# Ensure Lineage kernel helper picks the correct 6.1 prebuilt kernel
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/sony/pdx245/prebuilts/kernel
 
 # This file is included by the top-level Android build system.It allows us to add custom build steps and overrides.
 CUSTOM_BUILD_VARS += PDX245_SECURITY_PATCH_OVERRIDE
@@ -26,10 +24,6 @@ PDX245_SECURITY_PATCH_OVERRIDE_FILE := $(DEVICE_PATH)/custom_build_vars.mk
 include device/sony/sm8650-common/BoardConfigCommon.mk
 include vendor/lineage/config/BoardConfigSoong.mk 
 
-#Override LineageOS flag to allow our GKI prebuilt logic to work
-TARGET_FORCE_PREBUILT_KERNEL := true
-# Explicitly point to the GKI prebuilt kernel image for any logic that uses TARGET_PREBUILT_KERNEL
-TARGET_PREBUILT_KERNEL := $(TOP)/kernel/sony/pdx245/prebuilts/kernel
 # Inherit from common config first, so device-specific settings can override.
 
 # In device/sony/pdx245/BoardConfig.mk
@@ -45,39 +39,15 @@ TARGET_DESIRED_ROLLBACK_TIMESTAMP := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 BOARD_VNDK_VERSION := current
 
-# SELinux Configuration - Following LineageOS best practices
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive  # Testing enforcing mode
-SELINUX_IGNORE_NEVERALLOWS := true  # TODO: Migrate to selective permissive domains
+# SELinux Configuration
+SELINUX_IGNORE_NEVERALLOWS := true
 
-# Bypass sepolicy freeze test completely to allow 100% build completion
-BUILD_BROKEN_TREBLE_SEPOLICY_TESTS := true
-BUILD_BROKEN_SEPOLICY_TESTS := true
-BUILD_BROKEN_ENFORCE_SEPOLICY_API := true
-BUILD_BROKEN_SEPOLICY_FREEZE_TEST := true
-
-# Move vendor_dlkm out of vendor
-TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+# Override vendor_dlkm filesystem type (device-specific requirement)
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4  # Override common (erofs -> ext4)
 BOARD_USES_VENDOR_DLKMIMAGE := true
-# BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 157286400  # 150MB instead of 100MB - Let build system auto-size
-# NOTE: See vendor partition size note above.
-
-# Recovery settings moved to recovery.mk
 
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
 
-# TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
-# BOARD_USES_RECOVERY_AS_BOOT := true
-# If you're using erofs (common in Android 15)
-TARGET_USERIMAGES_USE_EROFS := false
-# Recovery settings moved to recovery.mk
-
-
-# Revert to minimal boot image arguments, removing the offsets that caused boot failures.
-# The stock bootloader does not expect these custom offsets.
-BOARD_MKBOOTIMG_ARGS += --cmdline "$(BOARD_KERNEL_CMDLINE)"
 
 # Display
 TARGET_SCREEN_DENSITY := 396
@@ -85,68 +55,11 @@ TARGET_SCREEN_DENSITY := 396
 # Props
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
-BOARD_USES_VENDOR_DLKM := true
-
-# Define base kernel path for crDroid GKI prebuilt
-_KERNEL_PREBUILT_DIR_TEMP := $(TOP)/kernel/sony/pdx245/prebuilts
-KERNEL_PREBUILT_DIR := $(strip $(_KERNEL_PREBUILT_DIR_TEMP))
-
-# Kernel Configuration
-TARGET_NO_KERNEL := false
-# TEMPORARY TEST: Override the common config to disable kernel in recovery (like stock)
-TARGET_NO_KERNEL_OVERRIDE := true
-# Use GKI base config for Kernel 6.1
-TARGET_KERNEL_CONFIG := $(TOP)/kernel/configs/v/android-6.1/android-base.config
-BOARD_KERNEL_IMAGE_NAME := kernel # Explicitly set the prebuilt image name
-# Point to the crDroid prebuilt kernel image
-INSTALLED_KERNEL_TARGET := $(KERNEL_PREBUILT_DIR)/$(BOARD_KERNEL_IMAGE_NAME)
-BOARD_KERNEL_CONFIG_FILE := $(KERNEL_PREBUILT_DIR)/kernel.config
-
-# DTB/DTBO Configuration
-#
-# DTB (Device Tree Blob - the base hardware tree for GKI)
-# This ensures the correct prebuilt DTB is included in the vendor_boot image,
-# which is required for the GKI kernel to boot correctly.
-BOARD_INCLUDE_DTB_IN_BOOTIMG := false
-BOARD_PREBUILT_DTBIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtb.img
-BOARD_INCLUDE_DTB_IN_VENDOR_BOOT := true
-
-# DTBO (Device Tree Blob Overlay)
-# We use a prebuilt dtbo.img and configure AVB to create a hash descriptor for it.
-BOARD_KERNEL_SEPARATED_DTBO :=
-
-# Offsets for boot.img contents are being removed as they caused boot failures.
-# The stock bootloader does not expect custom offsets in the boot.img header.
-# BOARD_KERNEL_OFFSET      := 0x00008000
-
-# The kernel version string might be derived differently or automatically by the build system
-# for these newer GKIs if prebuilt-info.txt doesn't contain the full string.
-# We'll keep the old one for now and see if the build complains or if it's correctly inferred.
-# If errors, we may need to find the exact version string for the 6.1 GKI or adjust this.
-_BOARD_KERNEL_VERSION_TEMP := 6.1.75-android14-11-g48b922851ac5-ab12039954
-BOARD_KERNEL_VERSION := $(strip $(_BOARD_KERNEL_VERSION_TEMP))
-
-# Kernel Headers
-TARGET_KERNEL_HEADER_ARCH := arm64
-# The following paths will now point to $(TOP)/kernel/sony/pdx245/prebuilts/
-# The build system might use kheaders.ko if available, or expect a kernel-headers dir.
-# If build fails related to headers, these paths or TARGET_USE_PREBUILT_KERNEL_HEADERS may need adjustment.
-TARGET_BOARD_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change if only kheaders.ko exists
-TARGET_NO_KERNEL_HEADERS := true
-TARGET_USE_PREBUILT_KERNEL_HEADERS := true
-BOARD_VENDOR_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
-BOARD_PREBUILT_KERNEL_HEADERS := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
-TARGET_SPECIFIC_HEADER_PATH += $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
-
-# Define the header library that other modules can depend on
-BOARD_HEADER_LIBRARIES += \
-    generated_kernel_headers \
-    qti_kernel_headers
-
-# Make sure Soong can find the headers
-SOONG_CONFIG_NAMESPACES += kernel_headers
-SOONG_CONFIG_kernel_headers += kernel_headers_path
-SOONG_CONFIG_kernel_headers_kernel_headers_path := $(KERNEL_PREBUILT_DIR)/kernel-headers # Path might need to change
+# DTB/DTBO Configuration - Following LineageOS SM8550 approach
+# Use Qualcomm's merge_dtbs script to build from kernel source
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_USES_QCOM_MERGE_DTBS_SCRIPT := true
+TARGET_NEEDS_DTBOIMAGE := true
 
 
 # VINTF Overrides & Settings
@@ -165,16 +78,20 @@ BUILD_BROKEN_VINTF_LEVEL_MISMATCH := true
 # Sepolicy
 BOARD_SHIPPING_API_LEVEL := 34
 BOARD_SHIPPING_FCM_VERSION := 8
+
 BOARD_SYSTEMSDK_VERSIONS := 34 35
+
 BOARD_SEPOLICY_VERS := 34.0
 BOARD_SEPOLICY_VERS_API := 34
 PLATFORM_SEPOLICY_COMPAT_VERSIONS := 29.0 30.0 31.0 32.0 33.0 34.0
 BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 BUILD_BROKEN_VINTF_VALIDATES_SEPOLICY_VERSION := true
 
-# Disable sepolicy freeze test for custom ROM compatibility
-BUILD_BROKEN_SEPOLICY_FREEZE_TEST := true
+# Bypass sepolicy freeze test completely to allow 100% build completion
 BUILD_BROKEN_TREBLE_SEPOLICY_TESTS := true
+BUILD_BROKEN_SEPOLICY_TESTS := true
+BUILD_BROKEN_ENFORCE_SEPOLICY_API := true
+BUILD_BROKEN_SEPOLICY_FREEZE_TEST := true
 BUILD_BROKEN_SEPOLICY_BUILD := true
 BOARD_SEPOLICY_M4DEFS += BUILD_BROKEN_SEPOLICY_FREEZE_TEST=true
 
@@ -207,20 +124,11 @@ BOARD_SEPOLICY_DIRS += device/crdroid/sepolicy/common
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/system_ext/public
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/sony/pdx245/sepolicy/system_ext/private
 
-# Dynamic Partitions - A/B Compatible Configuration
-BOARD_USES_DYNAMIC_PARTITIONS := true
-BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
-BOARD_BUILD_SUPER_IMAGE := true
-
-# Super partition - Match LineageOS sm8550-common/PDX234 for auto-allocation (fixes empty by removing custom args)
+# Super partition - Override common sizes for PDX245 (larger than common SM8650)
 BOARD_SUPER_PARTITION_SIZE := 15032385536
-BOARD_SUPER_PARTITION_GROUPS := somc_dynamic_partitions
-BOARD_SOMC_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm system_dlkm vendor_dlkm
 BOARD_SOMC_DYNAMIC_PARTITIONS_SIZE := 14999633920  # Stock - 32768 overhead
 
-# Remove custom lpmake args (Lineage uses default build system)
-
-# Explicit min sizes for allocation (removed reserved to fix 'Should not define both' error)
+# Explicit min sizes for allocation
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2684354560
 BOARD_PRODUCTIMAGE_PARTITION_SIZE := 1073741824
 BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE := 1073741824
@@ -232,96 +140,38 @@ BOARD_VENDOR_DLKMIMAGE_PARTITION_SIZE := 268435456
 # Minimal lpmake args with auto-suffix for A/B (enables population)
 BOARD_LPMAKE_ARGS += --metadata-slots 2 --sparse --auto-slot-suffixing
 
-# Filesystem types - erofs for vendor/odm/dlkm like Lineage
-BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
+# Override vendor_dlkm filesystem to ext4 (device-specific requirement)
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
 
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
-# A/B Updates
-AB_OTA_UPDATER := true
-
-# Minimal dummy post-install step to satisfy payload generator
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/true \
-    FILESYSTEM_TYPE_system=ext4 \
-    POSTINSTALL_OPTIONAL_system=true \
-    RUN_POSTINSTALL_vendor=false \
-    FILESYSTEM_TYPE_vendor=ext4 \
-    RUN_POSTINSTALL_product=false \
-    FILESYSTEM_TYPE_product=ext4
-
-AB_OTA_PARTITIONS := \
-    system \
-    system_ext \
-    product \
-    vendor \
-    odm \
-    system_dlkm \
-    vendor_dlkm \
-    boot \
-    init_boot \
-    vbmeta \
-    vbmeta_system \
-    recovery \
-    dtbo \
-    vendor_boot
-
-# Partition Sizes
-BOARD_BOOTIMAGE_PARTITION_SIZE := 100663296
-# DTBO partition – real slot size is 24 MiB (0x01800000 = 25 165 824 bytes)
-BOARD_DTBOIMG_PARTITION_SIZE := 25165824
-# Let build system generate DTBO instead of using prebuilt
-BOARD_PREBUILT_DTBOIMAGE := $(TOP)/kernel/sony/pdx245/prebuilts/dtbo.img
-
-# vendor_boot slot on-device is 96 MiB (0x06000000 = 100 663 296 bytes)
-BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296
-BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := 8388608
+# Partition Size Overrides for PDX245
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296  # 96 MB (vs 112 MB in common)
 TARGET_NO_INIT_BOOT := false
-BOARD_FLASH_BLOCK_SIZE := 131072  # Match PDX234 for UFS alignment
 
-# Init boot
-BOARD_INIT_BOOT_HEADER_VERSION := 3
-# BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
-
-# Disable Virtual A/B based on bootloader analysis (sections 16, 26, 28) to address persistent VAB errors in TA logs
+# Disable Virtual A/B based on bootloader analysis to address persistent VAB errors in TA logs
 BOARD_USES_VIRTUAL_AB := false
 BOARD_VIRTUAL_AB_COMPRESSION := false
 
 include $(DEVICE_PATH)/avb_AOSP.mk
 include $(DEVICE_PATH)/recovery.mk
-# Recovery settings moved to recovery.mk
+include $(DEVICE_PATH)/dtb.mk
 
-# GKI v4 layout fix - omit ramdisk from boot.img
-BOARD_EXCLUDE_KERNEL_RAMDISK := true
-
-# Match stock uncompressed kernel
-BOARD_KERNEL_COMPRESSION := none
-
-# GKI v4 layout
-BOARD_BOOTIMG_HEADER_VERSION := 4
-BOARD_USES_GENERIC_KERNEL_IMAGE := true
-BOARD_EXCLUDE_KERNEL_RAMDISK := true
-# BOARD_BUILD_INIT_BOOT_IMAGE := true
-BOARD_RAMDISK_USE_LZ4 := true
-BOARD_INCLUDE_DTB_IN_BOOTIMG := false
-# Enhanced pstore/ramoops for AVB debugging and bootloader log extraction
+# Device-specific kernel cmdline parameters
 BOARD_KERNEL_CMDLINE += androidboot.force_normal_boot=1
+BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx245
+BOARD_KERNEL_CMDLINE += androidboot.hardware.sku=c001707
+BOARD_KERNEL_CMDLINE += androidboot.hardware.color=176
+BOARD_KERNEL_CMDLINE += oembootloader.securityflags=0x00000003
+BOARD_KERNEL_CMDLINE += androidboot.veritymode=disabled
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+
+# Enhanced pstore/ramoops for AVB debugging and bootloader log extraction
 BOARD_KERNEL_CMDLINE += ramoops.mem_address=0x9ff00000
 BOARD_KERNEL_CMDLINE += ramoops.mem_size=0x100000
 BOARD_KERNEL_CMDLINE += ramoops.console_size=0x80000
-BOARD_KERNEL_CMDLINE += osP_version=15
-BOARD_KERNEL_CMDLINE += androidboot.hardware=pdx245 androidboot.hardware.sku=c001707 androidboot.hardware.color=176 oembootloader.securityflags=0x00000003
-BOARD_KERNEL_CMDLINE += androidboot.veritymode=disabled
+
 # Enable kernel console logging for debugging
-BOARD_KERNEL_CMDLINE += console=ttyMSM0,115200
-BOARD_KERNEL_CMDLINE += earlycon=qcom_geni,0xa9c000
 BOARD_KERNEL_CMDLINE += loglevel=8
 BOARD_KERNEL_CMDLINE += ignore_loglevel
 
@@ -331,7 +181,7 @@ TARGET_PROVIDES_LIBAR_PAL := true
 
 # Ensure we use prebuilt audio components
 TARGET_USES_QCOM_BSP := true
-BOARD_USES_QCOM_HARDWARE := true
+# BOARD_USES_QCOM_HARDWARE := true  # Duplicate - in common
 
 # Disable LineageOS's CAF audio HAL to prevent conflicts with Sony's prebuilts
 USE_DEVICE_SPECIFIC_AUDIO := true
@@ -352,17 +202,6 @@ DEVICE_SPECIFIC_BT_VENDOR_PATH := device/sony/pdx245/bt
 # Disable LineageOS's CAF media HAL to prevent conflicts with Sony's prebuilts
 USE_DEVICE_SPECIFIC_MEDIA := true
 DEVICE_SPECIFIC_MEDIA_PATH := device/sony/pdx245/media
-
-# Disable CAF Display HAL to use Sony prebuilts and avoid legacy Qualcomm code
-USE_DEVICE_SPECIFIC_DISPLAY := true
-DEVICE_SPECIFIC_DISPLAY_PATH := device/sony/pdx245/display  # Adjust if your path differs
-
-# Explicitly opt out of Qualcomm legacy/generic display builds
-     TARGET_USES_QCOM_DISPLAY := false
-     TARGET_DISABLE_QTI_DISPLAY := true
-     TARGET_USES_QCOM_LEGACY_DISPLAY := false
-     TARGET_USES_QCOM_BSP := false
-     TARGET_USES_QCOM_LEGACY_BSP := false  # Excludes sdm845-style legacy BSP includes
 
 # DATA_IPA_CFG_MGR (Data/Connectivity)
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true

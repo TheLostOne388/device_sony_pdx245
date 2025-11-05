@@ -28,6 +28,14 @@ PRODUCT_DEVICE := pdx245
 PRODUCT_NAME := lineage_pdx245
 PRODUCT_MODEL := Sony Xperia XQ-EC72
 PRODUCT_BRAND := Sony
+
+# Disable microdroid/virtualization modules - not needed for this device
+# These require prebuilt kernels we don't have
+PRODUCT_PACKAGES_DEBUG := \
+    $(filter-out microdroid_kernel_signed, $(PRODUCT_PACKAGES_DEBUG))
+
+PRODUCT_PACKAGES := \
+    $(filter-out microdroid_kernel_signed, $(PRODUCT_PACKAGES))
 PRODUCT_MANUFACTURER := Sony
 
 # Inherit from sony sm8650-common
@@ -112,15 +120,7 @@ PRODUCT_SOONG_NAMESPACES += \
     device/sony/pdx245/vintf/interfaces \
     $(LOCAL_PATH)/interfaces/stubs
 
-# Prebuilt kernel files
-PRODUCT_COPY_FILES += \
-    kernel/sony/pdx245/prebuilts/kernel:kernel \
-    kernel/sony/pdx245/prebuilts/dtb.img:dtb.img \
-    kernel/sony/pdx245/prebuilts/dtbo.img:$(TARGET_COPY_OUT_VENDOR)/dtbo.img \
-    kernel/sony/pdx245/prebuilts/system_dlkm.img:$(TARGET_COPY_OUT_SYSTEM_DLKM)/system_dlkm.img \
-    kernel/sony/pdx245/prebuilts/vendor_dlkm.img:$(TARGET_COPY_OUT_VENDOR_DLKM)/vendor_dlkm.img
-
-PRODUCT_VENDOR_KERNEL_HEADERS += kernel/sony/pdx245/prebuilts/kernel-headers
+# Kernel built from source - DTB/DTBO/DLKM will be built by kernel build
 
 # Override system_ext partition assignments
 PRODUCT_COPY_FILES += \
@@ -681,3 +681,4 @@ PRODUCT_PRIVATE_SEPOLICY_DIRS += \
     device/sony/pdx245/sepolicy/product/private
 
 PRODUCT_PACKAGES_DEBUG += bootable_deprecated-ota
+
